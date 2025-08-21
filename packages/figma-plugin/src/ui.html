@@ -26,6 +26,12 @@
     <textarea id="json" placeholder='Optional custom JSON to upload; leave empty to use selection' style="width:100%;height:120px"></textarea>
     <button id="ingest">Upload & Ingest</button>
     <div id="status"></div>
+    <div id="actions" style="display:none; margin:8px 0;">
+      <button id="openUrl" style="margin-right:6px;">Open Artifact</button>
+      <button id="copyUrl" style="margin-right:6px;">Copy URL</button>
+      <button id="copyKey" style="margin-right:6px;">Copy Key</button>
+      <button id="copyTrace">Copy trace_id</button>
+    </div>
     <pre id="out"></pre>
     <script>
       const $ = (id) => document.getElementById(id);
@@ -51,12 +57,21 @@
           $('status').textContent = msg.ok ? 'OK' : 'Failed';
           $('status').className = msg.ok ? 'ok' : 'fail';
           $('out').textContent = JSON.stringify(msg.json?.result || msg, null, 2);
+          $('actions').style.display = 'none';
           return;
         }
         if (msg.type === 'ingest_result') {
           $('status').textContent = msg.ok ? 'Ready' : 'Failed';
           $('status').className = msg.ok ? 'ok' : 'fail';
           $('out').textContent = JSON.stringify(msg, null, 2);
+          const signed = msg.signedUrl || '';
+          const key = msg.key || '';
+          const trace = msg.trace_id || '';
+          $('actions').style.display = signed ? 'block' : 'none';
+          $('openUrl').onclick = () => { if (signed) window.open(signed, '_blank'); };
+          $('copyUrl').onclick = async () => { try { await navigator.clipboard.writeText(String(signed)); } catch {} };
+          $('copyKey').onclick = async () => { try { await navigator.clipboard.writeText(String(key)); } catch {} };
+          $('copyTrace').onclick = async () => { try { await navigator.clipboard.writeText(String(trace)); } catch {} };
           return;
         }
       };
