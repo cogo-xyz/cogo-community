@@ -19,6 +19,8 @@
     <input id="anon" placeholder="anon key" />
     <label>Project ID</label>
     <input id="projectId" placeholder="project uuid" />
+    <label>Metrics Host (optional)</label>
+    <input id="metrics" placeholder="http://localhost:3100" />
     <button id="run">Convert Selection → UUI & Cogo</button>
     <hr />
     <label>Ingest (large JSON)</label>
@@ -40,17 +42,17 @@
     <script>
       const $ = (id) => document.getElementById(id);
       // persist/load settings
-      const keys = ['edge','anon','projectId'];
+      const keys = ['edge','anon','projectId','metrics'];
       try { const saved = JSON.parse(localStorage.getItem('cogo-plugin:settings')||'{}'); keys.forEach(k=>{ if(saved[k]) $(k).value = saved[k]; }); } catch {}
 
       document.getElementById('run').onclick = () => {
         parent.postMessage({ pluginMessage: { type: 'convert', payload: { edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value } } }, '*');
-        try { localStorage.setItem('cogo-plugin:settings', JSON.stringify({ edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value })); } catch {}
+        try { localStorage.setItem('cogo-plugin:settings', JSON.stringify({ edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value, metrics: $('metrics').value })); } catch {}
         $('status').textContent = 'Running...';
       };
       document.getElementById('ingest').onclick = () => {
         parent.postMessage({ pluginMessage: { type: 'ingest', payload: { edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value, fileName: $('fileName').value, json: $('json').value } } }, '*');
-        try { localStorage.setItem('cogo-plugin:settings', JSON.stringify({ edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value })); } catch {}
+        try { localStorage.setItem('cogo-plugin:settings', JSON.stringify({ edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value, metrics: $('metrics').value })); } catch {}
         $('status').textContent = 'Uploading & Ingesting...';
       };
       window.onmessage = (ev) => {
@@ -82,6 +84,16 @@
           $('copyUrl').onclick = async () => { try { await navigator.clipboard.writeText(String(signed)); } catch {} };
           $('copyKey').onclick = async () => { try { await navigator.clipboard.writeText(String(key)); } catch {} };
           $('copyTrace').onclick = async () => { try { await navigator.clipboard.writeText(String(trace)); } catch {} };
+          // Open Trace (metrics)
+          if ($('metrics').value && trace) {
+            const base = String($('metrics').value).replace(/\/$/, '');
+            const url = `${base}/api/metrics/trace/${encodeURIComponent(trace)}`;
+            const btn = document.createElement('button');
+            btn.textContent = 'Open Trace';
+            btn.style.marginLeft = '6px';
+            btn.onclick = () => window.open(url, '_blank');
+            $('actions').appendChild(btn);
+          }
           return;
         }
       };
