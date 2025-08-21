@@ -1,0 +1,13 @@
+{
+  "name": "cogo-uui-figma-plugin",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "esbuild src/code.ts --bundle --platform=browser --outfile=dist/code.js"
+  },
+  "devDependencies": {
+    "esbuild": "^0.23.0"
+  }
+}
+
+

@@ -1,0 +1,10 @@
+{
+  "name": "cogo-open",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "build": "npm run -ws --if-present build",
+    "ci": "npm ci && npm run -ws --if-present build"
+  }
+}
