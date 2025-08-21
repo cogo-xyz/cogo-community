@@ -29,12 +29,18 @@
     <pre id="out"></pre>
     <script>
       const $ = (id) => document.getElementById(id);
+      // persist/load settings
+      const keys = ['edge','anon','projectId'];
+      try { const saved = JSON.parse(localStorage.getItem('cogo-plugin:settings')||'{}'); keys.forEach(k=>{ if(saved[k]) $(k).value = saved[k]; }); } catch {}
+
       document.getElementById('run').onclick = () => {
         parent.postMessage({ pluginMessage: { type: 'convert', payload: { edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value } } }, '*');
+        try { localStorage.setItem('cogo-plugin:settings', JSON.stringify({ edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value })); } catch {}
         $('status').textContent = 'Running...';
       };
       document.getElementById('ingest').onclick = () => {
         parent.postMessage({ pluginMessage: { type: 'ingest', payload: { edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value, fileName: $('fileName').value, json: $('json').value } } }, '*');
+        try { localStorage.setItem('cogo-plugin:settings', JSON.stringify({ edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value })); } catch {}
         $('status').textContent = 'Uploading & Ingesting...';
       };
       window.onmessage = (ev) => {
