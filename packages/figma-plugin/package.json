@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "esbuild src/code.ts --bundle --platform=browser --outfile=dist/code.js"
+    "build": "esbuild src/code.ts --bundle --platform=browser --outfile=dist/code.js && cp src/ui.html dist/ui.html"
   },
   "devDependencies": {
     "esbuild": "^0.23.0"
