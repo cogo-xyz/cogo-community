@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "esbuild src/code.ts --bundle --platform=browser --outfile=dist/code.js && cp src/ui.html dist/ui.html",
-    "pack": "npm run -s build && mkdir -p releases && zip -r releases/cogo-figma-plugin-$npm_package_version.zip dist manifest.json"
+    "build": "esbuild src/code.ts --bundle --platform=browser --outfile=dist/code.js"
   },
   "devDependencies": {
     "esbuild": "^0.23.0"

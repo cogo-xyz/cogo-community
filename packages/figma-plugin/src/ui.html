@@ -32,6 +32,10 @@
       <button id="copyKey" style="margin-right:6px;">Copy Key</button>
       <button id="copyTrace">Copy trace_id</button>
     </div>
+    <div id="actionsConvert" style="display:none; margin:8px 0;">
+      <button id="copyUui" style="margin-right:6px;">Copy UUI JSON</button>
+      <button id="copyCogo">Copy Cogo JSON</button>
+    </div>
     <pre id="out"></pre>
     <script>
       const $ = (id) => document.getElementById(id);
@@ -58,6 +62,12 @@
           $('status').className = msg.ok ? 'ok' : 'fail';
           $('out').textContent = JSON.stringify(msg.json?.result || msg, null, 2);
           $('actions').style.display = 'none';
+          const res = (msg.json && msg.json.result) ? msg.json.result : null;
+          const uui = res && res.uui_json ? JSON.stringify(res.uui_json, null, 2) : '';
+          const cogo = res && res.cogo_ui_json ? JSON.stringify(res.cogo_ui_json, null, 2) : '';
+          $('actionsConvert').style.display = (uui || cogo) ? 'block' : 'none';
+          $('copyUui').onclick = async () => { if (uui) { try { await navigator.clipboard.writeText(uui); } catch {} } };
+          $('copyCogo').onclick = async () => { if (cogo) { try { await navigator.clipboard.writeText(cogo); } catch {} } };
           return;
         }
         if (msg.type === 'ingest_result') {
