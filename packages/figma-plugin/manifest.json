@@ -3,9 +3,7 @@
   "id": "cogo-uui-converter",
   "api": "1.0.0",
   "main": "dist/code.js",
-  "ui": "ui.html",
+  "ui": "src/ui.html",
   "editorType": ["figma", "figjam"],
   "documentAccess": "dynamic"
 }
-
-
