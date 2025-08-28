@@ -143,6 +143,17 @@ Outcome:
 - [ ] Execution succeeds; metrics/profile within thresholds
 - [ ] Documentation updated (UI, BDD, flow, variable map)
 
+## Protocol References (Edge / SSE / Realtime)
+
+- Edge Function: All endpoints under `/figma-compat/*` are Edge (short-lived HTTP JSON). Label requests as Edge in docs.
+- SSE: When using Chat via gateway, set `Accept: text/event-stream` or `{"stream": true}` to receive SSE frames.
+- Realtime: Subscribe to `trace:<trace_id>` or `cogo:agent:<agent_id>` for async events if enabled.
+
+## Figma via Plugin vs Chat
+
+- Plugin (recommended): Configure Figma Access Token in plugin settings → select page/component → Send to Agent → receive `trace_id`/`ingestId` → proceed to BDD/ActionFlow.
+- Chat-only: Provide Figma public URL; if private, do not paste token. Use Edge presign/ingest (`/figma-compat/uui/presign` → upload → `/figma-compat/uui/ingest`).
+
 ## Quick Reference – Edge vs Agent Responsibilities
 
 - Edge (`figma-compat`): short-lived conversion/ingestion/triggers under `/figma-compat/uui/*`

@@ -8,6 +8,11 @@ This manual explains how to use the COGO Agent from ingestion (Figma/UUI/COGO JS
 - COGO Agent Services: compile BDD→ActionFlow, execute flows, manage variables/symbols, integrate RAG/pgvector & KG/Neo4j, record metrics/profiles.
 - Metrics Server: authentication/CORS/rate-limit hardened; exposes health and profile ingest endpoints.
 
+### Protocols & Labels
+- Edge Function: Any endpoint under `/figma-compat/*` (HTTP JSON). Always label as Edge.
+- SSE: Streaming responses via `text/event-stream` (e.g., Chat through chat-gateway). Client reads SSE frames.
+- Realtime: Supabase Realtime channels (e.g., `trace:<trace_id>`) for async events.
+
 ## 2. Prerequisites
 
 - Project created and accessible
@@ -25,6 +30,12 @@ Endpoints (POST unless specified):
 - `/figma-compat/uui/presign`, `/figma-compat/uui/ingest`
 
 Notes: CORS/idempotency/rate limits apply; keep requests short-lived.
+
+Figma Inputs
+- Plugin path (recommended): Configure Figma Access Token in plugin settings (central), select page/component → "Send to Agent" → receive `trace_id`/`ingestId`.
+- Chat-only path: Provide public Figma URL. For private files, do not paste token in chat; use Edge presign/ingest:
+  - `POST /figma-compat/uui/presign` → `signedUrl/token`
+  - Upload JSON → `POST /figma-compat/uui/ingest` with `{ projectId, storage_key }` → `trace_id`.
 
 ## 4. Variables and Symbols
 
