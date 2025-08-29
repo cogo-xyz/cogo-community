@@ -23,9 +23,9 @@
    - POST /figma-context/apply { job_id, page: { id }, trace_id }
 
 ### Assistant-UI Controls
-- Job ID, Trace 입력
-- Live Subscribe 토글 → streamFigmaContext()
-- Status 버튼 → getFigmaContextStatus()
+- Job ID, Trace input
+- Live Subscribe toggle → streamFigmaContext()
+- Status button → getFigmaContextStatus()
 
 ### Compatibility
 - Figma runtime: es2017 target, no optional chaining/spread in plugin code
