@@ -58,25 +58,42 @@ Then call #restAPI:Login and set #errorMessage or navigate Home
   "id": "loginProcessFlow",
   "actionType": "flow",
   "steps": [
-    { "actionType": "basic", "actionId": "setProperty", "params": { "target": "#isLoading", "value": true }},
-    { "actionType": "callback", "actionId": "restApi", "params": { "baseUrl": "#_appData.api.base", "path": "/login", "method": "POST", "body": { "u": "#userName", "p": "#password" }, "saveTo": "#_appData.session.auth" }},
-    { "actionType": "basic", "actionId": "setProperty", "params": { "target": "#isLoading", "value": false }}
+    { "actionType": "basic", "actionId": "setProperty", "params": { "target": "#isLoading", "value": false }},
+    { "actionType": "callback", "actionId": "restApi", "params": { "baseUrl": "#_appData.api.base", "path": "/login", "method": "POST", "body": { "u": "#userName", "p": "#password" }, "saveTo": "#_appData.session.auth" }}
   ]
 }
 ```
 
-## 4. Tips
+## 4. Artifacts in Chat Responses
+
+- The agent returns small previews inline under `artifacts.*_preview`.
+- Large outputs are stored and exposed via signed links under `artifacts.links[]`.
+- Use `trace_id` to retrieve all related artifacts and events.
+
+Quick commands:
+```bash
+# SSE design generate
+curl -sS -N -X POST "$BASE/design-generate?prompt=$(python3 - <<'PY'
+import urllib.parse; print(urllib.parse.quote('Create a simple login page'))
+PY
+)" -H 'accept: text/event-stream' -H "apikey: $ANON" -H "Authorization: Bearer $ANON"
+
+# Trace artifacts lookup
+curl -sS "$BASE/api-router/metrics/trace/<TRACE_ID>" | jq '.artifacts'
+```
+
+## 5. Tips
 
 - Keep names short and clear; prefer `loginPage.userName` over ambiguous names.
 - Confirm every symbol→variable mapping before generating BDD.
 - For multi-page flows, specify the page context in your prompts.
 - Ask the Agent to highlight undecided or risky steps.
 
-## 5. Where Execution Happens
+## 6. Where Execution Happens
 
 - The chat produces artifacts (mapping, BDD, ActionFlow). Heavy execution and long validations run on the Agent side, not in Chatting or Edge.
 
-## 6. Protocol Labels (Be explicit)
+## 7. Protocol Labels (Be explicit)
 
 - "Edge Function": Any endpoint under `/figma-compat/*` is an Edge Function (short-lived HTTP JSON). Always label it as Edge in docs/requests.
 - "SSE": When responses are streamed (e.g., Chat via `chat-gateway`), Accept header is `text/event-stream`, and the client consumes Server-Sent Events.

@@ -30,8 +30,8 @@ Steps:
 4. Agent registers symbols for later mapping to variables.
 
 Outcome:
-- UI JSON with clearly identified dynamic points and `#symbols`
-- Confirmed event names (e.g., `#onLoginClicked`)
+- UI JSON with clearly identified dynamic points and `#symbols` (returned with `trace_id`)
+- Artifacts: `cogo_ui_json_preview` + optional signed links when large
 
 ## Scenario 2 — Variable Definition and Mapping
 
@@ -45,57 +45,31 @@ Steps:
 3. Agent assigns initial/default values from current UI JSON (if present).
 4. Agent links each `#symbol` to a concrete variable path.
 
-Example mapping:
-```
-"#userName": "#_appData.loginPage.userName"
-"#isLoading": "#_uiState.loginPage.isLoading"
-```
-
 Outcome:
-- Variables catalog available to the BDD/ActionFlow pipeline
-- Deterministic symbol-to-variable references
+- Deterministic symbol-to-variable references (preview + links in `artifacts`)
 
 ## Scenario 3 — Event-based BDD Definition
 
 Goal: For an event (e.g., `#onLoginClicked`), describe expected logic with BDD.
 
 Steps:
-1. Designer writes Given-When-Then using existing `#symbols`:
-   - Given `#userName` and `#password`
-   - When `#onLoginClicked`
-   - Then call `#restAPI:Login` and update `#errorMessage` or navigate to `HomePage`
+1. Designer writes Given-When-Then using existing `#symbols`.
 2. Agent drafts candidate scenarios using UI structure, variables, and known actions.
-3. Designer confirms or refines the scenario (clarify branches, side-effects).
+3. Designer confirms or refines the scenario.
 
 Outcome:
-- Confirmed BDD artifact(s) per event, traceable to symbols/variables
+- BDD artifact(s) with `trace_id`; large text as artifact link if needed
 
 ## Scenario 4 — ActionFlow Generation from BDD
 
 Goal: Turn the confirmed BDD into a structured ActionFlow JSON.
 
 Steps:
-1. Agent compiles BDD to ActionFlow: each Given/When/Then → one or more steps (`actionType`, `actionId`, `params`).
-2. Undecided actions are marked with `actionType: "none"` for follow-up.
-3. Designer/Developer review and finalize the flow (API selection, payload formats, guards).
-
-Example (simplified):
-```json
-{
-  "id": "loginProcessFlow",
-  "actionType": "flow",
-  "steps": [
-    {
-      "actionType": "basic",
-      "actionId": "setProperty",
-      "params": { "target": "#errorMessage", "value": "Invalid login" }
-    }
-  ]
-}
-```
+1. Agent compiles BDD to ActionFlow JSON.
+2. Undecided actions are marked with `actionType: "none"`.
 
 Outcome:
-- Valid ActionFlow artifact ready for execution
+- ActionFlow artifact available (preview + signed link)
 
 ## Scenario 5 — Data Actions and API Calls
 
@@ -108,31 +82,52 @@ Steps:
 4. Map responses back to variables (`saveTo`) with validated paths.
 
 Outcome:
-- Secure, observable data actions integrated into the flow
+- Secure, observable data actions integrated (artifacts for logs/reports when large)
 
 ## Scenario 6 — Execution, Metrics, and Profiling
 
 Goal: Execute ActionFlow, record metrics/timings, and inspect results.
 
 Steps:
-1. Run the flow via Agent Runner (not in Edge; short-lived only at Edge).
-2. Inspect execution log, status, and per-step timings (binding/whitelist/fetch/parse/branches).
-3. Review metrics endpoints and/or artifacts; confirm success criteria/gates (error rate, RAG/KG counts, etc.).
+1. Run the flow via Agent Runner.
+2. Inspect execution log and timings.
+3. Review `/api-router/metrics/trace/{traceId}` for aggregated events + signed artifact links.
 
 Outcome:
-- Deterministic execution with profiling; observable results and artifacts
+- Trace-bound observability with artifacts
 
 ## Scenario 7 — Iteration and Refinement
 
 Goal: Evolve design and logic iteratively with minimal friction.
 
 Steps:
-1. Update UI JSON (layout, dynamic fields). Re-run symbol/variable mapping.
+1. Update UI JSON and re-run symbol/variable mapping.
 2. Update BDD per event; recompile to ActionFlow.
 3. Re-validate metrics/gates before promotion.
 
 Outcome:
-- Continuous improvement with guardrails (security, reliability, performance)
+- Continuous improvement with guardrails
+
+## Quick Commands
+
+```bash
+# Design generate
+curl -sS -X POST "$BASE/design-generate" -H 'content-type: application/json' \
+  -H "apikey: $ANON" -H "Authorization: Bearer $ANON" \
+  --data '{"prompt":"Create a simple login page"}' | jq '{trace_id, artifacts}'
+
+# Figma context (start → synthetic stream → status)
+JOB=$(curl -sS -X POST "$BASE/figma-context/start" -H 'content-type: application/json' \
+  -H "apikey: $ANON" -H "Authorization: Bearer $ANON" --data '{"figma_url":"<URL>"}' | jq -r '.job_id')
+
+curl -sS -N -X POST "$BASE/figma-context/stream" -H 'content-type: application/json' -H 'accept: text/event-stream' \
+  -H "apikey: $ANON" -H "Authorization: Bearer $ANON" --data "{\"job_id\":\"$JOB\",\"dev_enable_synthetic\":true,\"dev_total_nodes\":20}"
+
+curl -sS "$BASE/figma-context/status?job_id=$JOB" -H "apikey: $ANON" -H "Authorization: Bearer $ANON" | jq '{ok, status, artifacts: .artifacts}'
+
+# Trace artifacts
+curl -sS "$BASE/api-router/metrics/trace/<TRACE_ID>" | jq '.artifacts'
+```
 
 ## Acceptance Checklist
 

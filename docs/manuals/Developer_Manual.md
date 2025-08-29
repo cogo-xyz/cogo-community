@@ -12,7 +12,11 @@ This guide targets developers integrating and operating the COGO Agent. It cover
 
 - BDD pipeline: parse → compile → run → RAG (pgvector) → KG (Neo4j) → reports/artifacts.
 - Quality gates (examples): BDD coverage, RAG hit rate, KG edge counts, ActionFlow step sanity, error rate.
-- Artifacts: execution logs, profiles, reports (served via `/artifacts`).
+- Artifacts:
+  - Inline previews: `artifacts.*_preview` for small JSONs
+  - Links: `artifacts.links[]` with signed URLs for large payloads
+  - Trace lookup: `/api-router/metrics/trace/{traceId}` aggregates events and artifacts
+  - Env: `ARTIFACTS_BUCKET` (default `artifacts`), `ARTIFACTS_SIGN_TTL_SEC` (default 600)
 
 ## 3. Edge Endpoints (for ingestion/conversion)
 
@@ -67,7 +71,6 @@ Note: Edge is not for long-running tasks.
 
 - Scenarios: `docs/manuals/COGO_User_Scenarios.md`
 - Designer chatting guide: `docs/manuals/Designer_Chatting_Guide.md`
-- Security & metrics: `docs/runbook/SECURITY_METRICS.md`
 
 ## 9. Protocols & Transports (Explicit)
 
@@ -77,84 +80,37 @@ Note: Edge is not for long-running tasks.
 ### 9.1 HTTP JSON (Edge/Agent APIs)
 - Content-Type: `application/json`
 - Auth headers (when enabled):
-  - `Authorization: Bearer <JWT>`
+  - `Authorization: Bearer <ANON or JWT>`
   - `apikey: <PUBLISHABLE>` (Supabase)
   - Optional HMAC (if required): `x-signature: <HMAC>`
-- Minimal request/response shape:
-```json
-{
-  "trace_id": "<uuid>",
-  "input": { /* domain-specific payload */ }
-}
-```
+- Chat-facing shape includes `artifacts`:
 ```json
 {
   "ok": true,
   "trace_id": "<uuid>",
-  "data": { /* result */ },
-  "error": null
+  "response": "...",
+  "artifacts": { "cogo_ui_json_preview": { /* small */ }, "links": [{"name":"cogo_ui_json","url":"https://...","mime":"application/json"}] }
 }
 ```
 
 ### 9.2 Server-Sent Events (SSE)
 - Transport: `text/event-stream`
-- Event fields: `event:` (optional), `data:` (JSON), `id:` (optional)
-- Example frame:
-```
-event: message
-data: {"trace_id":"...","type":"progress","payload":{"step":"compile","pct":42}}
-
-```
+- Events: `meta`, domain events (e.g., `rag.item`, `rag.done`, `llm.done`, `ui.generate`), final `done` with `artifacts`.
 
 ### 9.3 Realtime (Supabase)
-- Channels: `cogo:agent:<agent_id>` or flow-specific `trace:<trace_id>`
-- Message JSON:
-```json
-{ "trace_id":"...", "type":"event|log|result", "payload":{ /* domain */ } }
-```
-- Use Realtime for async notifications; fall back to HTTP polling if disabled.
+- Channels: `trace:<trace_id>`
 
-## 10. Figma Ingestion & Inputs
+## 10. RAG Toggle & Samples
 
-Two paths are supported.
-
-### 10.1 Via Figma Plugin (Recommended)
-- Configure Figma Access Token in the Plugin settings (never paste in chat/docs).
-- Select component/page in Figma, then “Send to Agent”. The plugin calls Edge Functions (Edge) to presign and ingest.
-- Data sent (typical): `{ file_url, page_url, node_id(s), selection_meta }` → returns `ingestId`.
-- In Chatting, reference the ingest: “Use ingestId <id> from my last Figma selection and generate BDD for #onLoginClicked.”
-
-### 10.2 Via Chat Only (No Plugin)
-- Provide a public Figma URL (file or page). Private files require token; do not paste tokens into chat.
-- If private: use a secure presign endpoint (Edge) operated by the team that holds the token centrally; pass only the URL in chat.
-- Minimal chat prompt:
-```
-Generate symbols/variables for this Figma page: <FIGMA_PAGE_URL>.
-Only use centrally configured tokens via Edge presign; do not request tokens from me.
+- Env: `ENABLE_RAG=true|false` (default: true)
+- JSON sample (RAG off expected):
+```bash
+curl -sS -X POST "$BASE/design-generate" \
+  -H 'content-type: application/json' -H "apikey: $ANON" -H "Authorization: Bearer $ANON" \
+  --data '{"prompt":"login without rag"}' | jq '{trace_id, rag_count: (.rag.count // 0), artifacts}'
 ```
 
-## 11. Chatting Inputs for COGO UI JSON → Variables/Symbols/BDD/ActionFlow
+## 11. Artifacts TTL/Bucket
 
-When working from existing COGO UI JSON:
-- Provide either a small JSON snippet or a reference (artifact id/URL). Prefer references for large payloads.
-- Specify the page/scope and goal.
-
-Example prompt:
-```
-Scope: loginPage
-Goal: derive symbols/variables and draft BDD for #onLoginClicked.
-Artifact: https://.../artifacts/ui/login.json (COGO UI JSON)
-Output: mapping (#symbol → #_appData/#_uiState), BDD, ActionFlow skeleton (undecided → actionType:"none").
-```
-
-Minimum fields expected by the compiler when sending raw JSON via API:
-```json
-{
-  "trace_id": "...",
-  "input": {
-    "ui_json": { /* COGO UI JSON */ },
-    "page": "loginPage",
-    "goals": ["symbols","variables","bdd","actionflow"]
-  }
-}
-```
+- Env: `ARTIFACTS_BUCKET=artifacts` (default), `ARTIFACTS_SIGN_TTL_SEC=600` (default)
+- `/_shared/artifacts.ts` respects these values for signing

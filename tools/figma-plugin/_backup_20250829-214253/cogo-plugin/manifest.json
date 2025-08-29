@@ -1,0 +1,11 @@
+{
+  "name": "Cogo UUI Converter",
+  "id": "cogo-uui-converter",
+  "api": "1.0.0",
+  "main": "dist/code.js",
+  "ui": "ui.html",
+  "editorType": ["figma", "figjam"],
+  "documentAccess": "dynamic"
+}
+
+

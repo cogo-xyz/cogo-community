@@ -13,6 +13,45 @@ This manual explains how to use the COGO Agent from ingestion (Figma/UUI/COGO JS
 - SSE: Streaming responses via `text/event-stream` (e.g., Chat through chat-gateway). Client reads SSE frames.
 - Realtime: Supabase Realtime channels (e.g., `trace:<trace_id>`) for async events.
 
+### Chat Protocol Quickstart (Edge-first)
+- Headers (development):
+  - `Authorization: Bearer <ANON>`
+  - `apikey: <ANON>`
+- Response envelope (user-facing, artifacts included):
+```json
+{
+  "ok": true,
+  "trace_id": "<uuid>",
+  "response": "Concise human-readable summary.",
+  "artifacts": {
+    "cogo_ui_json_preview": { "version": "1.0", "tree": [/* truncated */] },
+    "links": [
+      { "name": "cogo_ui_json", "url": "https://...signed...", "mime": "application/json" }
+    ]
+  }
+}
+```
+- Quick examples:
+```bash
+# Design generate (JSON)
+curl -sS -X POST "$BASE/design-generate" \
+  -H 'content-type: application/json' \
+  -H "apikey: $ANON" -H "Authorization: Bearer $ANON" \
+  --data '{"prompt":"Create a simple login page with email and password"}' | jq
+
+# Design generate (SSE)
+curl -sS -N -X POST "$BASE/design-generate?prompt=$(python3 - <<'PY'
+import urllib.parse; print(urllib.parse.quote('Create a simple login page with email and password'))
+PY
+)" -H 'accept: text/event-stream' -H "apikey: $ANON" -H "Authorization: Bearer $ANON"
+
+# Trace artifacts lookup (signed URLs)
+curl -sS "$BASE/api-router/metrics/trace/<TRACE_ID>" | jq '.artifacts'
+```
+- Notes:
+  - Large outputs are stored as artifacts (signed URL). Small previews appear inline under `artifacts.*_preview`.
+  - `trace_id` is returned in every response/stream for observability.
+
 ## 2. Prerequisites
 
 - Project created and accessible
