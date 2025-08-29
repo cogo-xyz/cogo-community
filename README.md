@@ -27,8 +27,7 @@ npm run build
 ### 2. Figma 플러그인 설치
 1. Figma → Plugins → Development → Import plugin from manifest
 2. 다음 경로에서 manifest.json 선택:
-   - 개발용: `tools/figma-plugin/manifest.json`
-   - 패키지용: `packages/figma-plugin/manifest.json`
+   - `packages/figma-plugin/manifest.json`
 
 ### 3. 플러그인 설정
 플러그인을 열고 다음 설정 입력:

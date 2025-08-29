@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Cogo UUI Converter</title>
+    <title>COGO Figma Agent</title>
     <style>
       body { font: 13px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin: 12px; }
       input { width: 100%; margin: 4px 0 8px; padding: 6px; }
@@ -14,274 +14,39 @@
   </head>
   <body>
     <label>Supabase Edge URL</label>
-    <input id="edge" placeholder="https://xxx.functions.supabase.co" />
+    <input id="edge" placeholder="https://<project>.functions.supabase.co" />
     <label>Anon Key</label>
     <input id="anon" placeholder="anon key" />
-    <label>Agent ID (optional)</label>
-    <input id="agentId" placeholder="cogo0" />
-    <label>Project ID</label>
-    <input id="projectId" placeholder="project uuid" />
-    <label>Metrics Host (optional)</label>
-    <input id="metrics" placeholder="http://localhost:3100" />
-    <button id="run">Convert Selection → UUI & Cogo</button>
-    <button id="test" style="margin-top: 8px; background: #f0f0f0;">Test Message Flow</button>
-    <div style="font-size: 11px; color: #666; margin-top: 4px;">
-      Note: This makes actual API calls to Supabase. If you get CORS errors, the server needs to allow requests from Figma plugins.
+    <label>Project UUID</label>
+    <input id="projectId" placeholder="e.g., 738a1fc6-..." />
+    <div style="display:flex; gap:8px; margin:8px 0;">
+      <button id="presenceRegister" style="flex:1;">Presence Register</button>
+      <button id="presenceUnreg" style="flex:1;">Presence Unregister</button>
     </div>
-    <hr />
-    <label>UUI/COGO Generate</label>
-    <input id="prompt" placeholder="Describe UI (e.g., login page with two inputs and a button)" />
-    <textarea id="cogo" placeholder='Optional COGO UI JSON seed' style="width:100%;height:100px"></textarea>
-    <button id="gen">Generate (deterministic)</button>
-    <button id="genLlm">Generate via LLM</button>
-    <hr />
-    <label>Ingest (large JSON)</label>
-    <input id="fileName" placeholder="figma_*.json (optional)" />
-    <textarea id="json" placeholder='Optional custom JSON to upload; leave empty to use selection' style="width:100%;height:120px"></textarea>
-    <button id="ingest">Upload & Ingest</button>
-    <hr />
-    <label>Chat (SSE)</label>
-    <input id="chatText" placeholder="Type a prompt for chat" />
-    <button id="chatSse">Chat SSE via /chat-gateway</button>
-    <hr />
-    <label>Figma Context SSE</label>
-    <input id="jobId" placeholder="job_id" />
-    <input id="cursor" placeholder="cursor (0..N-1)" />
-    <button id="ctxSse">Stream figma-context</button>
     <div id="status"></div>
-    <div id="actions" style="display:none; margin:8px 0;">
-      <button id="openUrl" style="margin-right:6px;">Open Artifact</button>
-      <button id="copyUrl" style="margin-right:6px;">Copy URL</button>
-      <button id="copyKey" style="margin-right:6px;">Copy Key</button>
-      <button id="copyTrace">Copy trace_id</button>
-    </div>
-    <div id="actionsConvert" style="display:none; margin:8px 0;">
-      <button id="copyUui" style="margin-right:6px;">Copy UUI JSON</button>
-      <button id="copyCogo">Copy Cogo JSON</button>
-    </div>
+    
     <pre id="out"></pre>
     <script>
       const $ = (id) => document.getElementById(id);
-      
-      // Safe copy function that works in Figma's sandboxed environment
-      function safeCopyText(text) {
-        if (text) {
-          // Try modern clipboard API first
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            try {
-              navigator.clipboard.writeText(text);
-              return true;
-            } catch (e) {
-              console.log('Modern clipboard API failed, trying fallback');
-            }
-          }
-          
-          // Fallback: create temporary textarea and select/copy
-          try {
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            textarea.style.position = 'fixed';
-            textarea.style.left = '-999999px';
-            textarea.style.top = '-999999px';
-            document.body.appendChild(textarea);
-            textarea.focus();
-            textarea.select();
-            
-            const successful = document.execCommand('copy');
-            document.body.removeChild(textarea);
-            
-            if (successful) {
-              return true;
-            }
-          } catch (e) {
-            console.log('Fallback copy failed:', e);
-          }
-          
-          // Last resort: show the text in a way user can manually copy
-          alert('Copy this text manually:\n\n' + text);
-          return false;
-        }
-        return false;
-      }
-      
-      // Retry function for UI context
-      async function retry(fn, opts = {}) {
-        const retries = opts.retries !== undefined ? opts.retries : 3;
-        const back = opts.backoffMs !== undefined ? opts.backoffMs : 500;
-        let lastErr;
-        for (let i = 0; i <= retries; i++) {
-          try { 
-            return await fn(); 
-          } catch (e) { 
-            lastErr = e; 
-          }
-          if (i < retries) {
-            await new Promise((r) => setTimeout(r, back * Math.max(1, i)));
-          }
-        }
-        throw lastErr;
-      }
-      
       // persist/load settings
-      const keys = ['edge','anon','projectId','metrics'];
+      const keys = ['edge','anon','projectId'];
       try { const saved = JSON.parse(localStorage.getItem('cogo-plugin:settings')||'{}'); keys.forEach(k=>{ if(saved[k]) $(k).value = saved[k]; }); } catch {}
-
-      document.getElementById('run').onclick = () => {
-        parent.postMessage({ pluginMessage: { type: 'convert', payload: { edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value, agentId: $('agentId').value } } }, '*');
-        try { localStorage.setItem('cogo-plugin:settings', JSON.stringify({ edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value, metrics: $('metrics').value, agentId: $('agentId').value })); } catch {}
-        $('status').textContent = 'Running...';
+      document.getElementById('presenceRegister').onclick = () => {
+        parent.postMessage({ pluginMessage: { type: 'presence_register', payload: { edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value } } }, '*');
+        try { localStorage.setItem('cogo-plugin:settings', JSON.stringify({ edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value })); } catch {}
+        $('status').textContent = 'Presence registering...';
       };
-      
-      document.getElementById('test').onclick = () => {
-        console.log('Test button clicked');
-        $('status').textContent = 'Testing message flow...';
-        // Send a test message to the plugin
-        parent.postMessage({ pluginMessage: { type: 'test', payload: { message: 'Hello from UI' } } }, '*');
-      };
-      document.getElementById('gen').onclick = () => {
-        parent.postMessage({ pluginMessage: { type: 'uui_generate', payload: { edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value, prompt: $('prompt').value, cogo: $('cogo').value, agentId: $('agentId').value } } }, '*');
-        $('status').textContent = 'Generating...';
-      };
-      document.getElementById('genLlm').onclick = () => {
-        parent.postMessage({ pluginMessage: { type: 'uui_generate_llm', payload: { edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value, prompt: $('prompt').value, cogo: $('cogo').value, agentId: $('agentId').value } } }, '*');
-        $('status').textContent = 'Generating (LLM)...';
-      };
-      document.getElementById('ingest').onclick = () => {
-        parent.postMessage({ pluginMessage: { type: 'ingest', payload: { edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value, fileName: $('fileName').value, json: $('json').value, agentId: $('agentId').value } } }, '*');
-        try { localStorage.setItem('cogo-plugin:settings', JSON.stringify({ edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value, metrics: $('metrics').value, agentId: $('agentId').value })); } catch {}
-        $('status').textContent = 'Uploading & Ingesting...';
-      };
-      document.getElementById('chatSse').onclick = () => {
-        parent.postMessage({ pluginMessage: { type: 'chat_sse', payload: { edge: $('edge').value, anon: $('anon').value, text: $('chatText').value, sessionId: 'sess_'+Date.now(), agentId: $('agentId').value } } }, '*');
-        $('status').textContent = 'Chat SSE connecting...';
-      };
-      document.getElementById('ctxSse').onclick = () => {
-        const cur = parseInt($('cursor').value||'0',10) || 0;
-        parent.postMessage({ pluginMessage: { type: 'context_sse', payload: { edge: $('edge').value, anon: $('anon').value, jobId: $('jobId').value, cursor: cur, agentId: $('agentId').value } } }, '*');
-        $('status').textContent = 'Context SSE connecting...';
+      document.getElementById('presenceUnreg').onclick = () => {
+        parent.postMessage({ pluginMessage: { type: 'presence_unregister', payload: { edge: $('edge').value, anon: $('anon').value } } }, '*');
+        $('status').textContent = 'Presence unregistering...';
       };
       window.onmessage = (ev) => {
         const msg = ev.data.pluginMessage;
         if (!msg) return;
-        
-        if (msg.type === 'status') { 
-          $('status').textContent = msg.message; 
-          return; 
-        }
-        
-        if (msg.type === 'api_request') {
-          // Handle API requests from the UI context to avoid CORS issues
-          console.log('UI received api_request:', msg.payload);
-          (async () => {
-            try {
-              console.log('Making API request to:', msg.payload.url);
-              
-              // Try to make the API request with proper CORS handling
-              const fetchOptions = {
-                method: msg.payload.method,
-                headers: {
-                  ...msg.payload.headers,
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(msg.payload.body)
-              };
-              
-              console.log('Fetch options:', fetchOptions);
-              
-              const res = await retry(() => fetch(msg.payload.url, fetchOptions), { retries: 2, backoffMs: 700 });
-              
-              console.log('API response received:', res.status, res.ok);
-              const json = await res.json();
-              console.log('API response JSON:', json);
-              
-              // Send result back to the plugin
-              parent.postMessage({ 
-                pluginMessage: { 
-                  type: 'result', 
-                  ok: res.ok, 
-                  json 
-                } 
-              }, '*');
-            } catch (e) {
-              console.error('API request failed:', e);
-              
-              // If it's a CORS error, provide helpful information
-              let errorMessage = String((e && e.message) || e);
-              if (errorMessage.includes('CORS') || errorMessage.includes('Failed to fetch')) {
-                errorMessage = 'CORS Error: The API server needs to allow requests from Figma plugins. Contact your API administrator to add proper CORS headers.';
-              }
-              
-              parent.postMessage({ 
-                pluginMessage: { 
-                  type: 'result', 
-                  ok: false, 
-                  error: errorMessage 
-                } 
-              }, '*');
-            }
-          })();
-          return;
-        }
-        
-        if (msg.type === 'result') {
-          $('status').textContent = msg.ok ? 'OK' : 'Failed';
+        if (msg.type === 'status') { $('status').textContent = msg.message; return; }
+        if (msg.type === 'presence') {
+          $('status').textContent = msg.ok ? `Presence OK (session_id=${msg.session_id||'?'})` : `Presence Failed: ${msg.error}`;
           $('status').className = msg.ok ? 'ok' : 'fail';
-          $('out').textContent = JSON.stringify(msg.json?.result || msg, null, 2);
-          $('actions').style.display = 'none';
-          const res = (msg.json && msg.json.result) ? msg.json.result : null;
-          const uui = res && res.uui_json ? JSON.stringify(res.uui_json, null, 2) : '';
-          const cogo = res && res.cogo_ui_json ? JSON.stringify(res.cogo_ui_json, null, 2) : '';
-          $('actionsConvert').style.display = (uui || cogo) ? 'block' : 'none';
-          $('copyUui').onclick = () => { if (uui) { safeCopyText(uui); } };
-          $('copyCogo').onclick = () => { if (cogo) { safeCopyText(cogo); } };
-          return;
-        }
-        if (msg.type === 'ingest_result') {
-          $('status').textContent = msg.ok ? 'Ready' : 'Failed';
-          $('status').className = msg.ok ? 'ok' : 'fail';
-          $('out').textContent = JSON.stringify(msg, null, 2);
-          const signed = msg.signedUrl || '';
-          const key = msg.key || '';
-          const trace = msg.trace_id || '';
-          $('actions').style.display = signed ? 'block' : 'none';
-          $('openUrl').onclick = () => { if (signed) window.open(signed, '_blank'); };
-          $('copyUrl').onclick = () => { safeCopyText(String(signed)); };
-          $('copyKey').onclick = () => { safeCopyText(String(key)); };
-          $('copyTrace').onclick = () => { safeCopyText(String(trace)); };
-          // Open Trace (metrics)
-          if ($('metrics').value && trace) {
-            const base = String($('metrics').value).replace(/\/$/, '');
-            const url = `${base}/api/metrics/trace/${encodeURIComponent(trace)}`;
-            const btn = document.createElement('button');
-            btn.textContent = 'Open Trace';
-            btn.style.marginLeft = '6px';
-            btn.onclick = () => window.open(url, '_blank');
-            $('actions').appendChild(btn);
-          }
-          return;
-        }
-        if (msg.type === 'sse_frame') {
-          const src = msg.source || 'sse';
-          const line = `[${src}] event=${msg.event} data=${msg.data}`;
-          $('out').textContent += (`\n${line}`);
-          return;
-        }
-        if (msg.type === 'sse_done') {
-          $('status').textContent = 'SSE done';
-          $('status').className = 'ok';
-          return;
-        }
-        if (msg.type === 'sse_error') {
-          $('status').textContent = `SSE error: ${msg.error}`;
-          $('status').className = 'fail';
-          return;
-        }
-        
-        if (msg.type === 'test_result') {
-          $('status').textContent = msg.message;
-          $('status').className = 'ok';
-          console.log('UI received test result:', msg.message);
           return;
         }
       };
