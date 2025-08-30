@@ -10,7 +10,7 @@ type ContextSseMsg = { type: 'context_sse'; payload: { edge: string; anon: strin
 type GenerateMsg = { type: 'uui_generate'; payload: { edge: string; anon: string; projectId?: string; prompt?: string; cogo?: string; agentId?: string } };
 type GenerateLlmMsg = { type: 'uui_generate_llm'; payload: { edge: string; anon: string; projectId?: string; prompt: string; cogo?: string; agentId?: string } };
 // New
-type PresenceRegisterMsg = { type: 'presence_register'; payload: { edge: string; anon: string; projectId?: string; fileKey?: string; userId?: string; ttlMs?: number; agentId?: string; language?: string; pageId?: number } };
+type PresenceRegisterMsg = { type: 'presence_register'; payload: { edge: string; anon: string; projectId?: string; fileKey?: string; userId?: string; ttlMs?: number; agentId?: string } };
 type PresenceUnregMsg = { type: 'presence_unregister'; payload: { edge: string; anon: string; sessionId?: string; agentId?: string } };
 type StartMsg = { type: 'context_start'; payload: { edge: string; anon: string; figmaUrl?: string; agentId?: string } };
 type ApplyMsg = { type: 'context_apply'; payload: { edge: string; anon: string; jobId: string; projectId: string; pageId?: number; agentId?: string } };
@@ -67,8 +67,6 @@ async function readSse(url: string, init: any = {}) {
 let presenceSessionId = '';
 let heartbeatTimer: any = null;
 let persistentPluginId = '';
-let prefLanguage: string = 'auto';
-let prefPageId: number | undefined = undefined;
 function uuid() { try { return crypto.randomUUID(); } catch { return (Date.now()+ '-' + Math.random().toString(16).slice(2)); } }
 (async () => {
   try {
@@ -110,8 +108,6 @@ figma.ui.onmessage = async (msg: AnyMsg) => {
   if ((msg as any).type === 'presence_register') {
     try {
       const p = (msg as PresenceRegisterMsg).payload;
-      if (typeof p.language === 'string' && p.language.trim()) prefLanguage = p.language.trim();
-      if (typeof p.pageId === 'number') prefPageId = p.pageId;
       await presenceRegister(p.edge, p.anon, p.projectId, p.fileKey, p.userId, p.ttlMs, p.agentId);
     } catch (e) {
       figma.ui.postMessage({ type: 'presence', ok: false, error: String((e as Error).message || e) });
@@ -173,23 +169,13 @@ figma.ui.onmessage = async (msg: AnyMsg) => {
         user_id: 'figma-plugin',
         session_id: 'sess_' + Date.now(),
         projectId: (msg as ConvertMsg).payload.projectId,
-        page_id: (typeof prefPageId === 'number' ? prefPageId : 1),
+        page_id: 1,
         page_name: figma.currentPage.name,
-        cogo_ui_json: nodes,
-        intent: { language: prefLanguage, keywords: ['symbols.identify'] }
+        cogo_ui_json: nodes
       };
-      const idem = 'sym-' + Date.now();
-      const res = await retry(() => fetch((msg as ConvertMsg).payload.edge.replace(/\/$/, '') + '/figma-compat/uui/symbols/map', { method: 'POST', headers: { ...headers((msg as ConvertMsg).payload.anon, (msg as ConvertMsg).payload.agentId), 'Idempotency-Key': idem }, body: JSON.stringify(body) }), { retries: 2, backoffMs: 700 });
+      const res = await retry(() => fetch((msg as ConvertMsg).payload.edge.replace(/\/$/, '') + '/figma-compat/uui/symbols/map', { method: 'POST', headers: headers((msg as ConvertMsg).payload.anon, (msg as ConvertMsg).payload.agentId), body: JSON.stringify(body) }), { retries: 2, backoffMs: 700 });
       const json = await res.json();
       figma.ui.postMessage({ type: 'result', ok: res.ok, json });
-      try {
-        const ih = (json && json.ide_hints) || null;
-        if (ih) {
-          const t = (prefLanguage || 'en').toLowerCase();
-          const toast = ih[`toast_${t}`] || ih.toast || '';
-          if (toast) postStatus(String(toast));
-        }
-      } catch {}
     } catch (e) {
       figma.ui.postMessage({ type: 'result', ok: false, error: String((e as Error)?.message || e) });
     }
@@ -302,22 +288,13 @@ figma.ui.onmessage = async (msg: AnyMsg) => {
         if (!raw.trim()) return undefined;
         try { return JSON.parse(raw); } catch { return undefined; }
       })();
-      const body: any = { projectId: (msg as GenerateMsg).payload.projectId, intent: { language: prefLanguage, keywords: ['ui.generate'] } };
+      const body: any = { projectId: (msg as GenerateMsg).payload.projectId };
       if (typeof (msg as GenerateMsg).payload.prompt === 'string') body.prompt = (msg as GenerateMsg).payload.prompt;
       if (cogo) body.cogo_ui_json = cogo;
       postStatus('Generating UUI/COGO...');
-      const idem = 'gen-' + Date.now();
-      const res = await retry(() => fetch(base + path, { method: 'POST', headers: { ...headers(((msg as any).payload.anon), ((msg as any).payload.agentId)), 'Idempotency-Key': idem }, body: JSON.stringify(body) }), { retries: 2, backoffMs: 700 });
+      const res = await retry(() => fetch(base + path, { method: 'POST', headers: headers(((msg as any).payload.anon), ((msg as any).payload.agentId)), body: JSON.stringify(body) }), { retries: 2, backoffMs: 700 });
       const json = await res.json().catch(() => ({}));
       figma.ui.postMessage({ type: 'result', ok: res.ok, json });
-      try {
-        const ih = (json && json.ide_hints) || null;
-        if (ih) {
-          const t = (prefLanguage || 'en').toLowerCase();
-          const toast = ih[`toast_${t}`] || ih.toast || '';
-          if (toast) postStatus(String(toast));
-        }
-      } catch {}
     } catch (e) {
       figma.ui.postMessage({ type: 'result', ok: false, error: String((e as Error)?.message || e) });
     }

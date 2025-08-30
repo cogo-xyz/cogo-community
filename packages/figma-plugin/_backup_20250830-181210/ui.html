@@ -19,10 +19,6 @@
     <input id="anon" placeholder="anon key" />
     <label>Project UUID</label>
     <input id="projectId" placeholder="e.g., 738a1fc6-..." />
-    <label>Language (auto/ko/en/ru/th/ja)</label>
-    <input id="language" placeholder="auto" />
-    <label>Page ID (optional)</label>
-    <input id="pageId" placeholder="1" />
     <div style="display:flex; gap:8px; margin:8px 0;">
       <button id="presenceRegister" style="flex:1;">Presence Register</button>
       <button id="presenceUnreg" style="flex:1;">Presence Unregister</button>
@@ -33,11 +29,11 @@
     <script>
       const $ = (id) => document.getElementById(id);
       // persist/load settings
-      const keys = ['edge','anon','projectId','language','pageId'];
+      const keys = ['edge','anon','projectId'];
       try { const saved = JSON.parse(localStorage.getItem('cogo-plugin:settings')||'{}'); keys.forEach(k=>{ if(saved[k]) $(k).value = saved[k]; }); } catch {}
       document.getElementById('presenceRegister').onclick = () => {
-        parent.postMessage({ pluginMessage: { type: 'presence_register', payload: { edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value, language: $('language').value, pageId: (Number($('pageId').value)||undefined) } } }, '*');
-        try { localStorage.setItem('cogo-plugin:settings', JSON.stringify({ edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value, language: $('language').value, pageId: $('pageId').value })); } catch {}
+        parent.postMessage({ pluginMessage: { type: 'presence_register', payload: { edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value } } }, '*');
+        try { localStorage.setItem('cogo-plugin:settings', JSON.stringify({ edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value })); } catch {}
         $('status').textContent = 'Presence registering...';
       };
       document.getElementById('presenceUnreg').onclick = () => {
