@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "domain": "sdk",
+  "action": "attachments-result",
+  "status": 200,
+  "result": {
+    "ok": true,
+    "status": "ready",
+    "bucket": "artifacts",
+    "key": "artifacts/cogo_ui/00000000-0000-4000-8000-175660029145/80cd82e2-d9e6-4abf-8177-f0ded8dfca70.json",
+    "signedUrl": "https://cjvgmyotqxfpxpvmwxfv.supabase.co/storage/v1/object/sign/artifacts/artifacts/cogo_ui/00000000-0000-4000-8000-175660029145/80cd82e2-d9e6-4abf-8177-f0ded8dfca70.json?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV83ZjZiYzVlNS0xNjlkLTRlN2ItOThjZC05MGY1N2U1ZjFjYWQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhcnRpZmFjdHMvYXJ0aWZhY3RzL2NvZ29fdWkvMDAwMDAwMDAtMDAwMC00MDAwLTgwMDAtMTc1NjYwMDI5MTQ1LzgwY2Q4MmUyLWQ5ZTYtNGFiZi04MTc3LWYwZGVkOGRmY2E3MC5qc29uIiwiaWF0IjoxNzU2NjE0MTY0LCJleHAiOjE3NTY2MTc3NjR9.QL0NzkJvhpJj0v7G8mTSSlX99WTk9UzOGlDZQZNrvWc"
+  }
+}

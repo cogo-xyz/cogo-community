@@ -1,0 +1,48 @@
+{
+  "ok": true,
+  "domain": "sdk",
+  "action": "compat-variables-derive",
+  "status": 200,
+  "result": {
+    "ok": true,
+    "result": {
+      "note": "uui.variables_derive",
+      "variables": {
+        "appData": {},
+        "uiState": {}
+      },
+      "uui_json": {
+        "version": "1.0",
+        "tree": [],
+        "meta": {
+          "project_id": "00000000-0000-4000-8000-175660029145"
+        }
+      },
+      "cogo_ui_json": {
+        "version": "1.0",
+        "page": {
+          "id": 1
+        },
+        "tree": [],
+        "meta": {
+          "project_id": "00000000-0000-4000-8000-175660029145"
+        }
+      },
+      "input_preview": []
+    },
+    "trace_id": "e8b0099c-7a7b-4949-ad43-45de66e68a21",
+    "legacy": {
+      "wrote": true
+    },
+    "artifact": {
+      "uploaded": true,
+      "bucket": "figma",
+      "path": "fig2cg/00000000-0000-4000-8000-175660029145/uui.variables_derive/e8b0099c-7a7b-4949-ad43-45de66e68a21.json",
+      "public_url": "https://cjvgmyotqxfpxpvmwxfv.supabase.co/storage/v1/object/public/figma/fig2cg/00000000-0000-4000-8000-175660029145/uui.variables_derive/e8b0099c-7a7b-4949-ad43-45de66e68a21.json"
+    },
+    "components": {
+      "wrote": false,
+      "reason": "insert or update on table \"components\" violates foreign key constraint \"components_page_id_fkey\""
+    }
+  }
+}

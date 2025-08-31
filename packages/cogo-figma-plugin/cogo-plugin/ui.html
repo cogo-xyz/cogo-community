@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>COGO Figma Agent</title>
+    <style>
+      body { font: 13px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin: 12px; }
+      input { width: 100%; margin: 4px 0 8px; padding: 6px; }
+      button { width: 100%; padding: 8px; }
+      pre { background: #f6f8fa; padding: 8px; height: 200px; overflow: auto; }
+      .ok { color: #0a0; }
+      .fail { color: #a00; }
+    </style>
+  </head>
+  <body>
+    <label>Supabase Edge URL</label>
+    <input id="edge" placeholder="https://<project>.functions.supabase.co" />
+    <label>Anon Key</label>
+    <input id="anon" placeholder="anon key" />
+    <label>Project UUID</label>
+    <input id="projectId" placeholder="e.g., 738a1fc6-..." />
+    <div style="display:flex; gap:8px; margin:8px 0;">
+      <button id="presenceRegister" style="flex:1;">Presence Register</button>
+      <button id="presenceUnreg" style="flex:1;">Presence Unregister</button>
+    </div>
+    <div id="status"></div>
+    
+    <pre id="out"></pre>
+    <script>
+      const $ = (id) => document.getElementById(id);
+      // persist/load settings
+      const keys = ['edge','anon','projectId'];
+      try { const saved = JSON.parse(localStorage.getItem('cogo-plugin:settings')||'{}'); keys.forEach(k=>{ if(saved[k]) $(k).value = saved[k]; }); } catch {}
+      document.getElementById('presenceRegister').onclick = () => {
+        parent.postMessage({ pluginMessage: { type: 'presence_register', payload: { edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value } } }, '*');
+        try { localStorage.setItem('cogo-plugin:settings', JSON.stringify({ edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value })); } catch {}
+        $('status').textContent = 'Presence registering...';
+      };
+      document.getElementById('presenceUnreg').onclick = () => {
+        parent.postMessage({ pluginMessage: { type: 'presence_unregister', payload: { edge: $('edge').value, anon: $('anon').value } } }, '*');
+        $('status').textContent = 'Presence unregistering...';
+      };
+      window.onmessage = (ev) => {
+        const msg = ev.data.pluginMessage;
+        if (!msg) return;
+        if (msg.type === 'status') { $('status').textContent = msg.message; return; }
+        if (msg.type === 'presence') {
+          $('status').textContent = msg.ok ? `Presence OK (session_id=${msg.session_id||'?'})` : `Presence Failed: ${msg.error}`;
+          $('status').className = msg.ok ? 'ok' : 'fail';
+          return;
+        }
+      };
+    </script>
+  </body>
+  </html>
+
+

@@ -165,3 +165,24 @@ This project is distributed under the license specified in the [LICENSE](LICENSE
 
 </div>
 
+
+## SDK & CLI Guides
+- SDK (TypeScript): docs/SDK_TS.md
+- SDK (Flutter): docs/SDK_FLUTTER.md
+- CLI (Flutter): docs/CLI_COGO_FLUTTER.md
+- Plan: docs/plans/COGO_CLI_DESIGN.md
+
+## New Packages
+- packages/cogo-chat-sdk-ts
+- packages/cogo-chat-sdk-flutter
+- packages/cogo-cli-flutter
+- packages/cogo-figma-plugin
+
+## Figma Plugin Guides
+- Protocol: docs/EDGE_FIGMA_PLUGIN_PROTOCOL.md
+- User Guide: docs/FIGMA_PLUGIN_USER_GUIDE.md
+- Examples: docs/FIGMA_PLUGIN_EXAMPLES.md
+
+
+Note:
+- Ingest result returns { bucket, key, signedUrl }. key is bucket-relative; prefer using signedUrl to download.

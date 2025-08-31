@@ -1,0 +1,35 @@
+{
+  "ok": true,
+  "domain": "sdk",
+  "action": "trace-status",
+  "status": 200,
+  "result": {
+    "ok": true,
+    "trace_id": "80cd82e2-d9e6-4abf-8177-f0ded8dfca70",
+    "status": "done",
+    "events": [
+      {
+        "event_type": "uui_ingest_succeeded",
+        "message_id": "80cd82e2-d9e6-4abf-8177-f0ded8dfca70",
+        "project_id": "00000000-0000-4000-8000-175660029145",
+        "payload": {
+          "key": "artifacts/cogo_ui/00000000-0000-4000-8000-175660029145/80cd82e2-d9e6-4abf-8177-f0ded8dfca70.json",
+          "bucket": "artifacts"
+        },
+        "created_at": "2025-08-31T04:11:35.916161+00:00"
+      },
+      {
+        "event_type": "uui_ingest_requested",
+        "message_id": "80cd82e2-d9e6-4abf-8177-f0ded8dfca70",
+        "project_id": "00000000-0000-4000-8000-175660029145",
+        "payload": {
+          "size": null,
+          "bucket": "figma",
+          "sha256": null,
+          "storage_key": "uploads/00000000-0000-4000-8000-175660029145/uui.json"
+        },
+        "created_at": "2025-08-31T04:11:34.232017+00:00"
+      }
+    ]
+  }
+}
