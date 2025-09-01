@@ -229,12 +229,12 @@ FIREWORKS_API_KEY=fw_3ZiXdMNVDzkYJg9cFpedJWTB
 FIREWORKS_MODEL=qwen3-coder-480b-a35b-instruct
 
 # Secondary Model (Claude)
-ANTHROPIC_API_KEY=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
+ANTHROPIC_API_KEY=your-anthropic-api-key-here
 CLAUDE_MODEL=claude-3-5-sonnet-20241022
 
 # Backup Models
-OPENAI_API_KEY=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
-GEMINI_API_KEY=AIzaSyC3qA7UuDCCtuhDbacsvJQpdTmNlAdYzC4
+OPENAI_API_KEY=your-openai-api-key-here
+GEMINI_API_KEY=your-gemini-api-key-here
 ```
 
 ### Strategy Configuration
