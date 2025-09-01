@@ -1,3 +1,62 @@
+## Figma Plugin — Example Calls
+
+### Prerequisites
+- Env variables:
+  - `SUPABASE_EDGE` or `SUPABASE_PROJECT_ID`
+  - `SUPABASE_ANON_KEY`
+
+### Verify with Node Script
+Run the repository helper script:
+
+```bash
+node tools/figma-verify.mjs
+```
+
+Expected output:
+
+```
+[env] { base: 'https://<ref>.functions.supabase.co/functions/v1', anonSet: true, projectId: '<uuid>' }
+[symbols.map] 200 true <trace_id>
+[uui.generate] 200 true <trace_id>
+```
+
+### symbols.map (curl)
+```bash
+PJ=$(uuidgen)
+BASE=${SUPABASE_EDGE:-https://${SUPABASE_PROJECT_ID}.functions.supabase.co}/functions/v1
+curl -sS -X POST "$BASE/figma-compat/uui/symbols/map" \
+  -H 'content-type: application/json' \
+  -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+  -H "apikey: $SUPABASE_ANON_KEY" \
+  --data '{"projectId":"'$PJ'","page_id":1,"page_name":"Page","cogo_ui_json":[{"type":"container"}],"intent":{"language":"en","keywords":["symbols.identify"]}}'
+```
+
+### generate (curl)
+```bash
+PJ=${PJ:-$(uuidgen)}
+BASE=${SUPABASE_EDGE:-https://${SUPABASE_PROJECT_ID}.functions.supabase.co}/functions/v1
+curl -sS -X POST "$BASE/figma-compat/uui/generate" \
+  -H 'content-type: application/json' \
+  -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+  -H "apikey: $SUPABASE_ANON_KEY" \
+  --data '{"projectId":"'$PJ'","prompt":"Login page","intent":{"language":"en","keywords":["ui.generate"]}}'
+```
+
+### Large JSON — Ingest Flow
+```bash
+# 1) Presign (if using storage upload) — endpoint may vary
+# 2) Upload via signed URL
+# 3) Enqueue ingest
+BASE=${SUPABASE_EDGE:-https://${SUPABASE_PROJECT_ID}.functions.supabase.co}/functions/v1
+TRACE=$(curl -sS -X POST "$BASE/figma-compat/uui/ingest" \
+  -H 'content-type: application/json' \
+  -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+  -H "apikey: $SUPABASE_ANON_KEY" \
+  --data '{"projectId":"'$PJ'","signedUrl":"https://storage.example/signed.json"}' | jq -r '.trace_id')
+
+curl -sS "$BASE/figma-compat/uui/ingest/result?trace_id=$TRACE"
+```
+
 ### Figma Plugin Examples — Prompts & JSON
 
 #### 1) Deterministic Generate

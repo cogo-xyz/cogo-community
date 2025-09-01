@@ -1,0 +1,6 @@
+{
+  "#loginAPI": { "type": "api_endpoint", "url": "/functions/v1/actionflow-compat/compat/actionflow/healthz", "method": "GET" },
+  "#statusMessage": { "type": "app_var", "path": "appData.statusMessage" },
+  "#loginButton": { "type": "ui", "id": "loginButton" },
+  "#statusText": { "type": "ui", "id": "statusText" }
+}

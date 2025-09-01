@@ -1,0 +1,264 @@
+openapi: 3.0.3
+info:
+  title: Figma Compatibility (UUI Direct) - Supabase Edge
+  version: 1.0.0
+servers:
+  - url: https://{project}.functions.supabase.co
+    variables:
+      project:
+        default: YOUR_PROJECT_REF
+paths:
+  /figma-compat/healthz:
+    get:
+      summary: Liveness
+      responses:
+        '200': { description: ok }
+
+  /figma-compat/uui/symbols/map:
+    post:
+      summary: UUI symbols map (direct)
+      description: Direct endpoint for Figma Plugin to call without queueing. Use in conjunction with `projectId`, optional `cogoProjectId`.
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          schema: { type: string }
+          required: false
+          description: Optional idempotency key. If the server enforces idempotency (REQUIRE_IDEMPOTENCY=true), this header or body.idempotencyKey is required.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [projectId, page_id]
+              properties:
+                projectId: { type: string, format: uuid }
+                cogoProjectId: { type: string, description: Optional internal COGO project scope }
+                sessionId: { type: string }
+                page_id: { type: integer, format: int32 }
+                variables: { type: object, additionalProperties: true }
+                creatego_json: { type: array, items: { type: object } }
+                figma_like: { type: array, items: { type: object }, description: Alternative input }
+                idempotencyKey: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  trace_id: { type: string }
+                  result: { type: object }
+              examples:
+                success:
+                  value:
+                    ok: true
+                    trace_id: "tr-123"
+                    result: { note: "uui.symbols_map.mock", symbols: [] }
+                    legacy: { wrote: true }
+                    artifact: { uploaded: true, bucket: "figma", path: "fig2cg/<project_uuid>/uui.symbols_map/tr-123.json", public_url: "https://.../figma/fig2cg/.../tr-123.json" }
+        '400':
+          description: Invalid params or idempotency required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  error: { type: string }
+                  reason: { type: string }
+                  details: { type: object }
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  error: { type: string }
+                  reason: { type: string }
+
+  /figma-compat/uui/variables/derive:
+    post:
+      summary: UUI variables derive (direct)
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          schema: { type: string }
+          required: false
+          description: Optional idempotency key. If the server enforces idempotency (REQUIRE_IDEMPOTENCY=true), this header or body.idempotencyKey is required.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [projectId, page_id]
+              properties:
+                projectId: { type: string, format: uuid }
+                cogoProjectId: { type: string }
+                sessionId: { type: string }
+                page_id: { type: integer, format: int32 }
+                creatego_json: { type: array, items: { type: object } }
+                figma_like: { type: array, items: { type: object } }
+                idempotencyKey: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  trace_id: { type: string }
+                  result: { type: object }
+              examples:
+                success:
+                  value:
+                    ok: true
+                    trace_id: "tr-456"
+                    result: { note: "uui.variables_derive.mock", variables: { appData: {}, uiState: {} } }
+                    legacy: { wrote: true }
+                    artifact: { uploaded: true, bucket: "figma", path: "fig2cg/<project_uuid>/uui.variables_derive/tr-456.json", public_url: "https://..." }
+        '400':
+          description: Invalid params or idempotency required
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  error: { type: string }
+                  reason: { type: string }
+                  details: { type: object }
+        '500':
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  error: { type: string }
+                  reason: { type: string }
+
+  /figma-compat/uui/bdd/generate:
+    post:
+      summary: UUI BDD generate (direct)
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          schema: { type: string }
+          required: false
+          description: Optional idempotency key. If the server enforces idempotency (REQUIRE_IDEMPOTENCY=true), this header or body.idempotencyKey is required.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [projectId]
+              properties:
+                projectId: { type: string, format: uuid }
+                cogoProjectId: { type: string }
+                sessionId: { type: string }
+                symbol_mappings: { type: array, items: { type: object } }
+                creatego_json: { type: array, items: { type: object } }
+                event_list: { type: array, items: { type: object } }
+                idempotencyKey: { type: string }
+      responses:
+        '200': { description: OK }
+        '400':
+          description: Invalid params
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  error: { type: string }
+                  reason: { type: string }
+                  details: { type: object }
+
+  /figma-compat/uui/bdd/refine:
+    post:
+      summary: UUI BDD refine (direct)
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          schema: { type: string }
+          required: false
+          description: Optional idempotency key. If the server enforces idempotency (REQUIRE_IDEMPOTENCY=true), this header or body.idempotencyKey is required.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [projectId, current_bdd]
+              properties:
+                projectId: { type: string, format: uuid }
+                cogoProjectId: { type: string }
+                sessionId: { type: string }
+                page_id: { oneOf: [{type: integer}, {type: string}] }
+                current_bdd: { type: string }
+                refinement_queries: { type: array, items: { type: string } }
+                idempotencyKey: { type: string }
+      responses:
+        '200': { description: OK }
+        '400':
+          description: Invalid params
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  error: { type: string }
+                  reason: { type: string }
+                  details: { type: object }
+
+  /figma-compat/uui/actionflow/refine:
+    post:
+      summary: UUI ActionFlow refine (direct)
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          schema: { type: string }
+          required: false
+          description: Optional idempotency key. If the server enforces idempotency (REQUIRE_IDEMPOTENCY=true), this header or body.idempotencyKey is required.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [projectId, current_flow]
+              properties:
+                projectId: { type: string, format: uuid }
+                cogoProjectId: { type: string }
+                sessionId: { type: string }
+                page_id: { oneOf: [{type: integer}, {type: string}] }
+                flow_id: { type: string }
+                current_flow: { type: object }
+                refinement_queries: { type: array, items: { type: string } }
+                idempotencyKey: { type: string }
+      responses:
+        '200': { description: OK }
+        '400':
+          description: Invalid params
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  error: { type: string }
+                  reason: { type: string }
+                  details: { type: object }
+
+

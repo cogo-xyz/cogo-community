@@ -1,0 +1,8 @@
+{
+  "id": "ctaFlow",
+  "version": "1.0.0",
+  "steps": [
+    { "actionType": "api_call", "target": "#ctaAPI", "params": { "resultPath": "appData.lastCtaResult" } },
+    { "actionType": "setProperty", "target": "appData.statusMessage", "params": { "value": "Action completed" } }
+  ]
+}

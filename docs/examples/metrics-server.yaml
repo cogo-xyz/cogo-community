@@ -1,0 +1,284 @@
+openapi: 3.0.3
+info:
+  title: Metrics Server API
+  version: 1.0.0
+servers:
+  - url: http://localhost:3100
+paths:
+  /api/metrics/chat/project:
+    get:
+      summary: Chat metrics (project)
+      parameters:
+        - in: query
+          name: projectId
+          required: true
+          schema: { type: string, format: uuid }
+        - in: query
+          name: cogoProjectId
+          schema: { type: string }
+        - in: query
+          name: sinceMs
+          schema: { type: integer, minimum: 0, default: 86400000 }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  counts:
+                    type: object
+                    properties: { total: {type: integer}, ok: {type: integer}, failed: {type: integer} }
+                  p50: { type: integer, nullable: true }
+                  p95: { type: integer, nullable: true }
+                  successRate: { type: number }
+                  recent:
+                    type: array
+                    items:
+                      type: object
+                      properties: { at: {type: string}, type: {type: string}, latency_ms: { type: integer, nullable: true } }
+
+  /api/metrics/uui/project:
+    get:
+      summary: UUI metrics (project)
+      parameters:
+        - in: query
+          name: projectId
+          required: true
+          schema: { type: string, format: uuid }
+        - in: query
+          name: sinceMs
+          schema: { type: integer, minimum: 0, default: 86400000 }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  p95: { type: integer, nullable: true }
+                  errorRate: { type: number, nullable: true }
+                  tools:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        key: { type: string }
+                        p95: { type: integer, nullable: true }
+                        errorRate: { type: number, nullable: true }
+                        count: { type: integer }
+                        okCount: { type: integer }
+
+  /api/metrics/uui/service:
+    get:
+      summary: UUI per-service metrics
+      parameters:
+        - in: query
+          name: projectId
+          required: true
+          schema: { type: string, format: uuid }
+        - in: query
+          name: sinceMs
+          schema: { type: integer, minimum: 0, default: 86400000 }
+        - in: query
+          name: limit
+          schema: { type: integer, minimum: 1, maximum: 5000, default: 1000 }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  tools:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        key: { type: string }
+                        p95: { type: integer, nullable: true }
+                        errorRate: { type: number, nullable: true }
+                        count: { type: integer }
+                        okCount: { type: integer }
+
+  /api/metrics/uui/service/gate:
+    post:
+      summary: UUI per-service thresholds evaluation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ projectId ]
+              properties:
+                projectId: { type: string, format: uuid }
+                sinceMs: { type: integer, minimum: 0, default: 86400000 }
+                thresholds:
+                  type: object
+                  additionalProperties:
+                    type: object
+                    properties:
+                      p95: { type: integer }
+                      errorRate: { type: number }
+                sendAlert: { type: boolean }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  pass: { type: boolean }
+                  details:
+                    type: object
+                    additionalProperties:
+                      type: object
+                      properties:
+                        pass: { type: boolean }
+                        p95: { type: integer, nullable: true }
+                        errorRate: { type: number, nullable: true }
+                        p95Max: { type: integer, nullable: true }
+                        errorRateMax: { type: number, nullable: true }
+
+  /api/metrics/chat/gate:
+    post:
+      summary: Chat thresholds evaluation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ projectId ]
+              properties:
+                projectId: { type: string, format: uuid }
+                sinceMs: { type: integer, minimum: 0, default: 86400000 }
+                thresholds:
+                  type: object
+                  properties:
+                    p95: { type: integer }
+                    errorRate: { type: number }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  pass: { type: boolean }
+                  details:
+                    type: object
+                    properties:
+                      p95: { type: integer, nullable: true }
+                      errorRate: { type: number, nullable: true }
+                      p95Max: { type: integer, nullable: true }
+                      errorRateMax: { type: number, nullable: true }
+
+  /api/metrics/gate/combined:
+    post:
+      summary: Combined thresholds evaluation (UUI + Chat)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ projectId ]
+              properties:
+                projectId: { type: string, format: uuid }
+                sinceMs: { type: integer, minimum: 0, default: 86400000 }
+                uuiThresholds:
+                  type: object
+                  additionalProperties:
+                    type: object
+                    properties:
+                      p95: { type: integer }
+                      errorRate: { type: number }
+                chatThresholds:
+                  type: object
+                  properties:
+                    p95: { type: integer }
+                    errorRate: { type: number }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  pass: { type: boolean }
+                  uui:
+                    type: object
+                    properties:
+                      details:
+                        type: object
+                        additionalProperties:
+                          type: object
+                          properties:
+                            pass: { type: boolean }
+                            p95: { type: integer, nullable: true }
+                            errorRate: { type: number, nullable: true }
+                            p95Max: { type: integer, nullable: true }
+                            errorRateMax: { type: number, nullable: true }
+                  chat:
+                    type: object
+                    properties:
+                      p95: { type: integer, nullable: true }
+                      errorRate: { type: number, nullable: true }
+                      thresholds:
+                        type: object
+                        properties:
+                          p95: { type: integer }
+                          errorRate: { type: number }
+                      pass: { type: boolean }
+
+  /api/artifacts/smoke/summary:
+    get:
+      summary: Smoke artifacts summary
+      parameters:
+        - in: query
+          name: limit
+          schema: { type: integer, minimum: 1, maximum: 200, default: 20 }
+        - in: query
+          name: sinceMs
+          schema: { type: integer, minimum: 0 }
+        - in: query
+          name: projectId
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        ts: { type: string }
+                        file: { type: string }
+                        ok: { type: boolean }
+                  aggregate:
+                    type: object
+                    properties:
+                      count: { type: integer }
+                      perService: { type: object }
+
+

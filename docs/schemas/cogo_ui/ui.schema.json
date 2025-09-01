@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cogo.ai/schemas/cogo_ui/ui.schema.json",
+  "title": "Cogo UI JSON",
+  "type": "object",
+  "required": ["version", "pages", "components"],
+  "properties": {
+    "version": { "type": "string" },
+    "pages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "components": { "type": "array", "items": { "type": "string" } },
+          "layout": {
+            "type": "object",
+            "properties": {
+              "width": { "type": "number", "minimum": 1 },
+              "height": { "type": "number", "minimum": 1 },
+              "bg": { "type": "string" }
+            },
+            "required": ["width", "height"],
+            "additionalProperties": true
+          },
+          "includes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["pageRefId", "role", "dx", "dy", "index", "isEditable"],
+              "properties": {
+                "pageRefId": { "type": "string" },
+                "role": { "type": "string", "enum": ["HEADER", "FOOTER", "DRAWER", "BLOCK"] },
+                "dx": { "type": "number", "minimum": 0 },
+                "dy": { "type": "number", "minimum": 0 },
+                "index": { "type": "integer", "minimum": 0 },
+                "isEditable": { "type": "boolean" }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type"],
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "type": "string" },
+          "props": { "type": "object", "additionalProperties": true }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}
+

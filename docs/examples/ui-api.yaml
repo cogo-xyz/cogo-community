@@ -1,0 +1,256 @@
+openapi: 3.0.3
+info:
+  title: COGO UI API
+  version: 1.0.0
+paths:
+  /api/ui/convert:
+    post:
+      summary: Enqueue Figma→UUIS conversion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                toolset: { type: string, enum: [figma] }
+                tool: { type: string, enum: [get_selection, get_document_info] }
+                params: { type: object, additionalProperties: true }
+                figma_json: { type: object, additionalProperties: true }
+              required: [toolset]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  ui: { type: object, additionalProperties: true }
+                  valid: { type: boolean }
+                  errors: { type: array, items: { type: object }, nullable: true }
+        '202':
+          description: Accepted
+  /api/ui/bdd:
+    post:
+      summary: Enqueue UUIS→BDD generation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ui_json: { type: object }
+              required: [ui_json]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  scenarios: { type: array, items: { type: object } }
+  /api/ui/actions:
+    post:
+      summary: Enqueue BDD→ActionFlow synthesis
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bdd: { type: object }
+              required: [bdd]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  flow: { type: object, additionalProperties: true }
+  /api/ui/health:
+    get:
+      summary: UI pipeline health
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  ui: { type: object, additionalProperties: true }
+                  mcp: { type: object, additionalProperties: true }
+  /api/uui/fragment/preview:
+    get:
+      summary: Preview UUI fragment registry
+      description: |
+        Returns registry index or a specific fragment. If `key` is provided, returns the fragment summary and optional hash verification result.
+        When `verify=1` without `key`, performs batch hash verification across the registry.
+      parameters:
+        - in: query
+          name: url
+          required: true
+          schema: { type: string }
+        - in: query
+          name: key
+          required: false
+          schema: { type: string }
+        - in: query
+          name: verify
+          required: false
+          schema: { type: string, enum: ['0','1'] }
+        - in: query
+          name: maxKeys
+          required: false
+          schema: { type: string, pattern: "^\\d+$" }
+        - in: query
+          name: maxNodeBytes
+          required: false
+          schema: { type: string, pattern: "^\\d+$" }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+              examples:
+                index:
+                  summary: Registry index
+                  value:
+                    ok: true
+                    url: "https://example.com/registry.json"
+                    count: 12
+                    keys: ["page/home","fragment/card"]
+                    truncated: false
+                    config: { maxKeys: 50, maxNodeBytes: 16384, previewEnabled: true, adminGuard: false }
+                fragment:
+                  summary: Single fragment with hash verdict
+                  value:
+                    ok: true
+                    key: "fragment/card"
+                    verdict: "ok"
+                    recompute: "abcd1234ef567890"
+                    got: "abcd1234ef567890"
+                    truncated: false
+                    node: { id: "card-1", type: "cogo:card", name: "Card" }
+
+  /api/uui/stream:
+  /api/uui/cache/list:
+    get:
+      summary: List UUI fragment cache entries
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /api/uui/cache/prune:
+    post:
+      summary: Prune UUI fragment cache by TTL
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /api/uui/fragment/fetch:
+    post:
+      summary: Fetch a remote fragment registry into cache
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url: { type: string }
+              required: [url]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+  /api/uui/convert/batch:
+    post:
+      summary: Convert array of Figma JSONs to UUI
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                items:
+                  type: array
+                  items: { type: object }
+              required: [items]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+    get:
+      summary: Stream UUI fragment children (SSE, draft)
+      description: |
+        Server-Sent Events stream of a fragment's children as chunks. Disabled by default unless UUI_STREAMING_ENABLED=true.
+      parameters:
+        - in: query
+          name: url
+          required: true
+          schema: { type: string }
+        - in: query
+          name: key
+          required: true
+          schema: { type: string }
+        - in: query
+          name: delayMs
+          required: false
+          schema: { type: string, pattern: "^\\d+$" }
+        - in: query
+          name: maxChunks
+          required: false
+          schema: { type: string, pattern: "^\\d+$" }
+        - in: query
+          name: mode
+          required: false
+          schema: { type: string, enum: [summary, full] }
+        - in: query
+          name: children
+          required: false
+          schema: { type: string, enum: ['0','1'] }
+        - in: query
+          name: maxProps
+          required: false
+          schema: { type: string, pattern: "^\\d+$" }
+        - in: query
+          name: pingMs
+          required: false
+          schema: { type: string, pattern: "^\\d+$" }
+      responses:
+        '200':
+          description: |
+            text/event-stream
+            events: start, ping, chunk, end, error
+

@@ -1,0 +1,91 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "HTTP p95 latency",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "histogram_quantile(0.95, sum(rate(cogo_http_request_duration_ms_bucket[5m])) by (le, route))",
+          "legendFormat": "{{route}}"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Tool p95 latency by tool",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "histogram_quantile(0.95, sum(rate(cogo_tool_request_duration_ms_bucket[5m])) by (le, tool))",
+          "legendFormat": "{{tool}}"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Step retries (5m)",
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 8 },
+      "targets": [
+        { "refId": "A", "expr": "sum(rate(cogo_plan_steps_retry_total[5m]))" }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Step failures (5m)",
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 8 },
+      "targets": [
+        { "refId": "A", "expr": "sum(rate(cogo_plan_steps_failed_total[5m]))" }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Tool cost (USD total)",
+      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 8 },
+      "targets": [
+        { "refId": "A", "expr": "sum(cogo_tool_cost_usd_total)" }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Job p95 latency",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 12 },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "histogram_quantile(0.95, sum(rate(cogo_job_latency_ms_bucket[5m])) by (le))",
+          "legendFormat": "p95"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Inflight & Concurrency",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 12 },
+      "targets": [
+        { "refId": "A", "expr": "cogo_jobs_inflight", "legendFormat": "inflight" },
+        { "refId": "B", "expr": "cogo_worker_concurrency", "legendFormat": "concurrency" }
+      ]
+    }
+  ],
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["cogo", "actor-critic"],
+  "templating": { "list": [] },
+  "time": { "from": "now-6h", "to": "now" },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "COGO – Actor–Critic (Minimal)",
+  "version": 1
+}
+
+

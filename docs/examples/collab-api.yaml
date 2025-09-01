@@ -1,0 +1,111 @@
+openapi: 3.0.3
+info:
+  title: COGO Collab API
+  version: 1.0.0
+  description: Control-plane API for assigning tasks and reporting results between Executor and Workers/Agents.
+servers:
+  - url: https://api.example.com
+paths:
+  /collab/health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+  /collab/task.assign:
+    post:
+      summary: Assign a task to workers via control-plane
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskAssignRequest'
+      responses:
+        '200':
+          description: Enqueued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskAssignResponse'
+  /collab/task.result:
+    post:
+      summary: Report task result back to the system
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskResultRequest'
+      responses:
+        '200':
+          description: Acknowledged
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+components:
+  schemas:
+    JobId:
+      type: string
+      format: uuid
+    Artifact:
+      type: object
+      properties:
+        name:
+          type: string
+        size:
+          type: integer
+        url:
+          type: string
+    TaskAssignRequest:
+      type: object
+      required: [type, executorId]
+      properties:
+        type:
+          type: string
+          description: Job type, e.g., browser.screenshot
+        executorId:
+          type: string
+        payload:
+          type: object
+          additionalProperties: true
+        idempotencyKey:
+          type: string
+    TaskAssignResponse:
+      type: object
+      properties:
+        jobId:
+          $ref: '#/components/schemas/JobId'
+        queued:
+          type: boolean
+    TaskResultRequest:
+      type: object
+      required: [jobId, type, ok]
+      properties:
+        jobId:
+          $ref: '#/components/schemas/JobId'
+        type:
+          type: string
+        ok:
+          type: boolean
+        error:
+          type: string
+        artifact:
+          $ref: '#/components/schemas/Artifact'
+        artifacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Artifact'
+
+

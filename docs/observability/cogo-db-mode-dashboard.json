@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 38,
+  "title": "COGO – DB Mode Workers",
+  "timezone": "browser",
+  "version": 1,
+  "editable": true,
+  "refresh": "10s",
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Jobs Succeeded / Failed (rate)",
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
+      "targets": [
+        { "expr": "rate(cogo_jobs_succeeded_total[5m])", "legendFormat": "succeeded" },
+        { "expr": "rate(cogo_jobs_failed_total[5m])", "legendFormat": "failed" }
+      ]
+    },
+    {
+      "type": "heatmap",
+      "title": "Job Latency (ms)",
+      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
+      "targets": [ { "expr": "cogo_job_latency_ms" } ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Backoffs (rate)",
+      "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
+      "targets": [ { "expr": "rate(cogo_job_backoff_total[5m])", "legendFormat": "backoff" } ]
+    },
+    {
+      "type": "stat",
+      "title": "Inflight / Concurrency",
+      "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 },
+      "options": { "reduceOptions": { "calcs": ["last"], "fields": "" } },
+      "targets": [
+        { "expr": "cogo_jobs_inflight", "legendFormat": "inflight" },
+        { "expr": "cogo_worker_concurrency", "legendFormat": "concurrency" }
+      ]
+    }
+  ]
+}
+
+

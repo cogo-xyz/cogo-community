@@ -1,0 +1,412 @@
+openapi: 3.0.3
+info:
+  title: Collab API
+  version: 0.2.0
+  description: Queue-based collaboration API (jobs/artifacts/events) backed by Supabase
+servers:
+  - url: http://localhost:3100
+paths:
+  /api/collab/health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                  timestamp:
+                    type: string
+                    format: date-time
+  /api/collab/task.assign:
+    post:
+      summary: Enqueue a new job
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [type, executorId]
+              properties:
+                type:
+                  type: string
+                  example: browser.run
+                executorId:
+                  type: string
+                payload:
+                  type: object
+                  additionalProperties: true
+                idempotencyKey:
+                  type: string
+      responses:
+        '200':
+          description: Job queued or found by idempotency key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jobId:
+                    type: string
+                    format: uuid
+                  queued:
+                    type: boolean
+              example:
+                jobId: "00000000-0000-0000-0000-000000000000"
+                queued: true
+  /api/collab/task.result:
+    post:
+      summary: Report job result and record artifacts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [jobId, type, ok]
+              properties:
+                jobId:
+                  type: string
+                  format: uuid
+                type:
+                  type: string
+                ok:
+                  type: boolean
+                error:
+                  type: string
+                artifact:
+                  $ref: '#/components/schemas/Artifact'
+                artifacts:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Artifact'
+      responses:
+        '200':
+          description: Stored
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+              example:
+                ok: true
+  /api/collab/task.claim:
+    post:
+      summary: Claim one queued job for an executor (lease-based)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [executorId, workerId]
+              properties:
+                executorId:
+                  type: string
+                workerId:
+                  type: string
+                leaseSeconds:
+                  type: integer
+                  minimum: 15
+                  maximum: 600
+                  default: 60
+                typePrefix:
+                  type: string
+      responses:
+        '200':
+          description: Claimed job or null
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job:
+                    type: object
+  /api/collab/job/{id}:
+    get:
+      summary: Get a single job
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Job
+  /api/collab/jobs/recent:
+    get:
+      summary: List recent jobs
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+        - in: query
+          name: status
+          schema:
+            type: string
+        - in: query
+          name: executorId
+          schema:
+            type: string
+        - in: query
+          name: type
+          schema:
+            type: string
+        - in: query
+          name: cursor
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: Items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedJobs'
+              example:
+                items:
+                  - id: "11111111-1111-1111-1111-111111111111"
+                    type: "browser.run"
+                    status: "failed"
+                    executor_id: "verify-demo"
+                    created_at: "2025-08-09T12:21:54.511721+00:00"
+                count: 1
+                nextCursor: null
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/collab/artifacts/by-job/{id}:
+    get:
+      summary: List artifacts by job
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Items
+  /api/collab/events/by-job/{id}:
+    get:
+      summary: List job events (commit-backed)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Items
+  /api/collab/metrics/overview:
+    get:
+      summary: Metrics overview (status counts and latest jobs)
+      responses:
+        '200':
+          description: Metrics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                  counts:
+                    type: object
+                    additionalProperties:
+                      type: integer
+                  latest:
+                    type: array
+                    items:
+                      type: object
+                  ts:
+                    type: string
+                    format: date-time
+  /api/collab/job/{id}/summary:
+    get:
+      summary: Get job summary (job + artifacts + events)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Summary
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job:
+                    type: object
+                  artifacts:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Artifact'
+                  events:
+                    type: array
+                    items:
+                      type: object
+              example:
+                job:
+                  id: "22222222-2222-2222-2222-222222222222"
+                  type: "browser.run"
+                  status: "queued"
+                  executor_id: "verify-demo"
+                  created_at: "2025-08-09T12:21:54.511721+00:00"
+                artifacts: []
+                events:
+                  - id: 24
+                    job_id: "22222222-2222-2222-2222-222222222222"
+                    event_type: "queued"
+                    created_at: "2025-08-09T12:21:54.511721+00:00"
+  /api/collab/workers/heartbeat:
+    post:
+      summary: Upsert worker heartbeat (server-backed presence mirror)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [agentId, executorId, status]
+              properties:
+                agentId:
+                  type: string
+                executorId:
+                  type: string
+                status:
+                  type: string
+                running:
+                  type: integer
+                capacity:
+                  type: integer
+                version:
+                  type: string
+      responses:
+        '200':
+          description: Upserted
+  /api/collab/workers/active:
+    get:
+      summary: List active workers (recent last_seen)
+      responses:
+        '200':
+          description: Items
+components:
+  schemas:
+    Artifact:
+      type: object
+      properties:
+        name:
+          type: string
+        url:
+          type: string
+          format: uri
+        size:
+          type: integer
+    Job:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        status:
+          type: string
+        executor_id:
+          type: string
+        worker_id:
+          type: string
+          nullable: true
+        payload:
+          type: object
+          additionalProperties: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+          nullable: true
+    PaginatedJobs:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Job'
+        count:
+          type: integer
+        nextCursor:
+          type: string
+          format: date-time
+          nullable: true
+    MetricsOverview:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        counts:
+          type: object
+          additionalProperties:
+            type: integer
+        latest:
+          type: array
+          items:
+            $ref: '#/components/schemas/Job'
+        ts:
+          type: string
+          format: date-time
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        hint:
+          type: string
+          nullable: true
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
+
+
