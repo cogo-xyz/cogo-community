@@ -1,8 +1,0 @@
-{
-  "id": "loginFlow",
-  "version": "1.0.0",
-  "steps": [
-    { "actionType": "api_call", "target": "#loginAPI", "params": { "resultPath": "appData.lastLoginResult" } },
-    { "actionType": "setProperty", "target": "appData.statusMessage", "params": { "value": "Login successful" } }
-  ]
-}

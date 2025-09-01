@@ -1,133 +1,111 @@
-# COGO Agent Core Documentation
+# COGO Community Documentation
 
-This repository contains comprehensive documentation for the COGO Agent Core system, a distributed AI agent framework built on Supabase Edge Functions and real-time communication channels.
+Welcome to the COGO Community Documentation! This collection provides comprehensive guides and references for integrating with COGO platform packages and APIs.
 
-## 📚 Quick Start
+## 📦 Available Packages
 
-- **[architecture/AGENT_ARCHITECTURE_OVERVIEW.md](architecture/AGENT_ARCHITECTURE_OVERVIEW.md)** - System architecture overview
-- **[api/](api/)** - API references and Edge functions
-- **[agents/COGO_AGENT_CHAT_MESSAGE_SPEC.md](agents/COGO_AGENT_CHAT_MESSAGE_SPEC.md)** - Chat message protocol specification (includes request `editor_context`, SSE `aborted`, attachments)
-- **[guides/](guides/)** - User guides and setup instructions
-  - **[guides/IDE_Chat_Integration.md](guides/IDE_Chat_Integration.md)** - IDE chat integration (editor_context, SSE, attachments)
-  - **[operations/Capabilities_Operations_Guide.md](operations/Capabilities_Operations_Guide.md)** - Capabilities ops (registry/fallback, DEV flags)
-  - **[operations/RELEASE_CHECKLIST.md](operations/RELEASE_CHECKLIST.md)** - Release checklist (chat protocol & edges)
+### SDKs
+- **[SDK_FLUTTER.md](SDK_FLUTTER.md)** - Flutter SDK for COGO chat and agent interactions
+- **[SDK_TS.md](SDK_TS.md)** - TypeScript SDK for COGO chat and agent interactions
 
-## 📁 Documentation Categories
+### CLI Tools
+- **[CLI_COGO_FLUTTER.md](CLI_COGO_FLUTTER.md)** - Flutter-based CLI for COGO platform operations
 
-### 🏗️ Architecture & Design
-Core system architecture and design documents.
-- **[architecture/](architecture/)** - System architecture documents
-- **[design/](design/)** - UI/UX design and client architecture
-- **[specs/](specs/)** - Technical specifications
+### Plugins
+- **[FIGMA_PLUGIN_USER_GUIDE.md](FIGMA_PLUGIN_USER_GUIDE.md)** - Figma plugin user guide
+- **[FIGMA_PLUGIN_EXAMPLES.md](FIGMA_PLUGIN_EXAMPLES.md)** - Figma plugin examples and use cases
+- **[EDGE_FIGMA_PLUGIN_PROTOCOL.md](EDGE_FIGMA_PLUGIN_PROTOCOL.md)** - Figma plugin protocol specification
 
-### 🤖 Agent Development
-Agent development, specifications, and implementation details.
-- **[agents/](agents/)** - Agent specifications and development
-- **[development/](development/)** - Development processes and implementation
+## 🚀 Quick Start
 
-### 🔌 API & Integration
-API references, integration guides, and external system connections.
-- **[api/](api/)** - API references and Edge functions
-- **[integration/](integration/)** - Third-party integrations (LLM, MCP, etc.)
-- **[supabase/](supabase/)** - Supabase-specific documentation
+### For Flutter Developers
+1. **[Install Flutter SDK](SDK_FLUTTER.md#getting-started)**
+2. **[Set up authentication](SDK_FLUTTER.md#authentication)**
+3. **[Make your first API call](SDK_FLUTTER.md#basic-usage)**
 
-### 🗄️ Database & Schema
-Database schemas, Neo4j integration, and data modeling.
-- **[schemas/](schemas/)** - Database schemas and data models
-- **[parsing/](parsing/)** - JSON parsing and data processing
+### For TypeScript Developers
+1. **[Install TypeScript SDK](SDK_TS.md#installation)**
+2. **[Configure your environment](SDK_TS.md#setup)**
+3. **[Integrate with your application](SDK_TS.md#integration)**
 
-### 🚀 Deployment & Operations
-Deployment guides, operations runbooks, and infrastructure management.
-- **[deployment/](deployment/)** - Deployment guides and environment setup
-- **[ops/](ops/)** - Operations documentation
-- **[runbook/](runbook/)** - Operations runbooks
+### For Figma Plugin Users
+1. **[Install the plugin](FIGMA_PLUGIN_USER_GUIDE.md#installation)**
+2. **[Connect your account](FIGMA_PLUGIN_USER_GUIDE.md#setup)**
+3. **[Start designing with COGO](FIGMA_PLUGIN_USER_GUIDE.md#getting-started)**
 
-### 📋 Development Plans
-Development roadmaps, implementation plans, and project milestones.
-- **[plans/](plans/)** - Development plans and roadmaps
-- **[plans/COGO_CLI_DESIGN.md](plans/COGO_CLI_DESIGN.md)** - COGO CLI design (plan/apply, SSE, artifacts)
-- **[plans/COGO_CLI_IMPLEMENTATION_PLAN.md](plans/COGO_CLI_IMPLEMENTATION_PLAN.md)** - COGO CLI implementation plan (architecture, modules, milestones)
-- **[project/](project/)** - Project management documentation
+## 📋 API Reference
 
-### 🧪 Testing & CI/CD
-Testing frameworks, CI/CD pipelines, and quality assurance.
-- **[tests/](tests/)** - Testing documentation and guides
-  - **[tests/CI_GUIDE.md](../tests/CI_GUIDE.md)** - CI guide for edge-all workflow
+- **[COGO_AGENT_CHAT_MESSAGE_SPEC.md](COGO_AGENT_CHAT_MESSAGE_SPEC.md)** - Complete chat message protocol specification
+  - Response schemas and formats
+  - Real-time progress updates (SSE)
+  - Artifact management
+  - Error handling patterns
 
-### 🔒 Security & Governance
-Security hardening, governance policies, and compliance.
-- **[security/](security/)** - Security documentation and policies
-- **[management/policies/](management/policies/)** - Project policies and governance
+## 🛠️ Development Tools
 
-### 📊 Monitoring & Observability
-Monitoring setup, alerting, metrics, and observability.
-- **[observability/](observability/)** - Observability setup, dashboards, and monitoring
+### CLI Operations
+- **Variables Management**: `cogo-cli variables upsert --project <id>`
+- **Symbols Processing**: `cogo-cli symbols identify --ui-json <file>`
+- **Action Flow Generation**: `cogo-cli actionflow generate --from-bdd <file>`
+- **Figma Integration**: `cogo-cli figma scan --url <figma-url>`
 
-### 🔄 Migration & Legacy
-Migration guides, legacy system cleanup, and transition plans.
-- **[migration/](migration/)** - Migration guides and legacy cleanup
-- **[methodology/](methodology/)** - Development methodologies
+### SDK Features
+- **Real-time Communication**: SSE and Supabase Realtime integration
+- **Artifact Handling**: Large file uploads and downloads
+- **Idempotent Operations**: Safe retry mechanisms
+- **Multi-language Support**: Localized responses and hints
 
-### 📖 User Guides & Documentation
-User guides, development guides, and reference materials.
-- **[guides/](guides/)** - User guides, manuals, and reference materials
-
-### 🔬 Research & Special Topics
-Research documentation and specialized topics.
-- **[research/](research/)** - Research documentation
-- **[technical/](technical/)** - Technical implementations (parsing, performance, tree-sitter)
-- **[ecosystem/](ecosystem/)** - Self-upgrading agent ecosystem
-- **[multilingual/](multilingual/)** - Multi-language support
-- **[sandbox/](sandbox/)** - Sandbox system documentation
-
-### 📈 Reports & Analysis
-Status reports, analysis, and historical documentation.
-- **[reports/](reports/)** - Status reports, analysis, and ADR
-
-### 🔧 Tools & Utilities
-Development tools, utilities, and supporting documentation.
-- **[examples/](examples/)** - Examples, OpenAPI specs, and Postman collections
-  - Run SSE example: `npm run sse:example` (requires SUPABASE_EDGE/ANON)
-- **[system/](system/)** - System components (events, realtime, scenarios)
-- **[management/](management/)** - Management tools (artifacts, rollout)
-
-## 📂 Directory Structure
+## 📚 Documentation Structure
 
 ```
-docs/
-├── README.md                           # Main documentation index (this file)
+docs/community/
+├── README.md                           # This overview (you are here)
 ├── index.md                           # Detailed documentation index
-├── agents/                            # Agent specifications and development
-├── api/                               # API references and Edge functions
-├── architecture/                      # System architecture documents
-├── design/                            # UI/UX design and client architecture
-├── development/                       # Development processes and implementation
-├── ecosystem/                         # Self-upgrading agent ecosystem
-├── examples/                          # Examples, OpenAPI specs, and collections
-├── guides/                            # User guides, manuals, and references
-├── integration/                       # Third-party integrations (LLM, MCP, etc.)
-├── management/                        # Management tools (artifacts, rollout, policies)
-├── methodology/                       # Development methodologies
-├── migration/                         # Migration guides and legacy cleanup
-├── multilingual/                      # Multi-language support
-├── observability/                     # Observability, monitoring, and dashboards
-├── operations/                        # Deployment, operations, and runbooks
-├── plans/                             # Development plans and roadmaps
-├── project/                           # Project management documentation
-├── reports/                           # Status reports, analysis, and ADR
-├── research/                          # Research documentation
-├── sandbox/                          # Sandbox system documentation
-├── schemas/                          # Database schemas and data models
-├── security/                         # Security documentation and policies
-├── specs/                            # Technical specifications
-├── supabase/                         # Supabase-specific documentation
-├── system/                           # System components (events, realtime, scenarios)
-├── technical/                        # Technical implementations (parsing, performance)
-├── tests/                            # Testing documentation and guides
-└── uui/                              # UUI system documentation
+├── SDK_FLUTTER.md                     # Flutter SDK documentation
+├── SDK_TS.md                         # TypeScript SDK documentation
+├── CLI_COGO_FLUTTER.md               # Flutter CLI documentation
+├── FIGMA_PLUGIN_USER_GUIDE.md        # Figma plugin user guide
+├── FIGMA_PLUGIN_EXAMPLES.md          # Figma plugin examples
+├── EDGE_FIGMA_PLUGIN_PROTOCOL.md     # Figma plugin protocol
+└── COGO_AGENT_CHAT_MESSAGE_SPEC.md   # Chat message specification
 ```
+
+## 🔗 Key Links
+
+- **GitHub Repository**: [https://github.com/cogo-xyz/cogo-community](https://github.com/cogo-xyz/cogo-community)
+- **Package Registry**: Available on pub.dev and npm
+- **Support**: GitHub Issues and Discussions
+
+## 📖 Integration Guides
+
+### Basic Integration
+1. **Choose your platform**: Flutter, TypeScript, or Figma
+2. **Install the appropriate package**
+3. **Configure authentication**
+4. **Implement your use case**
+
+### Advanced Features
+- **Real-time Updates**: Use SSE for live progress tracking
+- **File Management**: Handle large artifacts with signed URLs
+- **Error Recovery**: Implement proper retry and fallback logic
+- **Localization**: Support multiple languages in your UI
+
+## 🆘 Troubleshooting
+
+### Common Issues
+- **Authentication Errors**: Verify your API keys and tokens
+- **Connection Issues**: Check network connectivity and firewall settings
+- **File Upload Problems**: Ensure proper MIME types and file size limits
+- **Real-time Disconnects**: Implement reconnection logic for SSE streams
+
+### Getting Help
+1. Check the relevant documentation section
+2. Search existing GitHub issues
+3. Create a new issue with detailed information
+4. Join community discussions
 
 ---
 
-*Last updated: 2025-01-30*
-*Maintained by: COGO Development Team*
+**Version**: 1.0
+**Last Updated**: 2025-09-01
+**Maintained by**: COGO Community Team

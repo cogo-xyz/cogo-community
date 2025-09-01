@@ -1,352 +1,257 @@
+# COGO Community Documentation Index
 
-
-
-
-
-
-
-# COGO Agent Core Documentation Index
-
-This comprehensive index provides detailed categorization and quick access to all documentation in the COGO Agent Core project.
+This index provides comprehensive access to all COGO community documentation, focusing on SDKs, CLI tools, and plugins for seamless integration.
 
 ## 📋 Table of Contents
 
-- [Quick Reference](#-quick-reference)
-- [Architecture & Design](#-architecture--design)
-- [Agent Development](#-agent-development)
-- [API & Integration](#-api--integration)
-- [Database & Schema](#-database--schema)
-- [Deployment & Operations](#-deployment--operations)
-- [Development Plans](#-development-plans)
-- [Testing & CI/CD](#-testing--cicd)
-- [Security & Governance](#-security--governance)
-- [Monitoring & Observability](#-monitoring--observability)
-- [Migration & Legacy](#-migration--legacy)
-- [User Guides & Documentation](#-user-guides--documentation)
-- [Directory Structure](#-directory-structure)
+- [Quick Start](#-quick-start)
+- [SDK Documentation](#-sdk-documentation)
+- [CLI Tools](#-cli-tools)
+- [Plugins](#-plugins)
+- [API Reference](#-api-reference)
+- [Integration Examples](#-integration-examples)
+- [Troubleshooting](#-troubleshooting)
 
 ---
 
-## 🔍 Quick Reference
+## 🚀 Quick Start
 
-### Essential Documents
-| Document | Description | Status |
-|----------|-------------|--------|
-| [agents/COGO_AGENT_CHAT_MESSAGE_SPEC.md](agents/COGO_AGENT_CHAT_MESSAGE_SPEC.md) | Chat message protocol specification (editor_context, SSE aborted, attachments) | ✅ Current |
-| [architecture/AGENT_ARCHITECTURE_OVERVIEW.md](architecture/AGENT_ARCHITECTURE_OVERVIEW.md) | System architecture overview | ✅ Current |
-| [api/](api/) | API references and Edge functions | ✅ Current |
-| [guides/](guides/) | User guides and setup instructions | ✅ Current |
-| [guides/IDE_Chat_Integration.md](guides/IDE_Chat_Integration.md) | IDE chat integration (editor_context, SSE, attachments) | ✅ Current |
-| [operations/Capabilities_Operations_Guide.md](operations/Capabilities_Operations_Guide.md) | Capabilities ops guide (registry/fallback, DEV flags) | ✅ Current |
+### By Platform
 
-### Development Workflow
-| Document | Description | Status |
-|----------|-------------|--------|
-| [development/](development/) | Development guides and processes | ✅ Current |
-| [tests/](tests/) | Testing documentation and guides | ✅ Current |
-| [deployment/](deployment/) | Deployment guides and environment setup | ✅ Current |
-| [guides/](guides/) | User guides and setup instructions | ✅ Current |
+| Platform | Primary Guide | Quick Setup |
+|----------|---------------|-------------|
+| **Flutter** | [SDK_FLUTTER.md](SDK_FLUTTER.md) | Install → Auth → First Call |
+| **TypeScript** | [SDK_TS.md](SDK_TS.md) | Install → Setup → Integrate |
+| **Figma** | [FIGMA_PLUGIN_USER_GUIDE.md](FIGMA_PLUGIN_USER_GUIDE.md) | Install → Connect → Design |
+| **CLI** | [CLI_COGO_FLUTTER.md](CLI_COGO_FLUTTER.md) | Install → Auth → Commands |
+
+### Essential First Steps
+1. **Choose your platform** from the table above
+2. **Install the appropriate package/CLI**
+3. **Set up authentication** (API keys, tokens)
+4. **Make your first API call** or command execution
+5. **Explore examples** for your use case
 
 ---
 
-## 🏗️ Architecture & Design
+## 📱 SDK Documentation
 
-### Core Architecture
-| Document | Description | Status |
-|----------|-------------|--------|
-| [architecture/AGENT_ARCHITECTURE_OVERVIEW.md](architecture/AGENT_ARCHITECTURE_OVERVIEW.md) | System architecture overview | ✅ Current |
-| [architecture/SYSTEM_ARCHITECTURE.md](architecture/SYSTEM_ARCHITECTURE.md) | Detailed system architecture | ✅ Current |
-| [architecture/ARCHITECTURE_INDEX.md](architecture/ARCHITECTURE_INDEX.md) | Architecture documentation index | ✅ Current |
-| [architecture/DISTRIBUTED_AGENT_SYSTEM.md](architecture/DISTRIBUTED_AGENT_SYSTEM.md) | Distributed agent architecture | ✅ Current |
-| [architecture/AGENT_SYSTEM_ARCHITECTURE.md](architecture/AGENT_SYSTEM_ARCHITECTURE.md) | Agent system architecture | ✅ Current |
+### Flutter SDK
+| Document | Description | Key Features |
+|----------|-------------|--------------|
+| [SDK_FLUTTER.md](SDK_FLUTTER.md) | Complete Flutter SDK guide | Real-time chat, artifact handling, error recovery |
 
-### Design Documents
-| Document | Description | Status |
-|----------|-------------|--------|
-| [COGO_CLIENT_ARCHITECTURE_PLAN.md](COGO_CLIENT_ARCHITECTURE_PLAN.md) | Client architecture plan | 📅 Review |
-| [BETA_SYSTEM_DESIGN.md](BETA_SYSTEM_DESIGN.md) | Beta system design | 📅 Review |
-| [CORRECTED_COGO_ARCHITECTURE.md](CORRECTED_COGO_ARCHITECTURE.md) | Corrected COGO architecture | 📅 Review |
-| [design/](design/) | Design documents directory | - |
+**Highlights:**
+- Real-time communication via SSE and Supabase Realtime
+- Large file uploads/downloads with signed URLs
+- Idempotent operations for safe retries
+- Multi-language support and localization
 
-### ADR (Architecture Decision Records)
-| Document | Description | Status |
-|----------|-------------|--------|
-| [ADR/ADR-rag-utilization.md](ADR/ADR-rag-utilization.md) | RAG utilization ADR | ✅ Current |
+### TypeScript SDK
+| Document | Description | Key Features |
+|----------|-------------|--------------|
+| [SDK_TS.md](SDK_TS.md) | Complete TypeScript SDK guide | Same features as Flutter SDK |
 
----
-
-## 🤖 Agent Development
-
-### Agent Specifications
-| Document | Description | Status |
-|----------|-------------|--------|
-| [agents/COGO_AGENT_OVERVIEW.md](agents/COGO_AGENT_OVERVIEW.md) | Agent system overview | ✅ Current |
-| [agents/AGENT_DETAILED_SPECIFICATIONS.md](agents/AGENT_DETAILED_SPECIFICATIONS.md) | Agent specifications | ✅ Current |
-| [agents/COGO_AGENT_DETAILED_SPECIFICATIONS.md](agents/COGO_AGENT_DETAILED_SPECIFICATIONS.md) | COGO agent specifications | ✅ Current |
-| [agents/AGENT_SPECIFICATIONS_PART1.md](agents/AGENT_SPECIFICATIONS_PART1.md) | Agent specs part 1 | 📅 Review |
-| [agents/AGENT_SPECIFICATIONS_PART2.md](agents/AGENT_SPECIFICATIONS_PART2.md) | Agent specs part 2 | 📅 Review |
-
-### Agent Implementation
-| Document | Description | Status |
-|----------|-------------|--------|
-| [AGENT_IMPLEMENTATION_DETAILS.md](AGENT_IMPLEMENTATION_DETAILS.md) | Implementation details | ✅ Current |
-| [AGENT_SYSTEM_IMPLEMENTATION_STATUS.md](AGENT_SYSTEM_IMPLEMENTATION_STATUS.md) | Implementation status | ✅ Current |
-| [AGENT_SYSTEM_COMPLETION_REPORT.md](AGENT_SYSTEM_COMPLETION_REPORT.md) | Completion report | ✅ Current |
-| [ACTUAL_AGENT_ANALYSIS_AND_DEVELOPMENT_PLAN.md](ACTUAL_AGENT_ANALYSIS_AND_DEVELOPMENT_PLAN.md) | Analysis and development plan | 📅 Review |
-
-### Agent Analysis
-| Document | Description | Status |
-|----------|-------------|--------|
-| [AGENT_SOURCE_ANALYSIS.md](AGENT_SOURCE_ANALYSIS.md) | Source analysis | 📅 Review |
-| [AGENT_SOURCE_ANALYSIS_REVISED.md](AGENT_SOURCE_ANALYSIS_REVISED.md) | Revised source analysis | 📅 Review |
-| [AGENT_SOURCE_RELATIONSHIP_DIAGRAM.md](AGENT_SOURCE_RELATIONSHIP_DIAGRAM.md) | Source relationship diagram | 📅 Review |
-| [AGENT_SOURCE_STRUCTURE.md](AGENT_SOURCE_STRUCTURE.md) | Source structure | 📅 Review |
-
-### Agent-specific Documentation
-| Document | Description | Status |
-|----------|-------------|--------|
-| [agents/AGENTS_API_INDEX.md](agents/AGENTS_API_INDEX.md) | Agents API index | ✅ Current |
+**Highlights:**
+- Consistent API with Flutter SDK
+- Full TypeScript type definitions
+- Node.js and browser compatibility
+- Comprehensive error handling
 
 ---
 
-## 🔌 API & Integration
+## 🛠️ CLI Tools
 
-### API References
-| Document | Description | Status |
-|----------|-------------|--------|
-| [api/API_REFERENCE_COMPLETE.md](api/API_REFERENCE_COMPLETE.md) | Complete API reference | ✅ Current |
-| [api/API_REFERENCE.md](api/API_REFERENCE.md) | API reference | ✅ Current |
-| [api/COLLAB_API_FLOW_GUIDE.md](api/COLLAB_API_FLOW_GUIDE.md) | Collaboration API flow | ✅ Current |
+### Flutter CLI
+| Document | Description | Main Commands |
+|----------|-------------|---------------|
+| [CLI_COGO_FLUTTER.md](CLI_COGO_FLUTTER.md) | Flutter-based CLI tool | variables, symbols, actionflow, figma |
 
-### Edge Functions
-| Document | Description | Status |
-|----------|-------------|--------|
-| [api/EDGE_FUNCTIONS_OVERVIEW.md](api/EDGE_FUNCTIONS_OVERVIEW.md) | Edge functions overview | ✅ Current |
-| [api/EDGE_FIGMA_PLUGIN_PROTOCOL.md](api/EDGE_FIGMA_PLUGIN_PROTOCOL.md) | Figma plugin protocol | ✅ Current |
-| [api/EDGE_TEST_GUIDE.md](api/EDGE_TEST_GUIDE.md) | Edge function testing | ✅ Current |
-
-### Integration Systems
-| Document | Description | Status |
-|----------|-------------|--------|
-| [MCP_INTEGRATION.md](MCP_INTEGRATION.md) | MCP server integration | ✅ Current |
-| [MCP_SERVER_INTEGRATION_GUIDE.md](MCP_SERVER_INTEGRATION_GUIDE.md) | MCP integration guide | ✅ Current |
-| [MCP_ENDPOINTS.md](MCP_ENDPOINTS.md) | MCP endpoints | ✅ Current |
-| [SUPABASE_INTEGRATION.md](SUPABASE_INTEGRATION.md) | Supabase integration | ✅ Current |
-| [SUPABASE_CHAT_ARCHITECTURE.md](SUPABASE_CHAT_ARCHITECTURE.md) | Supabase chat architecture | ✅ Current |
+**Available Operations:**
+- `variables upsert` - Manage app data and UI state variables
+- `symbols identify` - Extract dynamic elements from UI JSON
+- `actionflow generate` - Create workflows from BDD specifications
+- `figma scan` - Analyze Figma designs for integration
 
 ---
 
-## 🗄️ Database & Schema
+## 🔌 Plugins
 
-### Database Design
-| Document | Description | Status |
-|----------|-------------|--------|
-| [schemas/DATABASE_SCHEMAS_FOR_COGO_SOURCE.md](schemas/DATABASE_SCHEMAS_FOR_COGO_SOURCE.md) | Database schemas for COGO | ✅ Current |
-| [schemas/SCHEMA_OWNERSHIP_MATRIX.md](schemas/SCHEMA_OWNERSHIP_MATRIX.md) | Schema ownership matrix | ✅ Current |
-| [schemas/database-design-and-namespace.md](schemas/database-design-and-namespace.md) | Database design and namespace | ✅ Current |
+### Figma Plugin
+| Document | Description | Use Cases |
+|----------|-------------|-----------|
+| [FIGMA_PLUGIN_USER_GUIDE.md](FIGMA_PLUGIN_USER_GUIDE.md) | User guide for Figma plugin | Design → Code conversion |
+| [FIGMA_PLUGIN_EXAMPLES.md](FIGMA_PLUGIN_EXAMPLES.md) | Examples and use cases | Real-world scenarios |
+| [EDGE_FIGMA_PLUGIN_PROTOCOL.md](EDGE_FIGMA_PLUGIN_PROTOCOL.md) | Technical protocol specification | API integration details |
 
-### Schema Analysis
-| Document | Description | Status |
-|----------|-------------|--------|
-| [schemas/current-schema-analysis.md](schemas/current-schema-analysis.md) | Current schema analysis | ✅ Current |
-| [schemas/neo4j-current-schema-analysis.md](schemas/neo4j-current-schema-analysis.md) | Neo4j schema analysis | ✅ Current |
-| [schemas/neo4j-schema-extension-plan.md](schemas/neo4j-schema-extension-plan.md) | Neo4j schema extension | 📅 Review |
-| [schemas/schema-extension-plan.md](schemas/schema-extension-plan.md) | Schema extension plan | 📅 Review |
-| [schemas/FINAL_SCHEMA_VALIDATION.md](schemas/FINAL_SCHEMA_VALIDATION.md) | Schema validation | ✅ Current |
-
-### Supabase Database
-| Document | Description | Status |
-|----------|-------------|--------|
-| [supabase/](supabase/) | Supabase documentation directory | - |
-| [supabase/sql/](supabase/sql/) | SQL schema files | - |
+**Plugin Features:**
+- Convert Figma designs to COGO UI JSON
+- Real-time collaboration with team members
+- Component library synchronization
+- Design system consistency checks
 
 ---
 
-## 🚀 Deployment & Operations
+## 📋 API Reference
 
-### Deployment Guides
-| Document | Description | Status |
-|----------|-------------|--------|
-| [deployment/DEPLOYMENT_AND_OPERATIONS.md](deployment/DEPLOYMENT_AND_OPERATIONS.md) | Deployment and operations | ✅ Current |
-| [deployment/DOCKER_LOCAL_PLAYBOOK.md](deployment/DOCKER_LOCAL_PLAYBOOK.md) | Docker local setup | ✅ Current |
-| [deployment/LAUNCH_CHECKLIST.md](deployment/LAUNCH_CHECKLIST.md) | Launch checklist | ✅ Current |
-| [deployment/README_BETA_ENV.md](deployment/README_BETA_ENV.md) | Beta environment templates | ✅ Current |
+### Chat Message Protocol
+| Document | Description | Coverage |
+|----------|-------------|----------|
+| [COGO_AGENT_CHAT_MESSAGE_SPEC.md](COGO_AGENT_CHAT_MESSAGE_SPEC.md) | Complete protocol specification | Request/response schemas, SSE, artifacts, errors |
 
-### Operations
-| Document | Description | Status |
-|----------|-------------|--------|
-| [runbook/OPERATIONS_RUNBOOK.md](runbook/OPERATIONS_RUNBOOK.md) | Operations runbook | ✅ Current |
-| [deployment/PORTS_AND_NETWORKING.md](deployment/PORTS_AND_NETWORKING.md) | Ports and networking | ✅ Current |
-| [ops/README_BETA_OPS.md](ops/README_BETA_OPS.md) | Beta operations quickstart | ✅ Current |
-| [runbook/](runbook/) | Operations runbooks directory | - |
+**Protocol Components:**
+- **Request Schema**: Text input, intent keywords, editor context
+- **Response Schema**: Task types, progress tracking, artifacts
+- **Real-time Updates**: SSE events for live progress
+- **Error Handling**: Standardized error formats and recovery
+- **Artifact Management**: Large file handling with signed URLs
 
----
-
-## 📋 Development Plans
-
-### Development Roadmaps
-| Document | Description | Status |
-|----------|-------------|--------|
-| [DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md) | Main development plan | 📅 Review |
-| [DEVELOPMENT_PLAN_RECOMMENDED.md](DEVELOPMENT_PLAN_RECOMMENDED.md) | Recommended development plan | 📅 Review |
-| [FUTURE_DEVELOPMENT_PLAN.md](FUTURE_DEVELOPMENT_PLAN.md) | Future development plan | 📅 Review |
-| [FUTURE_DEVELOPMENT_ROADMAP.md](FUTURE_DEVELOPMENT_ROADMAP.md) | Future development roadmap | 📅 Review |
-| [plans/COGO_CLI_DESIGN.md](plans/COGO_CLI_DESIGN.md) | COGO CLI design (plan/apply, SSE, artifacts) | ✅ Current |
-| [plans/COGO_CLI_IMPLEMENTATION_PLAN.md](plans/COGO_CLI_IMPLEMENTATION_PLAN.md) | COGO CLI implementation plan (architecture, modules, milestones) | ✅ Current |
-
-### Detailed Plans Directory
-| Document | Description | Status |
-|----------|-------------|--------|
-| [plans/DEVELOPMENT_PLAN_EDGE.md](plans/DEVELOPMENT_PLAN_EDGE.md) | Edge function development plan | ✅ Current |
-| [plans/BATCH_ROLLOUT_PLAN.md](plans/BATCH_ROLLOUT_PLAN.md) | Batch rollout plan | ✅ Current |
-| [plans/INTENT_KEYWORD_REGISTRY.md](plans/INTENT_KEYWORD_REGISTRY.md) | Intent keyword registry | ✅ Current |
-| [plans/IDEMPOTENCY_STORE_DDL.md](plans/IDEMPOTENCY_STORE_DDL.md) | Idempotency store DDL | ✅ Current |
+### Task Types Supported
+- `design_generate` - UI component generation
+- `variables_derive` - Data binding setup
+- `symbols_identify` - Dynamic element extraction
+- `figma_context_scan` - Figma design analysis
+- `bdd_generate` - Behavior specification creation
+- `actionflow_generate` - Workflow creation
+- `data_action_generate` - API integration setup
 
 ---
 
-## 🧪 Testing & CI/CD
+## 💡 Integration Examples
 
-### CI/CD Systems
-| Document | Description | Status |
-|----------|-------------|--------|
-| [tests/CI_GUIDE.md](tests/CI_GUIDE.md) | CI/CD guide | ✅ Current |
-| [tests/CI_GATE_PLAYBOOK.md](tests/CI_GATE_PLAYBOOK.md) | CI gate playbook | ✅ Current |
-| [tests/CI_SECRETS_AND_BRANCH_PROTECTION.md](tests/CI_SECRETS_AND_BRANCH_PROTECTION.md) | CI secrets and branch protection | ✅ Current |
-| [tests/CI_SMOKE_SETUP.md](tests/CI_SMOKE_SETUP.md) | CI smoke setup | ✅ Current |
+### Basic Integration Patterns
 
-### Testing Frameworks
-| Document | Description | Status |
-|----------|-------------|--------|
-| [tests/COMPREHENSIVE_TEST_SYSTEM.md](tests/COMPREHENSIVE_TEST_SYSTEM.md) | Comprehensive test system | ✅ Current |
-| [tests/EDGE_TEST_GUIDE.md](tests/EDGE_TEST_GUIDE.md) | Edge function testing | ✅ Current |
-| [tests/INTERFACE_PRESERVING_TEST_SYSTEM.md](tests/INTERFACE_PRESERVING_TEST_SYSTEM.md) | Interface-preserving tests | ✅ Current |
-| [sandbox/SANDBOX_TEST_SCENARIOS.md](sandbox/SANDBOX_TEST_SCENARIOS.md) | Sandbox test scenarios | ✅ Current |
+#### Flutter App Integration
+```dart
+import 'package:cogo_chat_sdk_flutter/cogo_chat_client.dart';
 
----
+final client = CogoChatClient(
+  supabaseUrl: 'your-supabase-url',
+  supabaseKey: 'your-anon-key',
+);
 
-## 🔒 Security & Governance
+final response = await client.sendMessage(
+  text: 'Create a login form',
+  intent: Intent(keywords: ['ui.generate']),
+);
+```
 
-### Security Hardening
-| Document | Description | Status |
-|----------|-------------|--------|
-| [security/SECURITY_HARDENING.md](security/SECURITY_HARDENING.md) | Security hardening guide | ✅ Current |
-| [security/SECURITY_AND_GOVERNANCE.md](security/SECURITY_AND_GOVERNANCE.md) | Security and governance | ✅ Current |
-| [security/RLS_HARDENING_SQL_TEMPLATE.sql](security/RLS_HARDENING_SQL_TEMPLATE.sql) | RLS hardening SQL template | ✅ Current |
-| [security/DISTRIBUTED_KEY_MANAGEMENT_DESIGN.md](security/DISTRIBUTED_KEY_MANAGEMENT_DESIGN.md) | Distributed key management | ✅ Current |
+#### TypeScript Integration
+```typescript
+import { CogoChatClient } from '@cogo/chat-sdk';
 
-### Governance
-| Document | Description | Status |
-|----------|-------------|--------|
-| [security/CENTRAL_CONFIGURATION_MANAGEMENT.md](security/CENTRAL_CONFIGURATION_MANAGEMENT.md) | Configuration management | ✅ Current |
-| [security/AUTHENTICATION_SYSTEM_IMPLEMENTATION.md](security/AUTHENTICATION_SYSTEM_IMPLEMENTATION.md) | Authentication system | ✅ Current |
-| [policies/](policies/) | Project policies directory | - |
+const client = new CogoChatClient({
+  supabaseUrl: 'your-supabase-url',
+  supabaseKey: 'your-anon-key',
+});
 
----
+const response = await client.sendMessage({
+  text: 'Create a login form',
+  intent: { keywords: ['ui.generate'] },
+});
+```
 
-## 📊 Monitoring & Observability
+#### CLI Usage Examples
+```bash
+# Variables management
+cogo-cli variables upsert --project demo --from-stdin < variables.json
 
-### Observability Setup
-| Document | Description | Status |
-|----------|-------------|--------|
-| [observability/OBSERVABILITY_SETUP.md](observability/OBSERVABILITY_SETUP.md) | Observability setup | ✅ Current |
-| [observability/ALERTS_AND_TRACES.md](observability/ALERTS_AND_TRACES.md) | Alerts and traces | ✅ Current |
-| [observability/API_METRICS_AND_NOTIFY.md](observability/API_METRICS_AND_NOTIFY.md) | API metrics and notifications | ✅ Current |
+# Symbols identification
+cogo-cli symbols identify --ui-json loginPage.json
 
-### Monitoring Tools
-| Document | Description | Status |
-|----------|-------------|--------|
-| [grafana/GRAFANA_DASHBOARD_NOTES.md](grafana/GRAFANA_DASHBOARD_NOTES.md) | Grafana dashboard notes | ✅ Current |
-| [monitoring/INTENT_RESOLVE_METRICS.md](monitoring/INTENT_RESOLVE_METRICS.md) | Intent resolve metrics | ✅ Current |
-| [observability/](observability/) | Observability documentation | - |
+# Action flow generation
+cogo-cli actionflow generate --from-bdd login.bdd
+
+# Figma integration
+cogo-cli figma scan --url https://www.figma.com/design/abc123/MyDesign
+```
 
 ---
 
-## 🔄 Migration & Legacy
+## 🆘 Troubleshooting
 
-### Migration Guides
-| Document | Description | Status |
-|----------|-------------|--------|
-| [COGO_MIGRATION_CREATEGO.md](COGO_MIGRATION_CREATEGO.md) | CreateGo migration | ✅ Current |
-| [SCHEMA_MIGRATION_ANALYSIS.md](SCHEMA_MIGRATION_ANALYSIS.md) | Schema migration analysis | ✅ Current |
-| [CHANNEL_ARCHITECTURE_MIGRATION.md](CHANNEL_ARCHITECTURE_MIGRATION.md) | Channel architecture migration | ✅ Current |
+### Common Issues & Solutions
 
-### Legacy Systems
-| Document | Description | Status |
-|----------|-------------|--------|
-| [LEGACY_CODE_CLEANUP_PLAN.md](LEGACY_CODE_CLEANUP_PLAN.md) | Legacy code cleanup | ✅ Current |
-| [TYPESCRIPT_LEGACY_CODE_CLEANUP_PLAN.md](TYPESCRIPT_LEGACY_CODE_CLEANUP_PLAN.md) | TypeScript legacy cleanup | ✅ Current |
-| [migration/](migration/) | Migration guides directory | - |
+#### Authentication Problems
+**Issue**: API key or token validation errors
+**Solution**:
+- Verify API keys are correctly set
+- Check token expiration
+- Ensure proper permissions are granted
+- Test with different authentication methods
+
+#### Connection Issues
+**Issue**: Network connectivity or firewall problems
+**Solution**:
+- Check internet connection
+- Verify firewall settings allow API calls
+- Test with different network environments
+- Use proxy settings if required
+
+#### Real-time Connection Drops
+**Issue**: SSE or Realtime connections disconnecting
+**Solution**:
+- Implement automatic reconnection logic
+- Handle network interruptions gracefully
+- Use exponential backoff for retries
+- Monitor connection health
+
+#### File Upload Problems
+**Issue**: Large file uploads failing
+**Solution**:
+- Check file size limits (typically 10MB)
+- Verify proper MIME types
+- Ensure signed URLs are used for large files
+- Implement chunked uploads for very large files
+
+#### CLI Command Failures
+**Issue**: CLI commands returning errors
+**Solution**:
+- Verify CLI installation and version
+- Check command syntax and parameters
+- Ensure proper authentication
+- Review error messages for specific guidance
+
+### Getting Help
+
+1. **Check Documentation**: Review relevant guides first
+2. **Search Issues**: Look for existing GitHub issues
+3. **Create Issue**: Submit detailed bug reports or feature requests
+4. **Community Support**: Join discussions and ask questions
 
 ---
 
-## 📖 User Guides & Documentation
-
-### User Guides
-| Document | Description | Status |
-|----------|-------------|--------|
-| [guides/COGO_SYSTEM_USER_GUIDE.md](guides/COGO_SYSTEM_USER_GUIDE.md) | System user guide | ✅ Current |
-| [guides/DEVELOPMENT_GUIDE.md](guides/DEVELOPMENT_GUIDE.md) | Development guide | ✅ Current |
-| [guides/QUICKSTART_TESTING.md](guides/QUICKSTART_TESTING.md) | Quickstart testing | ✅ Current |
-| [guides/ENV_SETUP.md](guides/ENV_SETUP.md) | Environment setup | ✅ Current |
-| [guides/API_KEY_SETUP_GUIDE.md](guides/API_KEY_SETUP_GUIDE.md) | API key setup guide | ✅ Current |
-| [guides/VERIFICATION_CHECKLIST_API.md](guides/VERIFICATION_CHECKLIST_API.md) | API verification checklist | ✅ Current |
-
-### Manuals and References
-| Document | Description | Status |
-|----------|-------------|--------|
-| [manuals/](manuals/) | User manuals directory | - |
-| [references/](references/) | Reference materials | - |
-| [references/DOCUMENTATION_INDEX.md](references/DOCUMENTATION_INDEX.md) | Documentation index | 📅 Review |
-
----
-
-## 📂 Directory Structure
+## 📚 Documentation Structure
 
 ```
-docs/
-├── README.md                           # Main documentation index
+docs/community/
+├── README.md                           # Main overview and quick start
 ├── index.md                           # This detailed index
-├── ADR/                               # Architecture Decision Records
-│   └── ADR-rag-utilization.md
-├── agents/                            # Agent-specific documentation
-│   └── AGENTS_API_INDEX.md
-├── design/                            # Design documents
-├── events/                            # Event system documentation
-├── examples/                          # Example implementations
-├── grafana/                           # Grafana dashboard documentation
-│   └── GRAFANA_DASHBOARD_NOTES.md
-├── integration/                       # Integration guides
-├── manuals/                           # User manuals
-├── methodology/                       # Development methodology
-├── migration/                         # Migration guides
-├── observability/                     # Observability documentation
-├── openapi/                           # OpenAPI specifications
-├── ops/                               # Operations documentation
-├── plans/                             # Development plans and roadmaps
-├── policies/                          # Project policies
-├── postman/                           # Postman collections
-├── realtime/                          # Real-time system documentation
-├── references/                        # Reference materials
-├── reports/                           # Status reports and analysis
-├── research/                          # Research documentation
-├── runbook/                           # Operations runbooks
-├── scenarios/                         # Usage scenarios
-├── schemas/                           # Schema documentation
-├── specs/                             # Technical specifications
-├── supabase/                          # Supabase-specific documentation
-├── tests/                             # Testing documentation
-└── uui/                               # UUI system documentation
+├── SDK_FLUTTER.md                     # Flutter SDK documentation
+├── SDK_TS.md                         # TypeScript SDK documentation
+├── CLI_COGO_FLUTTER.md               # Flutter CLI documentation
+├── FIGMA_PLUGIN_USER_GUIDE.md        # Figma plugin user guide
+├── FIGMA_PLUGIN_EXAMPLES.md          # Figma plugin examples
+├── EDGE_FIGMA_PLUGIN_PROTOCOL.md     # Figma plugin protocol
+└── COGO_AGENT_CHAT_MESSAGE_SPEC.md   # Chat message specification
 ```
 
-## 📋 Document Status Legend
+## 🔗 Important Links
 
-- ✅ **Current** - Actively maintained and up-to-date
-- 🔄 **In Progress** - Currently being updated or revised
-- 📅 **Review Needed** - Needs review for accuracy
-- 🏗️ **Draft** - Preliminary version, subject to change
-- 📚 **Reference** - Historical or reference documentation
+- **GitHub Repository**: [https://github.com/cogo-xyz/cogo-community](https://github.com/cogo-xyz/cogo-community)
+- **Package Registry**: Available on pub.dev and npm
+- **Issue Tracker**: GitHub Issues for bug reports and feature requests
+- **Community Discussions**: GitHub Discussions for questions and support
 
 ---
 
-*Last updated: 2025-01-30*
-*Maintained by: COGO Development Team*
+## 📋 Document Status
+
+- ✅ **Current** - Actively maintained and accurate
+- 🔄 **In Progress** - Currently being updated
+- 📅 **Review Needed** - May need updates based on latest changes
+
+---
+
+*Last updated: 2025-09-01*
+*Maintained by: COGO Community Team*
