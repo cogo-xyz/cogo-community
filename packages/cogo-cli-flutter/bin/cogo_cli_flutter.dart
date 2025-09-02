@@ -195,22 +195,58 @@ ArgParser build() {
   p.addCommand('artifacts-rm', artRm);
   // JSON ops
   final jset = ArgParser()
-    ..addOption('file', mandatory: true)
-    ..addOption('pointer', mandatory: true)
-    ..addOption('value', mandatory: true)
-    ..addOption('backup-dir');
+    ..addFlag('remote', negatable: false, help: 'Call Supabase Edge json-set instead of local file edit')
+    ..addOption('project-id', help: 'Project UUID (remote)')
+    ..addOption('doc-path', help: 'Document path key (remote)')
+    ..addOption('idempotency-key', help: 'Idempotency key (remote)')
+    ..addOption('retry', help: 'Retry times on HTTP failure (remote)')
+    ..addOption('retry-backoff-ms', help: 'Backoff ms between retries (remote)')
+    ..addOption('timeout-seconds', help: 'HTTP timeout seconds (remote)')
+    ..addOption('file', help: 'Local JSON file (local mode)')
+    ..addOption('pointer', help: 'JSON Pointer (local mode)')
+    ..addOption('value', mandatory: true, help: 'JSON value (string or JSON)')
+    ..addOption('backup-dir', help: 'Backup directory (local mode)');
   p.addCommand('json-set', jset);
   final jmerge = ArgParser()
-    ..addOption('file', mandatory: true)
-    ..addOption('pointer', mandatory: true)
-    ..addOption('value', mandatory: true)
-    ..addOption('backup-dir');
+    ..addFlag('remote', negatable: false, help: 'Call Supabase Edge json-merge instead of local file edit')
+    ..addOption('project-id', help: 'Project UUID (remote)')
+    ..addOption('doc-path', help: 'Document path key (remote)')
+    ..addOption('merge', help: 'Merge mode: deep (default) or shallow')
+    ..addOption('retry', help: 'Retry times on HTTP failure (remote)')
+    ..addOption('retry-backoff-ms', help: 'Backoff ms between retries (remote)')
+    ..addOption('timeout-seconds', help: 'HTTP timeout seconds (remote)')
+    ..addOption('file', help: 'Local JSON file (local mode)')
+    ..addOption('pointer', help: 'JSON Pointer (local mode)')
+    ..addOption('value', mandatory: true, help: 'JSON patch (string or JSON)')
+    ..addOption('backup-dir', help: 'Backup directory (local mode)');
   p.addCommand('json-merge', jmerge);
   final jrm = ArgParser()
-    ..addOption('file', mandatory: true)
-    ..addOption('pointer', mandatory: true)
-    ..addOption('backup-dir');
+    ..addFlag('remote', negatable: false, help: 'Call Supabase Edge json-remove instead of local file edit')
+    ..addOption('project-id', help: 'Project UUID (remote)')
+    ..addOption('doc-path', help: 'Document path key (remote)')
+    ..addOption('pointers', help: 'Comma-separated JSON Pointers (remote)')
+    ..addOption('retry', help: 'Retry times on HTTP failure (remote)')
+    ..addOption('retry-backoff-ms', help: 'Backoff ms between retries (remote)')
+    ..addOption('timeout-seconds', help: 'HTTP timeout seconds (remote)')
+    ..addOption('file', help: 'Local JSON file (local mode)')
+    ..addOption('pointer', help: 'JSON Pointer (local mode)')
+    ..addOption('backup-dir', help: 'Backup directory (local mode)');
   p.addCommand('json-remove', jrm);
+  // json-get (remote only)
+  final jget = ArgParser()
+    ..addFlag('remote', negatable: false, help: 'Call Supabase Edge json-get (remote only)')
+    ..addOption('project-id', help: 'Project UUID (remote)')
+    ..addOption('doc-path', help: 'Document path key (remote)')
+    ..addOption('timeout-seconds', help: 'HTTP timeout seconds (remote)');
+  p.addCommand('json-get', jget);
+  // json-list (remote only)
+  final jlist = ArgParser()
+    ..addFlag('remote', negatable: false, help: 'Call Supabase Edge json-list (remote only)')
+    ..addOption('project-id', help: 'Project UUID (remote)')
+    ..addOption('prefix', help: 'Prefix filter for path (remote)')
+    ..addOption('limit', help: 'Max items (default 100)')
+    ..addOption('timeout-seconds', help: 'HTTP timeout seconds (remote)');
+  p.addCommand('json-list', jlist);
   // config-validate
   p.addCommand('config-validate');
   return p;
@@ -999,6 +1035,8 @@ Future<int> main(List<String> a) async {
     case 'json-set':
     case 'json-merge':
     case 'json-remove':
+    case 'json-get':
+    case 'json-list':
       return await json_cmd.handleJson(c);
 
     case 'attachments-flow':

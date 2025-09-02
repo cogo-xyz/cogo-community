@@ -21,9 +21,14 @@ Command-line utilities for COGO Edge Functions, aligned with cogo-chat-sdk-flutt
 - attachments-ingest [--storage-key KEY] [--wait] [--timeout-seconds N]
 - attachments-result [--trace-id ID | ID] [--timeout-seconds N]
 - attachments-download [--trace-id ID | --signed-url URL] [--out-file FILE]
-- json-set --file p.json --pointer /a/b --value '{"x":1}' [--backup-dir .bak]
-- json-merge --file p.json --pointer /a --value '{"y":2}' [--backup-dir .bak]
-- json-remove --file p.json --pointer /a/b [--backup-dir .bak]
+- json-set [--remote --project-id UUID --doc-path PATH] --value '{"x":1}'
+           [--file p.json --pointer /a/b --backup-dir .bak]
+- json-merge [--remote --project-id UUID --doc-path PATH --merge deep|shallow] --value '{"y":2}'
+             [--file p.json --pointer /a --backup-dir .bak]
+- json-remove [--remote --project-id UUID --doc-path PATH --pointers '/a/b,/a/c']
+              [--file p.json --pointer /a/b --backup-dir .bak]
+ - json-get --remote --project-id UUID --doc-path PATH
+ - json-list --remote --project-id UUID [--prefix PRE] [--limit N]
 
 Global options:
 - --project-id UUID
@@ -141,17 +146,45 @@ dart run bin/cogo_cli_flutter.dart \
 
 ### JSON ops examples
 ```bash
-# set
+# Local set
 dart run bin/cogo_cli_flutter.dart \
   json-set --file ui.json --pointer /meta/title --value '"Home"' --backup-dir .bak
 
-# merge
+# Local merge
 dart run bin/cogo_cli_flutter.dart \
   json-merge --file ui.json --pointer /meta --value '{"version":"1.1"}' --backup-dir .bak
 
-# remove
+# Local remove
 dart run bin/cogo_cli_flutter.dart \
   json-remove --file ui.json --pointer /meta/title --backup-dir .bak
+
+# Remote set/merge/remove via Supabase Edge
+export SUPABASE_PROJECT_ID=xxxxx
+export SUPABASE_ANON_KEY=xxxxx
+export COGO_PROJECT_ID=00000000-0000-4000-8000-000000000000
+
+# set (remote)
+dart run bin/cogo_cli_flutter.dart \
+  json-set --remote --project-id "$COGO_PROJECT_ID" --doc-path "configs/app.json" \
+  --value '{"name":"app","ver":1}'
+
+# merge (remote, deep)
+dart run bin/cogo_cli_flutter.dart \
+  json-merge --remote --project-id "$COGO_PROJECT_ID" --doc-path "configs/app.json" \
+  --merge deep --value '{"flags":{"beta":true}}'
+
+# remove (remote)
+dart run bin/cogo_cli_flutter.dart \
+  json-remove --remote --project-id "$COGO_PROJECT_ID" --doc-path "configs/app.json" \
+  --pointers '/flags/beta'
+
+# get (remote)
+dart run bin/cogo_cli_flutter.dart \
+  json-get --remote --project-id "$COGO_PROJECT_ID" --doc-path "configs/app.json"
+
+# list (remote)
+dart run bin/cogo_cli_flutter.dart \
+  json-list --remote --project-id "$COGO_PROJECT_ID" --prefix "configs/" --limit 20
 ```
 
 
@@ -182,6 +215,8 @@ Example:
 - trace logs: `--show-progress`
 - artifacts-upload-batch: `--concurrency`
 - session-summary: `--out-actions`, `--out-summary`
+- json-set/merge/remove (remote): `--retry`, `--retry-backoff-ms`, `--timeout-seconds`, `--idempotency-key`
+ - json-get/list (remote): `--timeout-seconds`, and `--prefix/--limit` (list)
 
 ### Apply/Restore
 ```

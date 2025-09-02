@@ -21,6 +21,15 @@ class EdgeHttp {
   Future<http.Response> post(String path, String body) =>
       http.post(Uri.parse(base + path), headers: _headers, body: body);
 
+  Future<http.Response> postWithHeaders(String path, String body, {Map<String, String>? headers, Duration? timeout}) async {
+    final merged = <String, String>{}..addAll(_headers)..addAll(headers ?? const {});
+    final fut = http.post(Uri.parse(base + path), headers: merged, body: body);
+    if (timeout != null) {
+      return await fut.timeout(timeout);
+    }
+    return await fut;
+  }
+
   /// POST with Accept: text/event-stream and yield SSE frames via callback
   Future<void> postSse(
     String path,
