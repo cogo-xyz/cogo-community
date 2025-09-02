@@ -1,0 +1,15 @@
+{
+  "schemaVersion": "1",
+  "runner_type": "native",
+  "allowlist": ["npm", "pnpm", "yarn", "flutter", "dart", "cogo_cli_flutter"],
+  "denylist": ["rm", "sudo", "curl", "wget"],
+  "env_allowlist": ["^(SUPABASE|COGO)_"],
+  "env_denylist": ["SECRET", "KEY$"],
+  "auto_cli_allowlist": ["json-set", "json-merge", "json-remove"],
+  "default_cli_retries": 1,
+  "default_cli_retry_backoff_ms": 500,
+  "default_cli_timeout_seconds": 30,
+  "default_cli_on_fail": "stop"
+}
+
+
