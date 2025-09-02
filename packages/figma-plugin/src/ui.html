@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>COGO Figma Agent</title>
+    <title>Cogo UUI Converter</title>
     <style>
       body { font: 13px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin: 12px; }
       input { width: 100%; margin: 4px 0 8px; padding: 6px; }
@@ -14,43 +14,86 @@
   </head>
   <body>
     <label>Supabase Edge URL</label>
-    <input id="edge" placeholder="https://<project>.functions.supabase.co" />
+    <input id="edge" placeholder="https://xxx.functions.supabase.co" />
     <label>Anon Key</label>
     <input id="anon" placeholder="anon key" />
-    <label>Project UUID</label>
-    <input id="projectId" placeholder="e.g., 738a1fc6-..." />
-    <label>Language (auto/ko/en/ru/th/ja)</label>
-    <input id="language" placeholder="auto" />
-    <label>Page ID (optional)</label>
-    <input id="pageId" placeholder="1" />
-    <div style="display:flex; gap:8px; margin:8px 0;">
-      <button id="presenceRegister" style="flex:1;">Presence Register</button>
-      <button id="presenceUnreg" style="flex:1;">Presence Unregister</button>
-    </div>
+    <label>Project ID</label>
+    <input id="projectId" placeholder="project uuid" />
+    <label>Metrics Host (optional)</label>
+    <input id="metrics" placeholder="http://localhost:3100" />
+    <button id="run">Convert Selection → UUI & Cogo</button>
+    <hr />
+    <label>Ingest (large JSON)</label>
+    <input id="fileName" placeholder="figma_*.json (optional)" />
+    <textarea id="json" placeholder='Optional custom JSON to upload; leave empty to use selection' style="width:100%;height:120px"></textarea>
+    <button id="ingest">Upload & Ingest</button>
     <div id="status"></div>
-    
+    <div id="actions" style="display:none; margin:8px 0;">
+      <button id="openUrl" style="margin-right:6px;">Open Artifact</button>
+      <button id="copyUrl" style="margin-right:6px;">Copy URL</button>
+      <button id="copyKey" style="margin-right:6px;">Copy Key</button>
+      <button id="copyTrace">Copy trace_id</button>
+    </div>
+    <div id="actionsConvert" style="display:none; margin:8px 0;">
+      <button id="copyUui" style="margin-right:6px;">Copy UUI JSON</button>
+      <button id="copyCogo">Copy Cogo JSON</button>
+    </div>
     <pre id="out"></pre>
     <script>
       const $ = (id) => document.getElementById(id);
       // persist/load settings
-      const keys = ['edge','anon','projectId','language','pageId'];
+      const keys = ['edge','anon','projectId','metrics'];
       try { const saved = JSON.parse(localStorage.getItem('cogo-plugin:settings')||'{}'); keys.forEach(k=>{ if(saved[k]) $(k).value = saved[k]; }); } catch {}
-      document.getElementById('presenceRegister').onclick = () => {
-        parent.postMessage({ pluginMessage: { type: 'presence_register', payload: { edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value, language: $('language').value, pageId: (Number($('pageId').value)||undefined) } } }, '*');
-        try { localStorage.setItem('cogo-plugin:settings', JSON.stringify({ edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value, language: $('language').value, pageId: $('pageId').value })); } catch {}
-        $('status').textContent = 'Presence registering...';
+
+      document.getElementById('run').onclick = () => {
+        parent.postMessage({ pluginMessage: { type: 'convert', payload: { edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value } } }, '*');
+        try { localStorage.setItem('cogo-plugin:settings', JSON.stringify({ edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value, metrics: $('metrics').value })); } catch {}
+        $('status').textContent = 'Running...';
       };
-      document.getElementById('presenceUnreg').onclick = () => {
-        parent.postMessage({ pluginMessage: { type: 'presence_unregister', payload: { edge: $('edge').value, anon: $('anon').value } } }, '*');
-        $('status').textContent = 'Presence unregistering...';
+      document.getElementById('ingest').onclick = () => {
+        parent.postMessage({ pluginMessage: { type: 'ingest', payload: { edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value, fileName: $('fileName').value, json: $('json').value } } }, '*');
+        try { localStorage.setItem('cogo-plugin:settings', JSON.stringify({ edge: $('edge').value, anon: $('anon').value, projectId: $('projectId').value, metrics: $('metrics').value })); } catch {}
+        $('status').textContent = 'Uploading & Ingesting...';
       };
       window.onmessage = (ev) => {
         const msg = ev.data.pluginMessage;
         if (!msg) return;
         if (msg.type === 'status') { $('status').textContent = msg.message; return; }
-        if (msg.type === 'presence') {
-          $('status').textContent = msg.ok ? `Presence OK (session_id=${msg.session_id||'?'})` : `Presence Failed: ${msg.error}`;
+        if (msg.type === 'result') {
+          $('status').textContent = msg.ok ? 'OK' : 'Failed';
           $('status').className = msg.ok ? 'ok' : 'fail';
+          $('out').textContent = JSON.stringify(msg.json?.result || msg, null, 2);
+          $('actions').style.display = 'none';
+          const res = (msg.json && msg.json.result) ? msg.json.result : null;
+          const uui = res && res.uui_json ? JSON.stringify(res.uui_json, null, 2) : '';
+          const cogo = res && res.cogo_ui_json ? JSON.stringify(res.cogo_ui_json, null, 2) : '';
+          $('actionsConvert').style.display = (uui || cogo) ? 'block' : 'none';
+          $('copyUui').onclick = async () => { if (uui) { try { await navigator.clipboard.writeText(uui); } catch {} } };
+          $('copyCogo').onclick = async () => { if (cogo) { try { await navigator.clipboard.writeText(cogo); } catch {} } };
+          return;
+        }
+        if (msg.type === 'ingest_result') {
+          $('status').textContent = msg.ok ? 'Ready' : 'Failed';
+          $('status').className = msg.ok ? 'ok' : 'fail';
+          $('out').textContent = JSON.stringify(msg, null, 2);
+          const signed = msg.signedUrl || '';
+          const key = msg.key || '';
+          const trace = msg.trace_id || '';
+          $('actions').style.display = signed ? 'block' : 'none';
+          $('openUrl').onclick = () => { if (signed) window.open(signed, '_blank'); };
+          $('copyUrl').onclick = async () => { try { await navigator.clipboard.writeText(String(signed)); } catch {} };
+          $('copyKey').onclick = async () => { try { await navigator.clipboard.writeText(String(key)); } catch {} };
+          $('copyTrace').onclick = async () => { try { await navigator.clipboard.writeText(String(trace)); } catch {} };
+          // Open Trace (metrics)
+          if ($('metrics').value && trace) {
+            const base = String($('metrics').value).replace(/\/$/, '');
+            const url = `${base}/api/metrics/trace/${encodeURIComponent(trace)}`;
+            const btn = document.createElement('button');
+            btn.textContent = 'Open Trace';
+            btn.style.marginLeft = '6px';
+            btn.onclick = () => window.open(url, '_blank');
+            $('actions').appendChild(btn);
+          }
           return;
         }
       };
