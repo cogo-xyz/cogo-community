@@ -1,0 +1,65 @@
+{
+  "ok": true,
+  "domain": "sdk",
+  "action": "compat-generate",
+  "status": 200,
+  "result": {
+    "ok": true,
+    "result": {
+      "cogo_ui_json": {
+        "version": "1.0",
+        "page": {},
+        "tree": [
+          {
+            "id": "root",
+            "type": "container",
+            "children": [
+              {
+                "id": "txt_0",
+                "type": "text"
+              },
+              {
+                "id": "btn_0",
+                "type": "button"
+              },
+              {
+                "id": "img_0",
+                "type": "image"
+              }
+            ]
+          }
+        ],
+        "meta": {
+          "project_id": "00000000-0000-4000-8000-175660029145"
+        }
+      },
+      "uui_json": {
+        "version": "1.0",
+        "tree": [
+          {
+            "id": "root",
+            "kind": "container",
+            "children": [
+              {
+                "id": "txt_0",
+                "kind": "text"
+              },
+              {
+                "id": "btn_0",
+                "kind": "button"
+              },
+              {
+                "id": "img_0",
+                "kind": "image"
+              }
+            ]
+          }
+        ],
+        "meta": {
+          "project_id": "00000000-0000-4000-8000-175660029145"
+        }
+      }
+    },
+    "trace_id": "4ab988a9-7ce7-43a2-a874-fd6f225f5776"
+  }
+}

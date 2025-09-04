@@ -1,0 +1,4 @@
+{
+  "allowlist": ["npm", "pnpm", "yarn", "flutter", "dart", "git"],
+  "denylist": ["rm", "sudo", "curl", "wget"]
+}

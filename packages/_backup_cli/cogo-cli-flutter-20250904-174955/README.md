@@ -29,12 +29,6 @@ Command-line utilities for COGO Edge Functions, aligned with cogo-chat-sdk-flutt
               [--file p.json --pointer /a/b --backup-dir .bak]
  - json-get --remote --project-id UUID --doc-path PATH
  - json-list --remote --project-id UUID [--prefix PRE] [--limit N]
- - json-validate [--creatego-packages-dir DIR] <schemaId>@<version> <json_file>
-
-New/updated options aligning with cli-requirements:
-- JSON remote ops: `--retry`, `--retry-backoff-ms`, `--timeout-seconds`, `--idempotency-key`, `--expected-version`
-- JSON list: `--offset` for pagination
-- Global: `--out-json FILE` writes the full command result JSON to a file
 
 Global options:
 - --project-id UUID
@@ -70,19 +64,6 @@ dart run bin/cogo_cli_flutter.dart \
 - Realtime: ingest emits events to `bus_events` and broadcasts on `trace:{traceId}`
 - Artifacts: result returns `{ bucket, key, signedUrl }` where `key` is bucket-relative (no leading bucket name)
 - Components: when `LEGACY_COMPONENTS_ENABLE=true` and the server requires `COMP_COL_PAGE_ID`, provide a valid `--page-id`. If omitted, the server may return `page_id_required` or a foreign-key error. This does not affect compat artifact generation itself.
-
-`info` command now prints a safe environment/config summary:
-```json
-{
-  "env": {
-    "project_id": "...",
-    "edge_base": "https://<project>.supabase.co/functions/v1",
-    "supabase_anon_key_set": true,
-    "defaults": { "timeout_seconds": 30, "retries": 0, "retry_backoff_ms": 500 }
-  },
-  "server": { /* /intent-resolve/info response */ }
-}
-```
 
 ### Chat Loop (Cursor-like HITL workflow)
 ```bash
@@ -204,16 +185,6 @@ dart run bin/cogo_cli_flutter.dart \
 # list (remote)
 dart run bin/cogo_cli_flutter.dart \
   json-list --remote --project-id "$COGO_PROJECT_ID" --prefix "configs/" --limit 20
-
-# with out-json capture
-dart run bin/cogo_cli_flutter.dart \
-  --out-json .result.json \
-  json-set --remote --project-id "$COGO_PROJECT_ID" --doc-path "configs/app.json" \
-  --value '{"name":"app","ver":2}' --retry 2 --retry-backoff-ms 800 --timeout-seconds 20
-
-# validate local file against SSOT schema from creatego-packages
-dart run bin/cogo_cli_flutter.dart \
-  json-validate action.flow@2 external/cogo-client/creatego-packages/examples/json/action.flow.v2.json
 ```
 
 

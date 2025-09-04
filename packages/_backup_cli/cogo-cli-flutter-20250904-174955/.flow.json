@@ -1,0 +1,5 @@
+{
+  "ok": false,
+  "error": "parse_error",
+  "message": "FormatException: Could not find an option named \"--file-name\"."
+}

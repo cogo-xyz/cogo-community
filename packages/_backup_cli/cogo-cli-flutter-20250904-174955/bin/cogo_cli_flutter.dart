@@ -11,7 +11,6 @@ import 'package:cogo_cli_flutter/commands/artifacts.dart' as artifacts_cmd;
 import 'package:cogo_cli_flutter/commands/files.dart' as files_cmd;
 import 'package:cogo_cli_flutter/commands/json.dart' as json_cmd;
 import 'package:cogo_cli_flutter/commands/config.dart' as config_cmd;
-import 'package:cogo_cli_flutter/commands/schema.dart' as schema_cmd;
 import 'package:http/http.dart' as httpx;
 
 void j(Object o) => stdout.writeln(const JsonEncoder.withIndent('  ').convert(o));
@@ -200,7 +199,6 @@ ArgParser build() {
     ..addOption('project-id', help: 'Project UUID (remote)')
     ..addOption('doc-path', help: 'Document path key (remote)')
     ..addOption('idempotency-key', help: 'Idempotency key (remote)')
-    ..addOption('expected-version', help: 'Optimistic concurrency expected version (remote)')
     ..addOption('retry', help: 'Retry times on HTTP failure (remote)')
     ..addOption('retry-backoff-ms', help: 'Backoff ms between retries (remote)')
     ..addOption('timeout-seconds', help: 'HTTP timeout seconds (remote)')
@@ -214,7 +212,6 @@ ArgParser build() {
     ..addOption('project-id', help: 'Project UUID (remote)')
     ..addOption('doc-path', help: 'Document path key (remote)')
     ..addOption('merge', help: 'Merge mode: deep (default) or shallow')
-    ..addOption('expected-version', help: 'Optimistic concurrency expected version (remote)')
     ..addOption('retry', help: 'Retry times on HTTP failure (remote)')
     ..addOption('retry-backoff-ms', help: 'Backoff ms between retries (remote)')
     ..addOption('timeout-seconds', help: 'HTTP timeout seconds (remote)')
@@ -248,15 +245,10 @@ ArgParser build() {
     ..addOption('project-id', help: 'Project UUID (remote)')
     ..addOption('prefix', help: 'Prefix filter for path (remote)')
     ..addOption('limit', help: 'Max items (default 100)')
-    ..addOption('offset', help: 'Offset for pagination (default 0)')
     ..addOption('timeout-seconds', help: 'HTTP timeout seconds (remote)');
   p.addCommand('json-list', jlist);
   // config-validate
   p.addCommand('config-validate');
-  // json-validate: use creatego-packages validator
-  final jv = ArgParser()
-    ..addOption('creatego-packages-dir', help: 'Path to creatego-packages (optional)');
-  p.addCommand('json-validate', jv);
   return p;
 }
 
@@ -733,26 +725,13 @@ Future<int> main(List<String> a) async {
       }
     case 'info':
       {
-        final cfg = loadRunnerConfig();
-        final envSummary = {
-          'project_id': _projectId(ar),
-          'edge_base': base,
-          'supabase_anon_key_set': (env['SUPABASE_ANON_KEY'] ?? '').toString().isNotEmpty,
-          'defaults': {
-            'timeout_seconds': cfg.defaultTimeoutSec,
-            'retries': cfg.defaultRetries,
-            'retry_backoff_ms': cfg.defaultBackoffMs,
-          }
-        };
         final r = await http.get('/intent-resolve/info');
-        final server = _tryJson(r.body);
         j({
           'ok': r.statusCode == 200,
           'domain': 'sdk',
           'action': 'info',
           'status': r.statusCode,
-          'env': envSummary,
-          'server': server
+          'result': _tryJson(r.body)
         });
         return 0;
       }
@@ -1058,9 +1037,7 @@ Future<int> main(List<String> a) async {
     case 'json-remove':
     case 'json-get':
     case 'json-list':
-      return await json_cmd.handleJson(c, outJson: (ar['out-json']?.toString() ?? '').trim());
-    case 'json-validate':
-      return await schema_cmd.handleJsonValidate(c, (ar['out-json']?.toString() ?? '').trim());
+      return await json_cmd.handleJson(c);
 
     case 'attachments-flow':
       {

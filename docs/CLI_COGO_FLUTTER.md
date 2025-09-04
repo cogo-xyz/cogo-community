@@ -9,25 +9,25 @@ Command-line utilities for COGO Edge Functions, aligned with cogo-chat-sdk-flutt
 
 ### Commands
 - info
-- compat-symbols-map
-- compat-variables-derive
-- compat-bdd-generate
-- compat-bdd-refine
-- compat-actionflow-refine
-- compat-generate
 - trace-status [--trace-id ID | ID]
 - attachments-presign [--print-key-only]
 - attachments-presign-key
 - attachments-ingest [--storage-key KEY] [--wait] [--timeout-seconds N]
 - attachments-result [--trace-id ID | ID] [--timeout-seconds N]
 - attachments-download [--trace-id ID | --signed-url URL] [--out-file FILE]
-- json-set --file p.json --pointer /a/b --value '{"x":1}' [--backup-dir .bak]
-- json-merge --file p.json --pointer /a --value '{"y":2}' [--backup-dir .bak]
-- json-remove --file p.json --pointer /a/b [--backup-dir .bak]
+- json-set [--remote --project-id UUID --doc-path PATH --idempotency-key K --expected-version N --retry M --retry-backoff-ms B --timeout-seconds S] \
+           [--file p.json --pointer /a/b] --value '{"x":1}' [--backup-dir .bak]
+- json-merge [--remote --project-id UUID --doc-path PATH --merge deep|shallow --expected-version N --retry M --retry-backoff-ms B --timeout-seconds S] \
+             [--file p.json --pointer /a] --value '{"y":2}' [--backup-dir .bak]
+- json-remove [--remote --project-id UUID --doc-path PATH --pointers '/a/b,/a/c' --retry M --retry-backoff-ms B --timeout-seconds S] \
+              [--file p.json --pointer /a/b] [--backup-dir .bak]
+- json-get --remote --project-id UUID --doc-path PATH [--timeout-seconds S]
+- json-list --remote --project-id UUID [--prefix PRE] [--limit N] [--offset O] [--timeout-seconds S]
+- json-validate [--creatego-packages-dir DIR] <schemaId>@<version> <json_file>
 
 Global options:
+- --out-json FILE writes the full command result JSON to file
 - --project-id UUID
-- --page-id Number (compat 전용: components 업서트 등에 필요할 수 있음)
 - --timeout-seconds N
 - --out-key, --out-trace, --out-json
 
@@ -56,42 +56,10 @@ dart run bin/cogo_cli_flutter.dart \
 
 ### Notes
 - Edge auth: Authorization: Bearer <ANON>, apikey: <ANON> (handled internally)
-- Realtime: ingest emits events to bus_events and broadcasts on trace:{traceId}
-- Artifacts: result returns { bucket, key, signedUrl } where key is bucket-relative (no leading bucket name)
-- Components: 환경에서 LEGACY_COMPONENTS_ENABLE=true이고 COMP_COL_PAGE_ID가 요구되면 유효한 --page-id를 제공해야 합니다. 없으면 서버에서 "page_id_required" 또는 FK 오류가 반환될 수 있으나, compat 결과/아티팩트 생성에는 영향 없습니다.
+- Realtime: ingest emits events to `bus_events` and broadcasts on `trace:{traceId}`
+- Artifacts: result returns `{ bucket, key, signedUrl }` where `key` is bucket-relative (no leading bucket name)
 
-### Compat examples
-```bash
-# Generate from prompt
-dart run bin/cogo_cli_flutter.dart \
-  --project-id "$COGO_PROJECT_ID" \
-  compat-generate
-
-# Variables derive (옵션: --page-id 1)
-dart run bin/cogo_cli_flutter.dart \
-  --project-id "$COGO_PROJECT_ID" --page-id 1 \
-  compat-variables-derive
-
-# Symbols map (옵션: --page-id 1)
-dart run bin/cogo_cli_flutter.dart \
-  --project-id "$COGO_PROJECT_ID" --page-id 1 \
-  compat-symbols-map
-
-# BDD generate/refine (옵션: --page-id 1)
-dart run bin/cogo_cli_flutter.dart \
-  --project-id "$COGO_PROJECT_ID" --page-id 1 \
-  compat-bdd-generate
-dart run bin/cogo_cli_flutter.dart \
-  --project-id "$COGO_PROJECT_ID" --page-id 1 \
-  compat-bdd-refine
-
-# ActionFlow refine (옵션: --page-id 1)
-dart run bin/cogo_cli_flutter.dart \
-  --project-id "$COGO_PROJECT_ID" --page-id 1 \
-  compat-actionflow-refine
-```
-
-### JSON ops examples
+### JSON (Local) examples
 ```bash
 # set
 dart run bin/cogo_cli_flutter.dart \
@@ -106,4 +74,51 @@ dart run bin/cogo_cli_flutter.dart \
   json-remove --file ui.json --pointer /meta/title --backup-dir .bak
 ```
 
+### JSON (Remote via Supabase Edge) examples
+```bash
+export SUPABASE_PROJECT_ID=xxxxx
+export SUPABASE_ANON_KEY=xxxxx
+export COGO_PROJECT_ID=00000000-0000-4000-8000-000000000000
 
+# set (remote)
+dart run bin/cogo_cli_flutter.dart \
+  --out-json .result.json \
+  json-set --remote --project-id "$COGO_PROJECT_ID" --doc-path "configs/app.json" \
+  --value '{"name":"app","ver":1}' --idempotency-key test-1 --retry 2 --retry-backoff-ms 800 --timeout-seconds 20
+
+# merge (remote, deep)
+dart run bin/cogo_cli_flutter.dart \
+  json-merge --remote --project-id "$COGO_PROJECT_ID" --doc-path "configs/app.json" \
+  --merge deep --value '{"flags":{"beta":true}}'
+
+# remove (remote)
+dart run bin/cogo_cli_flutter.dart \
+  json-remove --remote --project-id "$COGO_PROJECT_ID" --doc-path "configs/app.json" \
+  --pointers '/flags/beta'
+
+# get (remote)
+dart run bin/cogo_cli_flutter.dart \
+  json-get --remote --project-id "$COGO_PROJECT_ID" --doc-path "configs/app.json" --out-json .get.json
+
+# list (remote)
+dart run bin/cogo_cli_flutter.dart \
+  json-list --remote --project-id "$COGO_PROJECT_ID" --prefix "configs/" --limit 20 --offset 0 --out-json .list.json
+```
+
+### Validate JSON against SSOT schemas
+`creatego-packages` includes a lightweight schema registry and validator.
+```bash
+# action.flow v1
+dart run bin/cogo_cli_flutter.dart \
+  json-validate action.flow@1 external/cogo-client/creatego-packages/examples/json/action.flow.v1.json --out-json .validate.flow.json
+
+# data.api_definition v1
+dart run bin/cogo_cli_flutter.dart \
+  json-validate data.api_definition@1 external/cogo-client/creatego-packages/examples/json/data.api_definition.v1.json --out-json .validate.api.json
+```
+
+### info command (environment summary)
+```bash
+dart run bin/cogo_cli_flutter.dart info --out-json .info.json
+# Prints { env: { project_id, edge_base, supabase_anon_key_set, defaults }, server: {...} }
+```

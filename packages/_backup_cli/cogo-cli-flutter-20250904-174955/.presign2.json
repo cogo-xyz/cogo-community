@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "domain": "sdk",
+  "action": "attachments-presign",
+  "status": 200,
+  "result": {
+    "ok": true,
+    "bucket": "figma",
+    "key": "uploads/144/sample.json",
+    "signedUrl": "https://cjvgmyotqxfpxpvmwxfv.supabase.co/storage/v1/object/upload/sign/figma/uploads/144/sample.json?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV83ZjZiYzVlNS0xNjlkLTRlN2ItOThjZC05MGY1N2U1ZjFjYWQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJmaWdtYS91cGxvYWRzLzE0NC9zYW1wbGUuanNvbiIsInVwc2VydCI6ZmFsc2UsImlhdCI6MTc1NjYwOTIwMSwiZXhwIjoxNzU2NjE2NDAxfQ.cq0awDvH_OZO89Kbjd-zUMvdEAZxc14oqMvsTS5IubE",
+    "token": "eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV83ZjZiYzVlNS0xNjlkLTRlN2ItOThjZC05MGY1N2U1ZjFjYWQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJmaWdtYS91cGxvYWRzLzE0NC9zYW1wbGUuanNvbiIsInVwc2VydCI6ZmFsc2UsImlhdCI6MTc1NjYwOTIwMSwiZXhwIjoxNzU2NjE2NDAxfQ.cq0awDvH_OZO89Kbjd-zUMvdEAZxc14oqMvsTS5IubE"
+  }
+}

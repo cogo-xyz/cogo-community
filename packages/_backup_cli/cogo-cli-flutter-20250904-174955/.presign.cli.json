@@ -1,0 +1,11 @@
+{
+  "ok": true,
+  "domain": "sdk",
+  "action": "attachments-presign",
+  "status": 200,
+  "result": {
+    "ok": true,
+    "bucket": "figma",
+    "key": "uploads/3f50a6d4-7990-435e-a6a6-97c95358adea/sample.json"
+  }
+}

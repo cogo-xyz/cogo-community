@@ -23,7 +23,7 @@ void _writeIfPath(String? path, String content) {
   try { File(p).writeAsStringSync(content); } catch (_) {}
 }
 
-Future<int> handleJson(ArgResults c, {String? outTrace, String? outJson}) async {
+Future<int> handleJson(ArgResults c, {String? outTrace}) async {
   switch (c.name) {
     case 'json-set':
       {
@@ -37,9 +37,7 @@ Future<int> handleJson(ArgResults c, {String? outTrace, String? outJson}) async 
           final valStr = (_safeGet(c, 'value')?.toString() ?? '').trim();
           if (projectId.isEmpty || docPath.isEmpty || valStr.isEmpty) { return _emit({'ok': false, 'error': 'args_missing_remote'}); }
           dynamic value; try { value = jsonDecode(valStr); } catch (_) { value = valStr; }
-          final expv = int.tryParse((_safeGet(c, 'expected-version')?.toString() ?? '').trim());
-          final payload = { 'project_id': projectId, 'path': docPath, 'value': value, if (expv != null) 'expected_version': expv };
-          final body = jsonEncode(payload);
+          final body = jsonEncode({ 'project_id': projectId, 'path': docPath, 'value': value });
           final retries = int.tryParse((_safeGet(c, 'retry')?.toString() ?? '').trim()) ?? loadRunnerConfig().defaultRetries;
           final backoff = int.tryParse((_safeGet(c, 'retry-backoff-ms')?.toString() ?? '').trim()) ?? loadRunnerConfig().defaultBackoffMs;
           final timeoutSec = int.tryParse((_safeGet(c, 'timeout-seconds')?.toString() ?? '').trim()) ?? loadRunnerConfig().defaultTimeoutSec;
@@ -58,9 +56,7 @@ Future<int> handleJson(ArgResults c, {String? outTrace, String? outJson}) async 
           }
           final obj = (resp.body.isEmpty? {} : jsonDecode(resp.body));
           try { final tid = (obj is Map) ? (obj['trace_id']?.toString() ?? '') : ''; if (tid.isNotEmpty) _writeIfPath(outTrace, tid); } catch (_) {}
-          final result = { 'ok': resp.statusCode == 200, 'status': resp.statusCode, 'response': obj };
-          _writeIfPath(outJson, jsonEncode(result));
-          return _emit(result);
+          return _emit({ 'ok': resp.statusCode == 200, 'status': resp.statusCode, 'response': obj });
         }
         final path = ((c['file']?.toString() ?? '').trim());
         final ptr = ((c['pointer']?.toString() ?? '').trim());
@@ -71,9 +67,7 @@ Future<int> handleJson(ArgResults c, {String? outTrace, String? outJson}) async 
         final data = await JsonOps.readJsonFile(path);
         final updated = JsonOps.setAtPointer(data, ptr, value) as Map<String, dynamic>;
         await JsonOps.writeJsonFile(path, updated, backupDir: backup.isEmpty ? null : backup);
-        final result = {'ok': true, 'domain': 'sdk', 'action': 'json-set', 'file': path, 'pointer': ptr};
-        _writeIfPath(outJson, jsonEncode(result));
-        return _emit(result);
+        return _emit({'ok': true, 'domain': 'sdk', 'action': 'json-set', 'file': path, 'pointer': ptr});
       }
     case 'json-merge':
       {
@@ -88,9 +82,7 @@ Future<int> handleJson(ArgResults c, {String? outTrace, String? outJson}) async 
           final mode = (_safeGet(c, 'merge')?.toString() ?? 'deep').trim().toLowerCase();
           if (projectId.isEmpty || docPath.isEmpty || valStr.isEmpty) { return _emit({'ok': false, 'error': 'args_missing_remote'}); }
           dynamic patch; try { patch = jsonDecode(valStr); } catch (_) { patch = valStr; }
-          final expv = int.tryParse((_safeGet(c, 'expected-version')?.toString() ?? '').trim());
-          final payload = { 'project_id': projectId, 'path': docPath, 'patch': patch, 'merge': (mode == 'shallow') ? 'shallow' : 'deep', if (expv != null) 'expected_version': expv };
-          final body = jsonEncode(payload);
+          final body = jsonEncode({ 'project_id': projectId, 'path': docPath, 'patch': patch, 'merge': (mode == 'shallow') ? 'shallow' : 'deep' });
           final retries = int.tryParse((_safeGet(c, 'retry')?.toString() ?? '').trim()) ?? loadRunnerConfig().defaultRetries;
           final backoff = int.tryParse((_safeGet(c, 'retry-backoff-ms')?.toString() ?? '').trim()) ?? loadRunnerConfig().defaultBackoffMs;
           final timeoutSec = int.tryParse((_safeGet(c, 'timeout-seconds')?.toString() ?? '').trim()) ?? loadRunnerConfig().defaultTimeoutSec;
@@ -108,9 +100,7 @@ Future<int> handleJson(ArgResults c, {String? outTrace, String? outJson}) async 
           }
           final obj = (resp.body.isEmpty? {} : jsonDecode(resp.body));
           try { final tid = (obj is Map) ? (obj['trace_id']?.toString() ?? '') : ''; if (tid.isNotEmpty) _writeIfPath(outTrace, tid); } catch (_) {}
-          final result = { 'ok': resp.statusCode == 200, 'status': resp.statusCode, 'response': obj };
-          _writeIfPath(outJson, jsonEncode(result));
-          return _emit(result);
+          return _emit({ 'ok': resp.statusCode == 200, 'status': resp.statusCode, 'response': obj });
         }
         final path = (c['file']?.toString() ?? '').trim();
         final ptr = (c['pointer']?.toString() ?? '').trim();
@@ -123,9 +113,7 @@ Future<int> handleJson(ArgResults c, {String? outTrace, String? outJson}) async 
         final merged = JsonOps.deepMerge(base, patch);
         final updated = JsonOps.setAtPointer(data, ptr, merged) as Map<String, dynamic>;
         await JsonOps.writeJsonFile(path, updated, backupDir: backup.isEmpty ? null : backup);
-        final result = {'ok': true, 'domain': 'sdk', 'action': 'json-merge', 'file': path, 'pointer': ptr};
-        _writeIfPath(outJson, jsonEncode(result));
-        return _emit(result);
+        return _emit({'ok': true, 'domain': 'sdk', 'action': 'json-merge', 'file': path, 'pointer': ptr});
       }
     case 'json-remove':
       {
@@ -157,9 +145,7 @@ Future<int> handleJson(ArgResults c, {String? outTrace, String? outJson}) async 
           }
           final obj = (resp.body.isEmpty? {} : jsonDecode(resp.body));
           try { final tid = (obj is Map) ? (obj['trace_id']?.toString() ?? '') : ''; if (tid.isNotEmpty) _writeIfPath(outTrace, tid); } catch (_) {}
-          final result = { 'ok': resp.statusCode == 200, 'status': resp.statusCode, 'response': obj };
-          _writeIfPath(outJson, jsonEncode(result));
-          return _emit(result);
+          return _emit({ 'ok': resp.statusCode == 200, 'status': resp.statusCode, 'response': obj });
         }
         final path = (c['file']?.toString() ?? '').trim();
         final ptr = (c['pointer']?.toString() ?? '').trim();
@@ -168,9 +154,7 @@ Future<int> handleJson(ArgResults c, {String? outTrace, String? outJson}) async 
         final data = await JsonOps.readJsonFile(path);
         final updated = JsonOps.removeAtPointer(data, ptr) as Map<String, dynamic>;
         await JsonOps.writeJsonFile(path, updated, backupDir: backup.isEmpty ? null : backup);
-        final result = {'ok': true, 'domain': 'sdk', 'action': 'json-remove', 'file': path, 'pointer': ptr};
-        _writeIfPath(outJson, jsonEncode(result));
-        return _emit(result);
+        return _emit({'ok': true, 'domain': 'sdk', 'action': 'json-remove', 'file': path, 'pointer': ptr});
       }
     case 'json-get':
       {
@@ -186,9 +170,7 @@ Future<int> handleJson(ArgResults c, {String? outTrace, String? outJson}) async 
         final r = (timeoutSec>0)
           ? await edge.postWithHeaders('/json-get', jsonEncode({'project_id': projectId, 'path': docPath}), timeout: Duration(seconds: timeoutSec))
           : await edge.post('/json-get', jsonEncode({'project_id': projectId, 'path': docPath}));
-        final result = {'ok': r.statusCode == 200, 'status': r.statusCode, 'response': (r.body.isEmpty? {} : jsonDecode(r.body))};
-        _writeIfPath(outJson, jsonEncode(result));
-        return _emit(result);
+        return _emit({'ok': r.statusCode == 200, 'status': r.statusCode, 'response': (r.body.isEmpty? {} : jsonDecode(r.body))});
       }
     case 'json-list':
       {
@@ -200,13 +182,10 @@ Future<int> handleJson(ArgResults c, {String? outTrace, String? outJson}) async 
         final projectId = (_safeGet(c, 'project-id')?.toString() ?? Platform.environment['COGO_PROJECT_ID'] ?? '').trim();
         final prefix = (_safeGet(c, 'prefix')?.toString() ?? '').trim();
         final limit = int.tryParse((_safeGet(c, 'limit')?.toString() ?? '').trim()) ?? 100;
-        final offset = int.tryParse((_safeGet(c, 'offset')?.toString() ?? '').trim()) ?? 0;
         if (projectId.isEmpty) { return _emit({'ok': false, 'error': 'args_missing_remote'}); }
-        final body = {'project_id': projectId, if (prefix.isNotEmpty) 'prefix': prefix, 'limit': limit, if (offset>0) 'offset': offset};
+        final body = {'project_id': projectId, if (prefix.isNotEmpty) 'prefix': prefix, 'limit': limit};
         final r = await edge.post('/json-list', jsonEncode(body));
-        final result = {'ok': r.statusCode == 200, 'status': r.statusCode, 'response': (r.body.isEmpty? {} : jsonDecode(r.body))};
-        _writeIfPath(outJson, jsonEncode(result));
-        return _emit(result);
+        return _emit({'ok': r.statusCode == 200, 'status': r.statusCode, 'response': (r.body.isEmpty? {} : jsonDecode(r.body))});
       }
   }
   return _emit({'ok': false, 'error': 'unknown_json_command'});
