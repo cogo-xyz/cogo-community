@@ -1,4 +1,4 @@
-# Cogo Chat Flutter App
+# Cogo Chat App
 
 A complete Flutter chat application that integrates the Cogo Chat SDK and CLI for advanced AI-powered conversations and design generation.
 
