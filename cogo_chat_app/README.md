@@ -60,7 +60,7 @@ The app uses the following key dependencies:
 1. **Clone the repository**:
    ```bash
    git clone <repository-url>
-   cd flutter_chat_app
+   cd cogo_chat_app
    ```
 
 2. **Install dependencies**:

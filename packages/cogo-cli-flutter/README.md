@@ -308,7 +308,7 @@ await dispatchNextActions(nextActions, hitl:true, http:http, traceId:traceId, lo
 ```
 
 Reference examples:
-- `examples/flutter_chat_app_reference.dart` (Desktop/Native UX)
+- `examples/cogo_chat_app_reference.dart` (Desktop/Native UX)
 - `examples/flutter_web_chat_reference.dart` (Web: no local process/file; preview+download; server delegation hook; multilingual)
 - `examples/flutter_hybrid_loop.dart` (Hybrid: delegate specific bundles to CLI loop)
 
