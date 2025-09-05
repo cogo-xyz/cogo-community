@@ -1,0 +1,78 @@
+{
+  "info": {
+    "name": "COGO Agent",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "SUPABASE_URL", "value": "https://<ref>.supabase.co" },
+    { "key": "KEY", "value": "<service_or_anon>" },
+    { "key": "PROJECT", "value": "<uuid>" }
+  ],
+  "item": [
+    {
+      "name": "json-generate (healthz)",
+      "request": { "method": "GET", "url": "{{SUPABASE_URL}}/functions/v1/json-generate/healthz" }
+    },
+    {
+      "name": "json-generate (persist)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" },
+          { "key": "apikey", "value": "{{KEY}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/json-generate",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"projectId\": \"{{PROJECT}}\",\n  \"base_path\": \"docs/cogo-agent/examples/simple-screen\",\n  \"ui\": {\n    \"screen\": \"simple\",\n    \"elements\": [\n      {\"id\":\"input1\",\"type\":\"textField\",\"binding\":\"uiState.inputText\"},\n      {\"id\":\"btnSend\",\"type\":\"button\",\"onTap\":{\"eventType\":\"onTap\",\"symbol\":\"chat.send\",\"params\":{\"text\":\"#_uiState.inputText\"}}}\n    ]\n  },\n  \"persist\": true\n}"
+        }
+      }
+    },
+    {
+      "name": "json-get",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/json-get",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"project_id\": \"{{PROJECT}}\",\n  \"path\": \"docs/cogo-agent/examples/simple-screen/actionFlow.v1.expanded.json\"\n}"
+        }
+      }
+    },
+    {
+      "name": "json-validate (action.flow@1)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/json-validate",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"schema_id\": \"action.flow@1\",\n  \"data\": {}\n}"
+        }
+      }
+    },
+    {
+      "name": "chat-gateway (handoff)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/chat-gateway",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"payload\": {\n    \"projectId\": \"{{PROJECT}}\",\n    \"text\": \"hello\"\n  }\n}"
+        }
+      }
+    }
+  ]
+}
