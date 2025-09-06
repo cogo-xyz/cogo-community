@@ -1,0 +1,402 @@
+[
+  {
+    "idx": 0,
+    "id": 1,
+    "created_at": "2025-01-27 10:00:00.000000+00",
+    "name": "User Authentication - Login Success",
+    "description": "As a user I want to authenticate with valid credentials So that I can access my wallet and manage my accounts",
+    "tags": ["authentication", "login", "wallet"],
+    "project_id": 145,
+    "gherkin_text": "Feature: User Authentication\nAs a user\nI want to authenticate with the system\nSo that I can access my wallet and manage my accounts\n\nScenario: Successful Login\nGiven I am on the login page\nAnd I have valid credentials\nWhen I enter my email \"#loginId\" as \"user@example.com\"\nAnd I enter my password \"#loginPwd\" as \"password123\"\nAnd I click the login button\nThen the system should authenticate me via \"authLogin\" action\nAnd my user data should be saved to \"#user\"\nAnd my wallet data should be saved to \"#wallets\"\nAnd my session should be saved to \"#session\"\nAnd I should be redirected to the home page"
+  },
+  {
+    "idx": 1,
+    "id": 2,
+    "created_at": "2025-01-27 10:01:00.000000+00",
+    "name": "User Authentication - Login Failure",
+    "description": "As a user I want to receive clear error messages when login fails So that I understand what went wrong",
+    "tags": ["authentication", "login", "error-handling"],
+    "project_id": 145,
+    "gherkin_text": "Feature: User Authentication\nAs a user\nI want to authenticate with the system\nSo that I can access my wallet and manage my accounts\n\nScenario: Failed Login\nGiven I am on the login page\nAnd I have invalid credentials\nWhen I enter my email \"#loginId\" as \"invalid@example.com\"\nAnd I enter my password \"#loginPwd\" as \"wrongpassword\"\nAnd I click the login button\nThen the system should show an error message\nAnd I should remain on the login page"
+  },
+  {
+    "idx": 2,
+    "id": 3,
+    "created_at": "2025-01-27 10:02:00.000000+00",
+    "name": "User Registration - Signup Success",
+    "description": "As a new user I want to create an account So that I can access the wallet system",
+    "tags": ["registration", "signup", "new-user"],
+    "project_id": 145,
+    "gherkin_text": "Feature: User Registration\nAs a new user\nI want to create an account\nSo that I can access the wallet system\n\nScenario: Successful Registration\nGiven I am on the signup page\nWhen I enter my email \"#signupId\" as \"newuser@example.com\"\nAnd I enter my password \"#signupPassword\" as \"newpassword123\"\nAnd I confirm my password \"#signupPasswordConfirm\" as \"newpassword123\"\nAnd I enter my phone \"#signupPhone\" as \"+1234567890\"\nAnd I click the signup button\nThen the system should create my account via \"authSignup\" action\nAnd I should be redirected to the success page\nAnd my account email should be displayed"
+  },
+  {
+    "idx": 3,
+    "id": 4,
+    "created_at": "2025-01-27 10:03:00.000000+00",
+    "name": "PIN Code Management - Create PIN Success",
+    "description": "As a user I want to create a secure PIN code So that I can protect my wallet access",
+    "tags": ["pin-code", "security", "wallet-protection"],
+    "project_id": 145,
+    "gherkin_text": "Feature: PIN Code Management\nAs a user\nI want to create and manage my PIN code\nSo that I can secure my wallet access\n\nScenario: Create PIN Code Successfully\nGiven I am on the PIN code creation page\nWhen I enter a 6-digit PIN code \"123456\"\nAnd I confirm the same PIN code \"123456\"\nThen the PIN code should be validated via \"typePincode\" action\nAnd the system should save the PIN to \"#pincode\"\nAnd I should be redirected to the home page"
+  },
+  {
+    "idx": 4,
+    "id": 5,
+    "created_at": "2025-01-27 10:04:00.000000+00",
+    "name": "PIN Code Management - PIN Creation Failure",
+    "description": "As a user I want to be notified when PIN codes don't match So that I can correct my input",
+    "tags": ["pin-code", "validation", "error-handling"],
+    "project_id": 145,
+    "gherkin_text": "Feature: PIN Code Management\nAs a user\nI want to create and manage my PIN code\nSo that I can secure my wallet access\n\nScenario: PIN Code Creation Failure\nGiven I am on the PIN code creation page\nWhen I enter a 6-digit PIN code \"123456\"\nAnd I enter a different confirmation PIN \"654321\"\nThen the system should show \"Incorrect PIN code\" message\nAnd the PIN code fields should be cleared\nAnd I should be prompted to try again"
+  },
+  {
+    "idx": 5,
+    "id": 6,
+    "created_at": "2025-01-27 10:05:00.000000+00",
+    "name": "PIN Code Visual Feedback",
+    "description": "As a user I want visual feedback while entering my PIN So that I can see my progress",
+    "tags": ["pin-code", "ui-feedback", "user-experience"],
+    "project_id": 145,
+    "gherkin_text": "Feature: PIN Code Management\nAs a user\nI want to create and manage my PIN code\nSo that I can secure my wallet access\n\nScenario: PIN Code Visual Feedback\nGiven I am on the PIN code creation page\nWhen I start entering digits\nThen the PIN symbols should change color to \"#319CF3\" as I type\nAnd the title should show \"Create a PIN code\" for first 6 digits\nAnd the title should show \"Confirm a PIN code\" for next 6 digits"
+  },
+  {
+    "idx": 6,
+    "id": 7,
+    "created_at": "2025-01-27 10:06:00.000000+00",
+    "name": "Wallet Management - View Balance",
+    "description": "As a user I want to view my wallet balance So that I can see my current crypto assets",
+    "tags": ["wallet", "balance", "assets"],
+    "project_id": 145,
+    "gherkin_text": "Feature: Wallet Management\nAs a user\nI want to manage my wallets and accounts\nSo that I can organize my crypto assets\n\nScenario: View Wallet Balance\nGiven I am logged in\nAnd I have a wallet with ID \"#walletId\"\nWhen I navigate to the assets page\nThen the system should call \"getWalletBalance\" action\nAnd my wallet balance should be displayed\nAnd the total USD value should be shown"
+  },
+  {
+    "idx": 7,
+    "id": 8,
+    "created_at": "2025-01-27 10:07:00.000000+00",
+    "name": "Account Management - Create Account",
+    "description": "As a user I want to create new accounts So that I can organize my crypto assets",
+    "tags": ["account", "creation", "wallet-management"],
+    "project_id": 145,
+    "gherkin_text": "Feature: Account Management\nAs a user\nI want to manage my accounts\nSo that I can organize my crypto assets\n\nScenario: Create New Account\nGiven I am on the account list page\nWhen I click \"Add Account\"\nAnd I enter an account name \"#createAccountName\" as \"My Trading Account\"\nAnd I click \"Create\"\nThen the system should call \"createAccount\" action\nAnd a new account should be created\nAnd I should be redirected to the account list\nAnd the new account should appear in the list"
+  },
+  {
+    "idx": 8,
+    "id": 9,
+    "created_at": "2025-01-27 10:08:00.000000+00",
+    "name": "Account Management - Delete Account",
+    "description": "As a user I want to delete accounts So that I can remove unwanted accounts",
+    "tags": ["account", "deletion", "wallet-management"],
+    "project_id": 145,
+    "gherkin_text": "Feature: Account Management\nAs a user\nI want to manage my accounts\nSo that I can organize my crypto assets\n\nScenario: Delete Account\nGiven I am on the account list page\nAnd I have an existing account\nWhen I click the delete button for an account\nThen a confirmation dialog should open\nAnd when I confirm the deletion\nThen the system should call \"deleteAccount\" action\nAnd the account should be removed\nAnd the dialog should close\nAnd I should be redirected to the account list"
+  },
+  {
+    "idx": 9,
+    "id": 10,
+    "created_at": "2025-01-27 10:09:00.000000+00",
+    "name": "Transaction Management - View Recent Transactions",
+    "description": "As a user I want to view my transaction history So that I can track my crypto activities",
+    "tags": ["transactions", "history", "wallet-activity"],
+    "project_id": 145,
+    "gherkin_text": "Feature: Transaction Management\nAs a user\nI want to view my transaction history\nSo that I can track my crypto activities\n\nScenario: View Recent Transactions\nGiven I am logged in\nWhen I navigate to the home page\nThen the system should call \"getUserTransactions\" action\nAnd my recent transactions should be loaded into \"#recentTransactions\"\nAnd the transactions should be displayed on the home page"
+  },
+  {
+    "idx": 10,
+    "id": 11,
+    "created_at": "2025-01-27 10:10:00.000000+00",
+    "name": "Seed Phrase Management - View Seed Phrase",
+    "description": "As a user I want to view my seed phrase So that I can backup my wallet",
+    "tags": ["seed-phrase", "backup", "wallet-security"],
+    "project_id": 145,
+    "gherkin_text": "Feature: Seed Phrase Management\nAs a user\nI want to view and restore my seed phrase\nSo that I can backup and recover my wallet\n\nScenario: View Seed Phrase\nGiven I am logged in\nAnd I have a seed phrase stored in \"#seed\"\nWhen I navigate to the seed show page\nThen the system should call \"onLoadSeedShow\" action\nAnd all 12 seed phrase words should be displayed\nAnd each word should be shown in its respective text field"
+  },
+  {
+    "idx": 11,
+    "id": 12,
+    "created_at": "2025-01-27 10:11:00.000000+00",
+    "name": "Profile Management - View Profile",
+    "description": "As a user I want to view my profile information So that I can see my account details",
+    "tags": ["profile", "user-info", "settings"],
+    "project_id": 145,
+    "gherkin_text": "Feature: Profile Management\nAs a user\nI want to manage my profile information\nSo that I can keep my account details up to date\n\nScenario: View Profile Information\nGiven I am logged in\nWhen I navigate to the profile page\nThen the system should call \"onLoadSettings\" action\nAnd my email should be displayed in the profile\nAnd my nickname should be shown as \"#_uiState.profile.nickname\"\nAnd my wallet address should be displayed as \"#_uiState.profile.walletAddress\""
+  },
+  {
+    "idx": 12,
+    "id": 13,
+    "created_at": "2025-01-27 10:12:00.000000+00",
+    "name": "Navigation - Settings Page",
+    "description": "As a user I want to navigate to settings So that I can access configuration options",
+    "tags": ["navigation", "settings", "ui-flow"],
+    "project_id": 145,
+    "gherkin_text": "Feature: Navigation\nAs a user\nI want to navigate between different sections\nSo that I can access all features of the app\n\nScenario: Navigate to Settings\nGiven I am on any page\nWhen I click the settings button\nThen the system should call \"moveSettings\" action\nAnd I should be redirected to \"/settings\""
+  },
+  {
+    "idx": 13,
+    "id": 14,
+    "created_at": "2025-01-27 10:13:00.000000+00",
+    "name": "Navigation - Assets Page",
+    "description": "As a user I want to navigate to assets So that I can view my crypto holdings",
+    "tags": ["navigation", "assets", "wallet-view"],
+    "project_id": 145,
+    "gherkin_text": "Feature: Navigation\nAs a user\nI want to navigate between different sections\nSo that I can access all features of the app\n\nScenario: Navigate to Assets\nGiven I am on any page\nWhen I click the assets button\nThen the system should call \"moveAssets\" action\nAnd I should be redirected to \"/assets_wrap\""
+  },
+  {
+    "idx": 14,
+    "id": 15,
+    "created_at": "2025-01-27 10:14:00.000000+00",
+    "name": "Error Handling - API Errors",
+    "description": "As a user I want to receive clear error messages So that I understand what went wrong",
+    "tags": ["error-handling", "api-errors", "user-feedback"],
+    "project_id": 145,
+    "gherkin_text": "Feature: Error Handling\nAs a user\nI want to receive clear error messages\nSo that I understand what went wrong and how to fix it\n\nScenario: API Error Handling\nGiven I am performing an action that requires API access\nWhen the API returns an error\nThen the system should display an appropriate error message\nAnd the error should be shown via \"showPopup\" action\nAnd the user should be able to retry the action"
+  },
+  {
+    "idx": 0,
+    "id": 46,
+    "created_at": "2025-09-05 07:30:30.121835+00",
+    "name": "Profile Update - Success",
+    "description": "As a user I want to update my profile information So that my account details are current",
+    "tags": ["profile", "update", "user-management"],
+    "project_id": 151,
+    "gherkin_text": "Feature: Profile Management\nAs a user\nI want to update my profile information\nSo that my account details are current\n\nScenario: Successful Profile Update\nGiven I am logged in\nAnd I am on the profile edit page\nWhen I enter my name \"#nameInput\" as \"John Doe\"\nAnd I enter my email \"#emailInput\" as \"john.doe@example.com\"\nAnd I enter my phone \"#phoneInput\" as \"+1234567890\"\nAnd I click the update profile button\nThen the system should validate my input via \"validateInput\" action\nAnd the profile should be updated via \"updateProfile\" API call\nAnd I should see \"Profile updated successfully\" message\nAnd my updated profile data should be saved to \"#user\""
+  },
+  {
+    "idx": 1,
+    "id": 47,
+    "created_at": "2025-09-05 07:30:30.121835+00",
+    "name": "Profile Update - Validation Error",
+    "description": "As a user I want to receive validation errors So that I can correct invalid profile data",
+    "tags": ["profile", "validation", "error-handling"],
+    "project_id": 151,
+    "gherkin_text": "Feature: Profile Management\nAs a user\nI want to update my profile information\nSo that my account details are current\n\nScenario: Profile Update Validation Error\nGiven I am logged in\nAnd I am on the profile edit page\nWhen I enter an empty name \"#nameInput\" as \"\"\nAnd I enter an invalid email \"#emailInput\" as \"invalid-email\"\nAnd I click the update profile button\nThen the system should validate my input via \"validateInput\" action\nAnd I should see \"Please fill in all required fields correctly\" message\nAnd my profile should not be updated"
+  },
+  {
+    "idx": 2,
+    "id": 48,
+    "created_at": "2025-09-05 07:30:30.121835+00",
+    "name": "Send Notification - Success",
+    "description": "As an admin I want to send notifications to users So that I can communicate important information",
+    "tags": ["notification", "admin", "communication"],
+    "project_id": 151,
+    "gherkin_text": "Feature: Notification Management\nAs an admin\nI want to send notifications to users\nSo that I can communicate important information\n\nScenario: Successful Notification Sending\nGiven I am logged in as admin\nAnd I am on the notification page\nWhen I enter notification title \"#titleInput\" as \"System Maintenance\"\nAnd I enter notification message \"#messageInput\" as \"Scheduled maintenance tonight\"\nAnd I select notification type \"#typeSelect\" as \"info\"\nAnd I enter recipient \"#recipientInput\" as \"all-users\"\nAnd I click send notification button\nThen the notification data should be prepared via \"prepareNotification\" action\nAnd the notification should be sent via \"sendNotification\" API call\nAnd I should see \"Notification sent successfully\" message"
+  },
+  {
+    "idx": 3,
+    "id": 49,
+    "created_at": "2025-09-05 07:30:30.121835+00",
+    "name": "Send Notification - Failure",
+    "description": "As an admin I want to receive error messages when notification sending fails So that I can retry the operation",
+    "tags": ["notification", "error-handling", "admin"],
+    "project_id": 151,
+    "gherkin_text": "Feature: Notification Management\nAs an admin\nI want to send notifications to users\nSo that I can communicate important information\n\nScenario: Notification Sending Failure\nGiven I am logged in as admin\nAnd I am on the notification page\nAnd the notification service is unavailable\nWhen I prepare valid notification data\nAnd I click send notification button\nThen the system should attempt to send via \"sendNotification\" API call\nAnd I should see \"Failed to send notification\" message"
+  },
+  {
+    "idx": 4,
+    "id": 50,
+    "created_at": "2025-09-05 07:30:30.121835+00",
+    "name": "File Upload - Success",
+    "description": "As a user I want to upload files So that I can store documents in the system",
+    "tags": ["file-upload", "storage", "documents"],
+    "project_id": 151,
+    "gherkin_text": "Feature: File Management\nAs a user\nI want to upload files\nSo that I can store documents in the system\n\nScenario: Successful File Upload\nGiven I am logged in\nAnd I am on the file upload page\nWhen I select a valid file \"#selectedFile\" smaller than 10MB\nAnd I select folder \"#folderSelect\" as \"documents\"\nAnd I enter description \"#descriptionInput\" as \"Important document\"\nAnd I click upload button\nThen the file should be validated via \"validateFile\" action\nAnd the file should be uploaded via \"uploadFile\" API call\nAnd the file should be added to \"#fileList\"\nAnd I should see \"File uploaded successfully\" message"
+  },
+  {
+    "idx": 5,
+    "id": 51,
+    "created_at": "2025-09-05 07:30:30.121835+00",
+    "name": "File Upload - Size Validation Error",
+    "description": "As a user I want to receive validation errors for oversized files So that I understand upload limitations",
+    "tags": ["file-upload", "validation", "error-handling"],
+    "project_id": 151,
+    "gherkin_text": "Feature: File Management\nAs a user\nI want to upload files\nSo that I can store documents in the system\n\nScenario: File Size Validation Error\nGiven I am logged in\nAnd I am on the file upload page\nWhen I select a file \"#selectedFile\" larger than 10MB\nAnd I click upload button\nThen the file should be validated via \"validateFile\" action\nAnd I should see \"Please select a file smaller than 10MB\" message\nAnd the file should not be uploaded"
+  },
+  {
+    "idx": 6,
+    "id": 52,
+    "created_at": "2025-09-05 07:30:30.121835+00",
+    "name": "Data Export - Success",
+    "description": "As a user I want to export my data So that I can backup or analyze it externally",
+    "tags": ["export", "data", "backup"],
+    "project_id": 151,
+    "gherkin_text": "Feature: Data Export\nAs a user\nI want to export my data\nSo that I can backup or analyze it externally\n\nScenario: Successful Data Export\nGiven I am logged in\nAnd I am on the export page\nWhen I select export format \"#formatSelect\" as \"CSV\"\nAnd I set start date \"#startDate\" as \"2024-01-01\"\nAnd I set end date \"#endDate\" as \"2024-12-31\"\nAnd I configure filters \"#filters\"\nAnd I click export button\nThen the export parameters should be prepared via \"prepareExportData\" action\nAnd the export should be generated via \"generateExport\" API call\nAnd the file should be downloaded automatically"
+  },
+  {
+    "idx": 7,
+    "id": 53,
+    "created_at": "2025-09-05 07:30:30.121835+00",
+    "name": "User Search - Success",
+    "description": "As an admin I want to search for users So that I can find specific user accounts",
+    "tags": ["search", "users", "admin"],
+    "project_id": 151,
+    "gherkin_text": "Feature: User Search\nAs an admin\nI want to search for users\nSo that I can find specific user accounts\n\nScenario: Successful User Search\nGiven I am logged in as admin\nAnd I am on the user management page\nWhen I enter search query \"#searchInput\" as \"john\"\nAnd I select role filter \"#roleFilter\" as \"user\"\nAnd I select status filter \"#statusFilter\" as \"active\"\nAnd I click search button\nThen the search parameters should be prepared via \"prepareSearchParams\" action\nAnd the search should be performed via \"performSearch\" API call\nAnd the results should be displayed in \"#results\"\nAnd pagination should be updated with \"#totalPages\" and \"#totalCount\""
+  },
+  {
+    "idx": 8,
+    "id": 54,
+    "created_at": "2025-09-05 07:30:30.121835+00",
+    "name": "Password Reset - Success",
+    "description": "As a user I want to reset my password So that I can regain access to my account",
+    "tags": ["password-reset", "authentication", "security"],
+    "project_id": 151,
+    "gherkin_text": "Feature: Password Reset\nAs a user\nI want to reset my password\nSo that I can regain access to my account\n\nScenario: Successful Password Reset Request\nGiven I am on the password reset page\nWhen I enter my email \"#emailInput\" as \"user@example.com\"\nAnd I click send reset email button\nThen the email should be validated via \"validateEmail\" action\nAnd the reset email should be sent via \"sendResetEmail\" API call\nAnd I should see \"Password reset email sent\" message"
+  },
+  {
+    "idx": 9,
+    "id": 55,
+    "created_at": "2025-09-05 07:30:30.121835+00",
+    "name": "Password Reset - Invalid Email",
+    "description": "As a user I want to receive validation errors for invalid emails So that I can enter a correct email address",
+    "tags": ["password-reset", "validation", "error-handling"],
+    "project_id": 151,
+    "gherkin_text": "Feature: Password Reset\nAs a user\nI want to reset my password\nSo that I can regain access to my account\n\nScenario: Password Reset Invalid Email\nGiven I am on the password reset page\nWhen I enter an invalid email \"#emailInput\" as \"invalid-email\"\nAnd I click send reset email button\nThen the email should be validated via \"validateEmail\" action\nAnd I should see \"Please enter a valid email address\" message\nAnd no reset email should be sent"
+  },
+  {
+    "idx": 10,
+    "id": 56,
+    "created_at": "2025-09-05 07:30:30.121835+00",
+    "name": "Bulk Delete - Success",
+    "description": "As an admin I want to delete multiple items at once So that I can efficiently manage data",
+    "tags": ["bulk-operations", "delete", "admin"],
+    "project_id": 151,
+    "gherkin_text": "Feature: Bulk Operations\nAs an admin\nI want to delete multiple items at once\nSo that I can efficiently manage data\n\nScenario: Successful Bulk Delete\nGiven I am logged in as admin\nAnd I am on the items list page\nAnd I have selected multiple items \"#selectedItems\"\nWhen I click bulk delete button\nThen a confirmation dialog should appear\nWhen I confirm the deletion\nThen the items should be deleted via \"performBulkDelete\" API call\nAnd the list should be refreshed\nAnd I should see \"Items deleted successfully\" message"
+  },
+  {
+    "idx": 11,
+    "id": 57,
+    "created_at": "2025-09-05 07:30:30.121835+00",
+    "name": "Data List Refresh - Success",
+    "description": "As a user I want to refresh data lists So that I can see the most current information",
+    "tags": ["data-refresh", "lists", "ui"],
+    "project_id": 151,
+    "gherkin_text": "Feature: Data Management\nAs a user\nI want to refresh data lists\nSo that I can see the most current information\n\nScenario: Successful Data List Refresh\nGiven I am logged in\nAnd I am viewing a data list\nWhen I click the refresh button\nThen the system should fetch updated data via \"fetchData\" API call\nAnd the list should be updated with \"#items\"\nAnd pagination should be updated with \"#totalPages\" and \"#totalCount\""
+  },
+  {
+    "idx": 12,
+    "id": 58,
+    "created_at": "2025-09-05 07:30:30.121835+00",
+    "name": "System Health Check - All Services Healthy",
+    "description": "As a system admin I want to check system health So that I can monitor service availability",
+    "tags": ["health-check", "monitoring", "system-admin"],
+    "project_id": 151,
+    "gherkin_text": "Feature: System Monitoring\nAs a system admin\nI want to check system health\nSo that I can monitor service availability\n\nScenario: All Services Healthy\nGiven I am logged in as system admin\nWhen I run a health check\nThen the database status should be checked via \"checkDatabase\" API call\nAnd the API status should be checked via \"checkAPI\" API call\nAnd the storage status should be checked via \"checkStorage\" API call\nAnd the overall status should be \"healthy\"\nAnd the health report should be generated with timestamp"
+  },
+  {
+    "idx": 13,
+    "id": 59,
+    "created_at": "2025-09-05 07:30:30.121835+00",
+    "name": "Order Validation - Success",
+    "description": "As a customer I want my order to be validated So that I can proceed with checkout",
+    "tags": ["order", "validation", "checkout"],
+    "project_id": 151,
+    "gherkin_text": "Feature: Order Processing\nAs a customer\nI want my order to be validated\nSo that I can proceed with checkout\n\nScenario: Successful Order Validation\nGiven I am logged in as customer\nAnd I have items in my cart \"#cartItems\"\nAnd I have provided shipping address \"#shippingAddress\"\nAnd I have selected payment method \"#paymentMethod\"\nWhen I proceed to checkout\nThen the order should be validated via \"validateOrder\" action\nAnd I should see \"Order validation successful\" message"
+  },
+  {
+    "idx": 14,
+    "id": 60,
+    "created_at": "2025-09-05 07:30:30.121835+00",
+    "name": "Order Creation - Success",
+    "description": "As a customer I want to create an order So that I can purchase items",
+    "tags": ["order", "creation", "purchase"],
+    "project_id": 151,
+    "gherkin_text": "Feature: Order Processing\nAs a customer\nI want to create an order\nSo that I can purchase items\n\nScenario: Successful Order Creation\nGiven I have a validated order\nWhen the order is processed\nThen the order data should be prepared via \"prepareOrderData\" action\nAnd the order should be created via \"createOrder\" API call\nAnd the order ID should be saved to \"#currentOrderId\""
+  },
+  {
+    "idx": 15,
+    "id": 61,
+    "created_at": "2025-09-05 07:30:30.121835+00",
+    "name": "Payment Processing - Success",
+    "description": "As a customer I want my payment to be processed So that I can complete my purchase",
+    "tags": ["payment", "processing", "checkout"],
+    "project_id": 151,
+    "gherkin_text": "Feature: Payment Processing\nAs a customer\nI want my payment to be processed\nSo that I can complete my purchase\n\nScenario: Successful Payment Processing\nGiven I have a created order with ID \"#currentOrderId\"\nAnd I have selected payment method \"#paymentMethod\"\nWhen the payment is processed\nThen the payment should be processed via \"processPayment\" API call\nAnd I should see \"Payment processed successfully\" message"
+  },
+  {
+    "idx": 16,
+    "id": 62,
+    "created_at": "2025-09-05 07:30:30.121835+00",
+    "name": "Inventory Update - Success",
+    "description": "As a system I want to update inventory after orders So that stock levels remain accurate",
+    "tags": ["inventory", "update", "system"],
+    "project_id": 151,
+    "gherkin_text": "Feature: Inventory Management\nAs a system\nI want to update inventory after orders\nSo that stock levels remain accurate\n\nScenario: Successful Inventory Update\nGiven an order has been paid\nAnd the order contains items \"#cartItems\"\nWhen the inventory is updated\nThen the inventory should be updated via \"updateInventory\" API call\nAnd the cart should be cleared\nAnd cart total should be reset to 0"
+  },
+  {
+    "idx": 17,
+    "id": 63,
+    "created_at": "2025-09-05 07:30:30.121835+00",
+    "name": "Order Confirmation - Success",
+    "description": "As a customer I want to receive order confirmation So that I have proof of my purchase",
+    "tags": ["order", "confirmation", "email"],
+    "project_id": 151,
+    "gherkin_text": "Feature: Order Confirmation\nAs a customer\nI want to receive order confirmation\nSo that I have proof of my purchase\n\nScenario: Successful Order Confirmation\nGiven an order has been completed with ID \"#currentOrderId\"\nAnd the customer email is \"#customerEmail\"\nWhen the confirmation is sent\nThen the confirmation should be sent via \"sendConfirmation\" API call\nAnd I should see \"Order confirmation sent successfully\" message"
+  },
+  {
+    "idx": 18,
+    "id": 64,
+    "created_at": "2025-09-05 07:30:30.121835+00",
+    "name": "Stock Level Check - Success",
+    "description": "As a manager I want to check stock levels So that I can monitor inventory",
+    "tags": ["stock", "inventory", "monitoring"],
+    "project_id": 151,
+    "gherkin_text": "Feature: Inventory Monitoring\nAs a manager\nI want to check stock levels\nSo that I can monitor inventory\n\nScenario: Successful Stock Level Check\nGiven I am logged in as manager\nWhen I check current stock levels\nThen the stock levels should be fetched via \"fetchStockLevels\" API call\nAnd the stock data should be saved to \"#stockLevels\""
+  },
+  {
+    "idx": 19,
+    "id": 65,
+    "created_at": "2025-09-05 07:30:30.121835+00",
+    "name": "Low Stock Alert - Items Found",
+    "description": "As a manager I want to receive low stock alerts So that I can reorder inventory",
+    "tags": ["alerts", "low-stock", "inventory"],
+    "project_id": 151,
+    "gherkin_text": "Feature: Inventory Alerts\nAs a manager\nI want to receive low stock alerts\nSo that I can reorder inventory\n\nScenario: Low Stock Alert with Items Found\nGiven stock levels have been checked\nAnd there are items with quantity below 10\nWhen the low stock check is performed\nThen low stock items should be filtered via \"prepareLowStockItems\" action\nAnd alerts should be sent via \"sendAlert\" API call\nAnd I should see \"Low stock alert sent\" message"
+  },
+  {
+    "idx": 20,
+    "id": 66,
+    "created_at": "2025-09-05 07:30:30.121835+00",
+    "name": "Refund Validation - Success",
+    "description": "As a customer service rep I want to validate refund requests So that only valid refunds are processed",
+    "tags": ["refund", "validation", "customer-service"],
+    "project_id": 151,
+    "gherkin_text": "Feature: Refund Processing\nAs a customer service rep\nI want to validate refund requests\nSo that only valid refunds are processed\n\nScenario: Successful Refund Validation\nGiven I am processing a refund request\nAnd the order ID \"#orderId\" is provided\nAnd the refund amount \"#amount\" is greater than 0\nWhen I validate the refund\nThen the refund should be validated via \"validateRefund\" action\nAnd I should see \"Refund request is valid\" message"
+  },
+  {
+    "idx": 21,
+    "id": 67,
+    "created_at": "2025-09-05 07:30:30.121835+00",
+    "name": "Refund Processing - Success",
+    "description": "As a customer service rep I want to process refunds So that customers receive their money back",
+    "tags": ["refund", "processing", "payment"],
+    "project_id": 151,
+    "gherkin_text": "Feature: Refund Processing\nAs a customer service rep\nI want to process refunds\nSo that customers receive their money back\n\nScenario: Successful Refund Processing\nGiven I have a validated refund request\nAnd the refund amount is \"#amount\"\nAnd the reason is \"#reason\"\nAnd the order ID is \"#orderId\"\nWhen I process the refund\nThen the refund should be processed via \"processRefund\" API call\nAnd I should see \"Refund processed successfully\" message"
+  },
+  {
+    "idx": 22,
+    "id": 68,
+    "created_at": "2025-09-05 07:30:30.121835+00",
+    "name": "Sales Report Generation - Success",
+    "description": "As a manager I want to generate sales reports So that I can analyze business performance",
+    "tags": ["reports", "sales", "analytics"],
+    "project_id": 151,
+    "gherkin_text": "Feature: Sales Reporting\nAs a manager\nI want to generate sales reports\nSo that I can analyze business performance\n\nScenario: Successful Sales Report Generation\nGiven I am logged in as manager\nAnd I am on the reports page\nWhen I set start date \"#startDate\"\nAnd I set end date \"#endDate\"\nAnd I generate the report\nThen sales data should be fetched via \"fetchSalesData\" API call\nAnd the report data should be saved to \"#reportData\""
+  },
+  {
+    "idx": 23,
+    "id": 69,
+    "created_at": "2025-09-05 07:30:30.121835+00",
+    "name": "Abandoned Cart Detection - Success",
+    "description": "As a marketing manager I want to find abandoned carts So that I can re-engage customers",
+    "tags": ["abandoned-cart", "marketing", "analytics"],
+    "project_id": 151,
+    "gherkin_text": "Feature: Abandoned Cart Management\nAs a marketing manager\nI want to find abandoned carts\nSo that I can re-engage customers\n\nScenario: Successful Abandoned Cart Detection\nGiven I am logged in as marketing manager\nWhen I search for abandoned carts from the last 24 hours\nThen abandoned carts should be fetched via \"fetchAbandonedCarts\" API call\nAnd the data should be saved to \"#abandonedCarts\""
+  },
+  {
+    "idx": 24,
+    "id": 70,
+    "created_at": "2025-09-05 07:30:30.121835+00",
+    "name": "Cart Reminder Email - Success",
+    "description": "As a marketing manager I want to send cart reminder emails So that customers complete their purchases",
+    "tags": ["cart-reminder", "email", "marketing"],
+    "project_id": 151,
+    "gherkin_text": "Feature: Cart Reminder System\nAs a marketing manager\nI want to send cart reminder emails\nSo that customers complete their purchases\n\nScenario: Successful Cart Reminder Email\nGiven abandoned carts have been found\nAnd there are carts in \"#abandonedCarts\"\nWhen cart reminder emails are sent\nThen reminders should be sent via \"sendReminder\" API call\nAnd I should see \"Cart reminder emails sent\" message"
+  }
+]

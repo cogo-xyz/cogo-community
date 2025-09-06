@@ -1,0 +1,21 @@
+## WHAT'S NEW (Edge Functions)
+
+- New endpoints
+  - artifacts-list: List artifacts by `project_id` and `prefix` with pagination.
+  - metrics-ingest: Ingest quality metrics into `public.bus_events`.
+- json-get
+  - HEAD support for ETag retrieval and conditional 304.
+- Preconditions
+  - `EDGE_STRICT_PRECONDITIONS=true` (PRD): If-Match version mismatch → 412; If-None-Match:* existing → 412.
+- Error schema unified
+  - All core endpoints now return `{ ok, error, code, message, trace_id? }` on errors.
+- Smoke/Full suite upgrades
+  - Added negative cases: invalid_json (400), version_mismatch (409).
+  - Idempotency checks for set/merge/remove.
+- Docs & Postman
+  - ENDPOINTS updated; Postman includes HEAD, updated_after, negative cases.
+- Aggregation & export
+  - `run_everything.sh` generates summary CSV and optionally sends metrics.
+- Latest alignments
+  - chat-gateway, json-list, trace-status, json-validate, chat, json-generate aligned to unified error schema and shared CORS
+  - artifacts-list cleaned (removed legacy duplicate block)

@@ -13,6 +13,16 @@
 - Flutter Web app using `chat-gateway` (JSON handoff), i18n toggle, runtime settings UI.
 - Zip: `docs/artifacts/flutter_web_chat.zip`
 
+### figma-compat (UUI)
+- Presign upload → upload UI JSON → ingest → check result
+- Endpoints: `/figma-compat/uui/presign`, `/figma-compat/uui/ingest`, `/figma-compat/uui/ingest/result`
+- See: `CURL_SNIPPETS.md` and Postman collection
+
+### kg-upsert-schedule (dev)
+- Triggers ingest requests for recently updated docs
+- Endpoints: `GET/POST /kg-upsert-schedule`
+- See: `CURL_SNIPPETS.md` and Postman collection
+
 ### Quality scripts
 - `run_edge_pipeline.sh`: generate→persist→fetch→validate
 - `run_corpus.js`: UI corpus generate/validate/metrics

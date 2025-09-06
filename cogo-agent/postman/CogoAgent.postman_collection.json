@@ -30,6 +30,54 @@
       }
     },
     {
+      "name": "json-merge (deep)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" },
+          { "key": "apikey", "value": "{{KEY}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/json-merge",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"project_id\": \"{{PROJECT}}\",\n  \"path\": \"examples/af.json\",\n  \"patch\": {\n    \"deep\": {\"x\": {\"y\": 1}}\n  },\n  \"merge\": \"deep\"\n}"
+        }
+      }
+    },
+    {
+      "name": "json-merge (shallow)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" },
+          { "key": "apikey", "value": "{{KEY}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/json-merge",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"project_id\": \"{{PROJECT}}\",\n  \"path\": \"examples/af.json\",\n  \"patch\": {\"x\": 2},\n  \"merge\": \"shallow\"\n}"
+        }
+      }
+    },
+    {
+      "name": "json-remove (multi pointers)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" },
+          { "key": "apikey", "value": "{{KEY}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/json-remove",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"project_id\": \"{{PROJECT}}\",\n  \"path\": \"examples/af.json\",\n  \"pointers\": [\n    \"/a\",\n    \"/b\"\n  ]\n}"
+        }
+      }
+    },
+    {
       "name": "json-get",
       "request": {
         "method": "POST",
@@ -42,6 +90,29 @@
           "mode": "raw",
           "raw": "{\n  \"project_id\": \"{{PROJECT}}\",\n  \"path\": \"docs/cogo-agent/examples/simple-screen/actionFlow.v1.expanded.json\"\n}"
         }
+      }
+    },
+    {
+      "name": "json-get (HEAD)",
+      "request": {
+        "method": "HEAD",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/json-get?project_id={{PROJECT}}&path=examples/af.json"
+      }
+    },
+    {
+      "name": "json-get (POST If-None-Match 304)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" },
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "If-None-Match", "value": "<copy ETag from HEAD>" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/json-get",
+        "body": { "mode": "raw", "raw": "{\n  \"project_id\": \"{{PROJECT}}\",\n  \"path\": \"examples/af.json\"\n}" }
       }
     },
     {
@@ -60,6 +131,51 @@
       }
     },
     {
+      "name": "json-validate (by path)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/json-validate",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"schema_id\": \"action.flow@1\",\n  \"project_id\": \"{{PROJECT}}\",\n  \"path\": \"docs/cogo-agent/examples/simple-screen/actionFlow.v1.expanded.json\"\n}"
+        }
+      }
+    },
+    {
+      "name": "json-validate (symbols@1 by path)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/json-validate",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"schema_id\": \"symbols@1\",\n  \"project_id\": \"{{PROJECT}}\",\n  \"path\": \"docs/cogo-agent/examples/simple-screen/symbols.doc.json\"\n}"
+        }
+      }
+    },
+    {
+      "name": "json-validate (events.map@1 by path)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/json-validate",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"schema_id\": \"events.map@1\",\n  \"project_id\": \"{{PROJECT}}\",\n  \"path\": \"docs/cogo-agent/examples/simple-screen/events.map.json\"\n}"
+        }
+      }
+    },
+    {
       "name": "chat-gateway (handoff)",
       "request": {
         "method": "POST",
@@ -72,6 +188,247 @@
           "mode": "raw",
           "raw": "{\n  \"payload\": {\n    \"projectId\": \"{{PROJECT}}\",\n    \"text\": \"hello\"\n  }\n}"
         }
+      }
+    }
+    ,
+    {
+      "name": "kg-upsert-schedule (GET)",
+      "request": {
+        "method": "GET",
+        "header": [ { "key": "Authorization", "value": "Bearer {{KEY}}" } ],
+        "url": "{{SUPABASE_URL}}/functions/v1/kg-upsert-schedule"
+      }
+    },
+    {
+      "name": "kg-upsert-schedule (POST)",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Authorization", "value": "Bearer {{KEY}}" } ],
+        "url": "{{SUPABASE_URL}}/functions/v1/kg-upsert-schedule"
+      }
+    },
+    {
+      "name": "figma-compat presign",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/figma-compat/uui/presign",
+        "body": { "mode": "raw", "raw": "{\n  \"projectId\": \"{{PROJECT}}\",\n  \"fileName\": \"ui.json\"\n}" }
+      }
+    },
+    {
+      "name": "figma-compat ingest",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/figma-compat/uui/ingest",
+        "body": { "mode": "raw", "raw": "{\n  \"projectId\": \"{{PROJECT}}\",\n  \"storage_key\": \"uploads/{{PROJECT}}/ui.json\"\n}" }
+      }
+    },
+    {
+      "name": "figma-compat ingest result",
+      "request": {
+        "method": "GET",
+        "header": [ { "key": "Authorization", "value": "Bearer {{KEY}}" } ],
+        "url": "{{SUPABASE_URL}}/functions/v1/figma-compat/uui/ingest/result?traceId=<trace_id>"
+      }
+    },
+    {
+      "name": "json-list (updated_after)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/json-list",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"project_id\": \"{{PROJECT}}\",\n  \"prefix\": \"docs/cogo-agent/examples/simple-screen\",\n  \"updated_after\": \"2025-01-01T00:00:00Z\",\n  \"limit\": 50\n}"
+        }
+      }
+    }
+    ,
+    {
+      "name": "artifacts-list",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/artifacts-list",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"project_id\": \"{{PROJECT}}\",\n  \"prefix\": \"docs/cogo-agent/examples/simple-screen/\",\n  \"limit\": 20\n}"
+        }
+      }
+    }
+    ,
+    {
+      "name": "artifacts-list (pagination)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/artifacts-list",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"project_id\": \"{{PROJECT}}\",\n  \"prefix\": \"docs/cogo-agent/examples/simple-screen/\",\n  \"limit\": 3,\n  \"offset\": 0\n}"
+        }
+      }
+    }
+    ,
+    {
+      "name": "metrics-ingest",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/metrics-ingest",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"project_id\": \"{{PROJECT}}\",\n  \"metrics\": { \"validate_pass_rate\": 0.98 },\n  \"tags\": { \"runner\": \"manual\" }\n}"
+        }
+      }
+    }
+    ,
+    {
+      "name": "json-set (invalid_json 400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/json-set",
+        "body": { "mode": "raw", "raw": "{invalid" }
+      }
+    },
+    {
+      "name": "artifacts-list (HEAD)",
+      "request": {
+        "method": "HEAD",
+        "header": [ { "key": "Authorization", "value": "Bearer {{KEY}}" } ],
+        "url": "{{SUPABASE_URL}}/functions/v1/artifacts-list?project_id={{PROJECT}}&prefix=docs/cogo-agent/examples/simple-screen/"
+      }
+    },
+    {
+      "name": "artifacts-list (POST If-None-Match 304)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" },
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "If-None-Match", "value": "<copy ETag from HEAD>" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/artifacts-list",
+        "body": { "mode": "raw", "raw": "{\n  \"project_id\": \"{{PROJECT}}\",\n  \"prefix\": \"docs/cogo-agent/examples/simple-screen/\",\n  \"limit\": 2,\n  \"offset\": 0\n}" }
+      }
+    },
+    {
+      "name": "json-list (HEAD)",
+      "request": {
+        "method": "HEAD",
+        "header": [ { "key": "Authorization", "value": "Bearer {{KEY}}" } ],
+        "url": "{{SUPABASE_URL}}/functions/v1/json-list?project_id={{PROJECT}}&prefix=docs/cogo-agent/examples/simple-screen/&limit=5&offset=0"
+      }
+    },
+    {
+      "name": "json-list (POST If-None-Match 304)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" },
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "If-None-Match", "value": "<copy ETag from HEAD>" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/json-list",
+        "body": { "mode": "raw", "raw": "{\n  \"project_id\": \"{{PROJECT}}\",\n  \"prefix\": \"docs/cogo-agent/examples/simple-screen/\",\n  \"limit\": 5,\n  \"offset\": 0\n}" }
+      }
+    },
+    {
+      "name": "trace-status (HEAD)",
+      "request": {
+        "method": "HEAD",
+        "header": [ { "key": "Authorization", "value": "Bearer {{KEY}}" } ],
+        "url": "{{SUPABASE_URL}}/functions/v1/trace-status?trace_id=<trace_id>"
+      }
+    },
+    {
+      "name": "trace-status (GET If-None-Match 304)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" },
+          { "key": "If-None-Match", "value": "<copy ETag from HEAD>" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/trace-status?trace_id=<trace_id>"
+      }
+    },
+    {
+      "name": "json-merge (version_mismatch 409)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/json-merge",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"project_id\": \"{{PROJECT}}\",\n  \"path\": \"examples/af.json\",\n  \"patch\": {\n    \"x\": 1\n  },\n  \"merge\": \"shallow\",\n  \"expected_version\": 0\n}"
+        }
+      }
+    }
+    ,
+    {
+      "name": "json-merge (If-Match stale 412 - PRD)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" },
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "If-Match", "value": "W/\"v0\"" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/json-merge",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"project_id\": \"{{PROJECT}}\",\n  \"path\": \"examples/af.json\",\n  \"patch\": {\n    \"x\": 1\n  },\n  \"merge\": \"shallow\"\n}"
+        },
+        "description": "This returns 412 only when EDGE_STRICT_PRECONDITIONS=true (PRD)."
+      }
+    },
+    {
+      "name": "json-list (GET If-None-Match 304)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" },
+          { "key": "If-None-Match", "value": "<copy ETag from HEAD>" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/json-list?project_id={{PROJECT}}&prefix=docs/cogo-agent/examples/simple-screen/&limit=5&offset=0"
+      }
+    },
+    {
+      "name": "artifacts-list (GET If-None-Match 304)",
+      "request": {
+        "method": "GET",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{KEY}}" },
+          { "key": "If-None-Match", "value": "<copy ETag from HEAD>" }
+        ],
+        "url": "{{SUPABASE_URL}}/functions/v1/artifacts-list?project_id={{PROJECT}}&prefix=docs/cogo-agent/examples/simple-screen/"
       }
     }
   ]

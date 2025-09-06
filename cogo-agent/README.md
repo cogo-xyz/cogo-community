@@ -16,13 +16,25 @@ References
 - Examples: `EXAMPLES_INDEX.md`, `examples/simple-screen/`, `examples/flutter_web_chat/`
 - Prompt policy and templates: `prompts/`
 - SDK quickstart: `SDK_QUICKSTART.md`
+- RAG search: `CURL_SNIPPETS.md` (RAG section), `SDK_QUICKSTART.md` (TS example)
 - KG upsert (cron plan): `KG_UPSERT_SCHEDULED.md` (dev trigger: `/functions/kg-upsert-schedule`)
 - KG worker runbook (poller): `KG_WORKER_RUNBOOK.md`
 - JSON generation (Edge function): `/functions/json-generate` — POST { ui, projectId }
 - Save artifacts: `node scripts/pipeline/edge_generate_save.js --project <id> --out docs/cogo-agent/examples/simple-screen`
 - Endpoints summary: `ENDPOINTS.md`
+- Error schema: unified `{ ok, error, code, message, trace_id? }` across core endpoints
+- Metrics dashboard: `metrics/DASHBOARD_QUERIES.md`
+- What's new: `WHATS_NEW.md`
 - Chat reference: `CHAT_REFERENCE.md`
+- Orchestrator quickcheck: `ORCHESTRATOR_QUICKCHECK.md`
+  - Node worker profile under `workers/` (`ecosystem.config.cjs`, PM2)
+  - KG worker quickstart and smoke included
 - CLI reference: `CLI_REFERENCE.md`
+- Deployment checklist: `DEPLOY_CHECKLIST.md`
+- Deploy webhook examples: `DEPLOY_WEBHOOK_EXAMPLES.md`
+- Deploy all (dry-run, filter, parallel, env presets): `scripts/edge/deploy_all.sh [deploy|build] [--only=fn1,fn2] [--env=dev|stg|prd] [--report=out.json] [--webhook=<url>]` (set `PARALLEL=1`, retries with backoff, summary of missing/succeeded/failed; optional webhook POST)
+- Quality summary CSV: `node scripts/quality/summarize_runs.js` → `docs/quality/runs/summary.csv` (also called by `run_everything.sh`)
+- Aggregator notifications: Set `QUALITY_WEBHOOK_URL` to receive start/fail/success webhooks from `run_everything.sh`
 - cogo-cli-flutter remote JSON: `../packages/cogo-cli-flutter/REMOTE_JSON_CLI_REFERENCE.md`
 - Dart CLI template: `../artifacts/cogo_cli_dart_template.zip` (runner: `scripts/quality/run_dart_cli_template.sh`)
 - CLI e2e: `scripts/quality/run_cli_e2e.sh`
@@ -39,3 +51,5 @@ References
 - A/B and benchmarks: `scripts/quality/run_ab.sh`
 - Full suite: `scripts/quality/run_full_suite.sh`
 - Quality corpus: `docs/quality/QUALITY_CORPUS.md` and `scripts/quality/run_corpus.js`
+- Postman extras: includes `json-validate (by path)` and `json-list (updated_after)` examples
+- Includes Node worker tick health query in `metrics/DASHBOARD_QUERIES.md`

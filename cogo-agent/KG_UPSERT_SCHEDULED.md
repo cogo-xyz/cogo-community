@@ -1,3 +1,33 @@
+## KG Upsert — Scheduled Strategy (Design)
+
+Goal: Periodically enqueue `kg.upsert_request` events for recently updated artifacts to keep the Neo4j KG fresh without heavy polling.
+
+### Approach
+- Use an Edge Function trigger (`/functions/v1/kg-upsert-schedule`) in development that scans `public.cogo_documents` by `updated_at` and publishes events.
+- In production, wire a Supabase Scheduled Function (cron) to POST the same endpoint with desired filters.
+
+### Request (POST)
+```json
+{ "project_id": "<uuid>", "prefix": "docs/", "window_minutes": 5, "limit": 100 }
+```
+Optional: `{ "paths": ["docs/.../actionFlow.v1.json", ...] }` to explicitly enqueue targets.
+
+### Response
+```json
+{ "ok": true, "enqueued": 12, "published": 12 }
+```
+
+### Smoke
+```bash
+jq -n --arg project "$COGO_PROJECT_ID" --arg prefix "docs/cogo-agent/examples/" '{project_id:$project,prefix:$prefix,window_minutes:5,limit:10}' \
+| curl -sS -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" -H "Content-Type: application/json" --data-binary @- \
+  "$SUPABASE_URL/functions/v1/kg-upsert-schedule" | jq .
+```
+
+### Notes
+- Events are published to `public.bus_events` with type `kg.upsert_request`.
+- A Node worker (`workers/kg/worker.js`) consumes these and performs Neo4j upserts with retries and metrics (`metrics.ingest`).
+
 ## KG Upsert via Scheduled Function (5-minute cron) — Plan
 
 Decision: Defer implementation. This document records the agreed approach to run Neo4j upserts in batches every 5 minutes using a Supabase Scheduled Function, avoiding continuous polling load on Supabase.

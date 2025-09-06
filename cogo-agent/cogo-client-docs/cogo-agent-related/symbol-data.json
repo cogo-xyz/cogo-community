@@ -1,0 +1,642 @@
+[
+  {
+    "idx": 0,
+    "id": 61,
+    "type": "variable",
+    "name": "#loginId",
+    "tracking_no": "VAR-001",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 404, \"key\": \"#_appData.loginId\", \"type\": 1, \"scope\": \"appData\", \"isList\": false}]}",
+    "project_id": 145,
+    "created_at": "2025-07-16 09:46:17.68076+00"
+  },
+  {
+    "idx": 1,
+    "id": 62,
+    "type": "variable",
+    "name": "#loginPwd",
+    "tracking_no": "VAR-002",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 405, \"key\": \"#_appData.loginPwd\", \"type\": 1, \"scope\": \"appData\", \"isList\": false}]}",
+    "project_id": 145,
+    "created_at": "2025-07-16 09:46:25.791489+00"
+  },
+  {
+    "idx": 2,
+    "id": 65,
+    "type": "variable",
+    "name": "#loginUser",
+    "tracking_no": "VAR-003",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 409, \"key\": \"#_appData.loginUser\", \"type\": 4, \"scope\": \"appData\", \"isList\": false}]}",
+    "project_id": 145,
+    "created_at": "2025-07-17 08:52:37.290453+00"
+  },
+  {
+    "idx": 3,
+    "id": 69,
+    "type": "variable",
+    "name": "#recentTransactions",
+    "tracking_no": "VAR-005",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 425, \"key\": \"#_appData.recentTransactions\", \"type\": 4, \"scope\": \"appData\", \"isList\": false}]}",
+    "project_id": 145,
+    "created_at": "2025-07-22 01:44:24.023055+00"
+  },
+  {
+    "idx": 4,
+    "id": 70,
+    "type": "variable",
+    "name": "#session",
+    "tracking_no": "VAR-006",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 428, \"key\": \"#_appData.session\", \"type\": 4, \"scope\": \"appData\", \"isList\": false}]}",
+    "project_id": 145,
+    "created_at": "2025-07-22 01:52:24.023958+00"
+  },
+  {
+    "idx": 5,
+    "id": 71,
+    "type": "variable",
+    "name": "#wallets",
+    "tracking_no": "VAR-007",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 427, \"key\": \"#_appData.wallets\", \"type\": 4, \"scope\": \"appData\", \"isList\": true}]}",
+    "project_id": 145,
+    "created_at": "2025-07-22 01:52:38.844128+00"
+  },
+  {
+    "idx": 6,
+    "id": 72,
+    "type": "variable",
+    "name": "#user",
+    "tracking_no": "VAR-008",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 426, \"key\": \"#_appData.user\", \"type\": 4, \"scope\": \"appData\", \"isList\": false}]}",
+    "project_id": 145,
+    "created_at": "2025-07-22 01:52:52.16876+00"
+  },
+  {
+    "idx": 7,
+    "id": 73,
+    "type": "variable",
+    "name": "#baseApiUrl",
+    "tracking_no": "VAR-009",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 434, \"key\": \"#_appData.baseApiUrl\", \"type\": 1, \"scope\": \"appData\", \"isList\": false}]}",
+    "project_id": 145,
+    "created_at": "2025-07-22 06:56:21.122068+00"
+  },
+  {
+    "idx": 8,
+    "id": 74,
+    "type": "variable",
+    "name": "#walletId",
+    "tracking_no": "VAR-010",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 435, \"key\": \"#_appData.walletId\", \"type\": 1, \"scope\": \"appData\", \"isList\": false}]}",
+    "project_id": 145,
+    "created_at": "2025-07-22 08:01:16.375506+00"
+  },
+  {
+    "idx": 9,
+    "id": 75,
+    "type": "variable",
+    "name": "#walletBalance",
+    "tracking_no": "VAR-011",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 436, \"key\": \"#_appData.walletBalance\", \"type\": 1, \"scope\": \"appData\", \"isList\": false}]}",
+    "project_id": 145,
+    "created_at": "2025-07-22 08:11:26.821696+00"
+  },
+  {
+    "idx": 10,
+    "id": 76,
+    "type": "variable",
+    "name": "#signupId",
+    "tracking_no": "VAR-012",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 437, \"key\": \"#_uiState.signup.userId\", \"type\": 1, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 145,
+    "created_at": "2025-07-23 09:08:42.542851+00"
+  },
+  {
+    "idx": 11,
+    "id": 77,
+    "type": "variable",
+    "name": "#signupPassword",
+    "tracking_no": "VAR-013",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 438, \"key\": \"#_uiState.signup.userPassword\", \"type\": 1, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 145,
+    "created_at": "2025-07-23 09:08:57.906134+00"
+  },
+  {
+    "idx": 12,
+    "id": 78,
+    "type": "variable",
+    "name": "#signupPasswordConfirm",
+    "tracking_no": "VAR-014",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 439, \"key\": \"#_uiState.signup.userPasswordConfirm\", \"type\": 1, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 145,
+    "created_at": "2025-07-23 09:09:12.398457+00"
+  },
+  {
+    "idx": 13,
+    "id": 79,
+    "type": "variable",
+    "name": "#signupPhone",
+    "tracking_no": "VAR-015",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 440, \"key\": \"#_uiState.signup.userPhone\", \"type\": 1, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 145,
+    "created_at": "2025-07-23 09:09:22.762576+00"
+  },
+  {
+    "idx": 14,
+    "id": 80,
+    "type": "variable",
+    "name": "#anonKey",
+    "tracking_no": "VAR-016",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 442, \"key\": \"#_appData.anonKey\", \"type\": 1, \"scope\": \"appData\", \"isList\": false}]}",
+    "project_id": 145,
+    "created_at": "2025-07-24 04:37:54.422938+00"
+  },
+  {
+    "idx": 15,
+    "id": 81,
+    "type": "variable",
+    "name": "#pincodeSymbols",
+    "tracking_no": "VAR-017",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 443, \"key\": \"#_uiState.pincode.symbols\", \"type\": 1, \"scope\": \"uiState\", \"isList\": true}]}",
+    "project_id": 145,
+    "created_at": "2025-07-24 06:09:19.827655+00"
+  },
+  {
+    "idx": 16,
+    "id": 82,
+    "type": "variable",
+    "name": "#currentPincode",
+    "tracking_no": "VAR-018",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 446, \"key\": \"#_appData.currentPincode\", \"type\": 1, \"scope\": \"appData\", \"isList\": false}]}",
+    "project_id": 145,
+    "created_at": "2025-07-24 06:32:36.447657+00"
+  },
+  {
+    "idx": 17,
+    "id": 83,
+    "type": "variable",
+    "name": "#currentPincodeConfirm",
+    "tracking_no": "VAR-019",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 454, \"key\": \"#_appData.currentPincodeConfirm\", \"type\": 1, \"scope\": \"appData\", \"isList\": false}]}",
+    "project_id": 145,
+    "created_at": "2025-07-24 07:57:12.404623+00"
+  },
+  {
+    "idx": 18,
+    "id": 84,
+    "type": "variable",
+    "name": "#currentPincodeResult",
+    "tracking_no": "VAR-020",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 453, \"key\": \"#_appData.currentPincodeResult\", \"type\": 1, \"scope\": \"appData\", \"isList\": false}]}",
+    "project_id": 145,
+    "created_at": "2025-07-24 07:57:25.994682+00"
+  },
+  {
+    "idx": 19,
+    "id": 85,
+    "type": "variable",
+    "name": "#currentPincodeStep",
+    "tracking_no": "VAR-021",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 452, \"key\": \"#_appData.currentPincodeStep\", \"type\": 2, \"scope\": \"appData\", \"isList\": false}]}",
+    "project_id": 145,
+    "created_at": "2025-07-24 07:57:36.911483+00"
+  },
+  {
+    "idx": 20,
+    "id": 86,
+    "type": "variable",
+    "name": "#pincode",
+    "tracking_no": "VAR-022",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 455, \"key\": \"#_appData.pincode\", \"type\": 1, \"scope\": \"appData\", \"isList\": false}]}",
+    "project_id": 145,
+    "created_at": "2025-07-24 09:55:18.090159+00"
+  },
+  {
+    "idx": 21,
+    "id": 89,
+    "type": "variable",
+    "name": "#seed",
+    "tracking_no": "VAR-023",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 475, \"key\": \"#_appData.seed\", \"type\": 1, \"scope\": \"appData\", \"isList\": true}]}",
+    "project_id": 145,
+    "created_at": "2025-07-30 03:36:35.064245+00"
+  },
+  {
+    "idx": 22,
+    "id": 90,
+    "type": "variable",
+    "name": "#hdWalletId",
+    "tracking_no": "VAR-024",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 494, \"key\": \"#_appData.hdWalletId\", \"type\": 1, \"scope\": \"appData\", \"isList\": false}]}",
+    "project_id": 145,
+    "created_at": "2025-07-31 06:29:48.333615+00"
+  },
+  {
+    "idx": 23,
+    "id": 91,
+    "type": "variable",
+    "name": "#createAccountName",
+    "tracking_no": "VAR-025",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 495, \"key\": \"#_appData.createAccountId\", \"type\": 1, \"scope\": \"appData\", \"isList\": false}]}",
+    "project_id": 145,
+    "created_at": "2025-07-31 07:03:44.682343+00"
+  },
+  {
+    "idx": 24,
+    "id": 92,
+    "type": "variable",
+    "name": "#deleteAccountId",
+    "tracking_no": "VAR-026",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 496, \"key\": \"#_appData.deleteAccountId\", \"type\": 1, \"scope\": \"appData\", \"isList\": false}]}",
+    "project_id": 145,
+    "created_at": "2025-07-31 07:03:55.829913+00"
+  },
+  {
+    "idx": 25,
+    "id": 93,
+    "type": "variable",
+    "name": "#accounts",
+    "tracking_no": "VAR-027",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 498, \"key\": \"#_appData.accounts\", \"type\": 4, \"scope\": \"appData\", \"isList\": true}]}",
+    "project_id": 145,
+    "created_at": "2025-07-31 10:09:47.807868+00"
+  },
+  {
+    "idx": 0,
+    "id": 99,
+    "type": "variable",
+    "name": "#test",
+    "tracking_no": "VAR-001",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false}",
+    "project_id": 151,
+    "created_at": "2025-09-04 08:07:17.3507+00"
+  },
+  {
+    "idx": 1,
+    "id": 148,
+    "type": "variable",
+    "name": "#nameInput",
+    "tracking_no": "SYM-001",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 642, \"key\": \"#_uiState.profile.nameInput.value\", \"type\": 1, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 2,
+    "id": 149,
+    "type": "variable",
+    "name": "#emailInput",
+    "tracking_no": "SYM-002",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 643, \"key\": \"#_uiState.profile.emailInput.value\", \"type\": 1, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 3,
+    "id": 150,
+    "type": "variable",
+    "name": "#phoneInput",
+    "tracking_no": "SYM-003",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 644, \"key\": \"#_uiState.profile.phoneInput.value\", \"type\": 1, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 4,
+    "id": 151,
+    "type": "variable",
+    "name": "#titleInput",
+    "tracking_no": "SYM-004",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 649, \"key\": \"#_uiState.notification.titleInput.value\", \"type\": 1, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 5,
+    "id": 152,
+    "type": "variable",
+    "name": "#messageInput",
+    "tracking_no": "SYM-005",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 650, \"key\": \"#_uiState.notification.messageInput.value\", \"type\": 1, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 6,
+    "id": 153,
+    "type": "variable",
+    "name": "#typeSelect",
+    "tracking_no": "SYM-006",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 651, \"key\": \"#_uiState.notification.typeSelect.value\", \"type\": 1, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 7,
+    "id": 154,
+    "type": "variable",
+    "name": "#recipientInput",
+    "tracking_no": "SYM-007",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 652, \"key\": \"#_uiState.notification.recipientInput.value\", \"type\": 1, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 8,
+    "id": 155,
+    "type": "variable",
+    "name": "#selectedFile",
+    "tracking_no": "SYM-008",
+    "data": "{\"value\": null, \"dataType\": \"object\", \"isRequired\": false, \"boundVariables\": [{\"id\": 654, \"key\": \"#_uiState.upload.selectedFile\", \"type\": 4, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 9,
+    "id": 156,
+    "type": "variable",
+    "name": "#folderSelect",
+    "tracking_no": "SYM-009",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 655, \"key\": \"#_uiState.upload.folderSelect.value\", \"type\": 1, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 10,
+    "id": 157,
+    "type": "variable",
+    "name": "#descriptionInput",
+    "tracking_no": "SYM-010",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 656, \"key\": \"#_uiState.upload.descriptionInput.value\", \"type\": 1, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 11,
+    "id": 158,
+    "type": "variable",
+    "name": "#fileList",
+    "tracking_no": "SYM-011",
+    "data": "{\"value\": null, \"dataType\": \"array\", \"isRequired\": false, \"boundVariables\": [{\"id\": 657, \"key\": \"#_uiState.upload.fileList.value\", \"type\": 4, \"scope\": \"uiState\", \"isList\": true}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 12,
+    "id": 159,
+    "type": "variable",
+    "name": "#formatSelect",
+    "tracking_no": "SYM-012",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 659, \"key\": \"#_uiState.export.formatSelect.value\", \"type\": 1, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 13,
+    "id": 160,
+    "type": "variable",
+    "name": "#startDate",
+    "tracking_no": "SYM-013",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 660, \"key\": \"#_uiState.export.startDate.value\", \"type\": 1, \"scope\": \"uiState\", \"isList\": false}, {\"id\": 697, \"key\": \"#_uiState.reports.startDate.value\", \"type\": 1, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 14,
+    "id": 161,
+    "type": "variable",
+    "name": "#endDate",
+    "tracking_no": "SYM-014",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 661, \"key\": \"#_uiState.export.endDate.value\", \"type\": 1, \"scope\": \"uiState\", \"isList\": false}, {\"id\": 698, \"key\": \"#_uiState.reports.endDate.value\", \"type\": 1, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 15,
+    "id": 162,
+    "type": "variable",
+    "name": "#filters",
+    "tracking_no": "SYM-015",
+    "data": "{\"value\": null, \"dataType\": \"object\", \"isRequired\": false, \"boundVariables\": [{\"id\": 662, \"key\": \"#_uiState.export.filters.value\", \"type\": 4, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 16,
+    "id": 163,
+    "type": "variable",
+    "name": "#searchInput",
+    "tracking_no": "SYM-016",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 664, \"key\": \"#_uiState.search.searchInput.value\", \"type\": 1, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 17,
+    "id": 164,
+    "type": "variable",
+    "name": "#roleFilter",
+    "tracking_no": "SYM-017",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 665, \"key\": \"#_uiState.search.roleFilter.value\", \"type\": 1, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 18,
+    "id": 165,
+    "type": "variable",
+    "name": "#statusFilter",
+    "tracking_no": "SYM-018",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 666, \"key\": \"#_uiState.search.statusFilter.value\", \"type\": 1, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 19,
+    "id": 166,
+    "type": "variable",
+    "name": "#results",
+    "tracking_no": "SYM-019",
+    "data": "{\"value\": null, \"dataType\": \"array\", \"isRequired\": false, \"boundVariables\": [{\"id\": 668, \"key\": \"#_uiState.search.results.value\", \"type\": 4, \"scope\": \"uiState\", \"isList\": true}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 20,
+    "id": 167,
+    "type": "variable",
+    "name": "#totalPages",
+    "tracking_no": "SYM-020",
+    "data": "{\"value\": null, \"dataType\": \"number\", \"isRequired\": false, \"boundVariables\": [{\"id\": 669, \"key\": \"#_uiState.search.totalPages.value\", \"type\": 2, \"scope\": \"uiState\", \"isList\": false}, {\"id\": 679, \"key\": \"#_uiState.list.totalPages.value\", \"type\": 2, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 21,
+    "id": 168,
+    "type": "variable",
+    "name": "#totalCount",
+    "tracking_no": "SYM-021",
+    "data": "{\"value\": null, \"dataType\": \"number\", \"isRequired\": false, \"boundVariables\": [{\"id\": 670, \"key\": \"#_uiState.search.totalCount.value\", \"type\": 2, \"scope\": \"uiState\", \"isList\": false}, {\"id\": 680, \"key\": \"#_uiState.list.totalCount.value\", \"type\": 2, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 22,
+    "id": 169,
+    "type": "variable",
+    "name": "#selectedItems",
+    "tracking_no": "SYM-022",
+    "data": "{\"value\": null, \"dataType\": \"array\", \"isRequired\": false, \"boundVariables\": [{\"id\": 674, \"key\": \"#_uiState.bulk.selectedItems.value\", \"type\": 4, \"scope\": \"uiState\", \"isList\": true}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 23,
+    "id": 170,
+    "type": "variable",
+    "name": "#items",
+    "tracking_no": "SYM-023",
+    "data": "{\"value\": null, \"dataType\": \"array\", \"isRequired\": false, \"boundVariables\": [{\"id\": 678, \"key\": \"#_uiState.list.items.value\", \"type\": 4, \"scope\": \"uiState\", \"isList\": true}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 24,
+    "id": 171,
+    "type": "variable",
+    "name": "#cartItems",
+    "tracking_no": "SYM-024",
+    "data": "{\"value\": null, \"dataType\": \"array\", \"isRequired\": false, \"boundVariables\": [{\"id\": 682, \"key\": \"#_uiState.cart.items.value\", \"type\": 4, \"scope\": \"uiState\", \"isList\": true}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 25,
+    "id": 172,
+    "type": "variable",
+    "name": "#shippingAddress",
+    "tracking_no": "SYM-025",
+    "data": "{\"value\": null, \"dataType\": \"object\", \"isRequired\": false, \"boundVariables\": [{\"id\": 684, \"key\": \"#_uiState.checkout.shippingAddress.value\", \"type\": 4, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 26,
+    "id": 173,
+    "type": "variable",
+    "name": "#paymentMethod",
+    "tracking_no": "SYM-026",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 685, \"key\": \"#_uiState.checkout.paymentMethod.value\", \"type\": 1, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 27,
+    "id": 174,
+    "type": "variable",
+    "name": "#currentOrderId",
+    "tracking_no": "SYM-027",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 688, \"key\": \"#_appData.currentOrderId\", \"type\": 1, \"scope\": \"appData\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 28,
+    "id": 175,
+    "type": "variable",
+    "name": "#customerEmail",
+    "tracking_no": "SYM-028",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 690, \"key\": \"#user.email\", \"type\": 1, \"scope\": \"appData\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 29,
+    "id": 176,
+    "type": "variable",
+    "name": "#stockLevels",
+    "tracking_no": "SYM-029",
+    "data": "{\"value\": null, \"dataType\": \"array\", \"isRequired\": false, \"boundVariables\": [{\"id\": 691, \"key\": \"#_appData.stockLevels\", \"type\": 4, \"scope\": \"appData\", \"isList\": true}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 30,
+    "id": 177,
+    "type": "variable",
+    "name": "#orderId",
+    "tracking_no": "SYM-030",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 693, \"key\": \"#_uiState.refund.orderId.value\", \"type\": 1, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 31,
+    "id": 178,
+    "type": "variable",
+    "name": "#amount",
+    "tracking_no": "SYM-031",
+    "data": "{\"value\": null, \"dataType\": \"number\", \"isRequired\": false, \"boundVariables\": [{\"id\": 694, \"key\": \"#_uiState.refund.amount.value\", \"type\": 2, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 32,
+    "id": 179,
+    "type": "variable",
+    "name": "#reason",
+    "tracking_no": "SYM-032",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 695, \"key\": \"#_uiState.refund.reason.value\", \"type\": 1, \"scope\": \"uiState\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 33,
+    "id": 180,
+    "type": "variable",
+    "name": "#reportData",
+    "tracking_no": "SYM-033",
+    "data": "{\"value\": null, \"dataType\": \"object\", \"isRequired\": false, \"boundVariables\": [{\"id\": 699, \"key\": \"#_appData.reportData\", \"type\": 4, \"scope\": \"appData\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 34,
+    "id": 181,
+    "type": "variable",
+    "name": "#abandonedCarts",
+    "tracking_no": "SYM-034",
+    "data": "{\"value\": null, \"dataType\": \"array\", \"isRequired\": false, \"boundVariables\": [{\"id\": 700, \"key\": \"#_appData.abandonedCarts\", \"type\": 4, \"scope\": \"appData\", \"isList\": true}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 35,
+    "id": 182,
+    "type": "variable",
+    "name": "#user",
+    "tracking_no": "SYM-035",
+    "data": "{\"value\": null, \"dataType\": \"object\", \"isRequired\": false, \"boundVariables\": [{\"id\": 646, \"key\": \"#user\", \"type\": 4, \"scope\": \"appData\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 36,
+    "id": 183,
+    "type": "variable",
+    "name": "#baseApiUrl",
+    "tracking_no": "SYM-036",
+    "data": "{\"value\": null, \"dataType\": \"string\", \"isRequired\": false, \"boundVariables\": [{\"id\": 648, \"key\": \"#baseApiUrl\", \"type\": 1, \"scope\": \"appData\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  },
+  {
+    "idx": 37,
+    "id": 184,
+    "type": "variable",
+    "name": "#session",
+    "tracking_no": "SYM-037",
+    "data": "{\"value\": null, \"dataType\": \"object\", \"isRequired\": false, \"boundVariables\": [{\"id\": 647, \"key\": \"#session.access_token\", \"type\": 1, \"scope\": \"appData\", \"isList\": false}]}",
+    "project_id": 151,
+    "created_at": "2025-09-05 07:53:15.459813+00"
+  }
+]

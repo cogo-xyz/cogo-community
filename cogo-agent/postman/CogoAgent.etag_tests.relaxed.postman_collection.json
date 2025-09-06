@@ -1,0 +1,65 @@
+{
+  "info": {"name":"COGO Agent - ETag 304 Tests (Relaxed)","schema":"https://schema.getpostman.com/json/collection/v2.1.0/collection.json"},
+  "variable": [
+    {"key":"SUPABASE_URL","value":"https://<ref>.supabase.co"},
+    {"key":"KEY","value":"<service_or_anon>"},
+    {"key":"PROJECT","value":"<uuid>"},
+    {"key":"TRACE_ID","value":""}
+  ],
+  "item": [
+    {"name":"json-get (HEAD)","request":{"method":"HEAD","header":[{"key":"Authorization","value":"Bearer {{KEY}}"}],"url":"{{SUPABASE_URL}}/functions/v1/json-get?project_id={{PROJECT}}&path=examples/af.json"},
+      "event":[{"listen":"test","script":{"type":"text/javascript","exec":[
+        "const et = pm.response.headers.get('ETag') || pm.response.headers.get('Etag') || pm.response.headers.get('etag');",
+        "pm.environment.set('ETAG_JSON_GET', et || '');",
+        "pm.test('HEAD ok/skip', function(){ pm.expect([200,405]).to.include(pm.response.code); });"
+      ]}}]
+    },
+    {"name":"json-get (POST If-None-Match 304)","request":{"method":"POST","header":[{"key":"Authorization","value":"Bearer {{KEY}}"},{"key":"Content-Type","value":"application/json"},{"key":"If-None-Match","value":"{{ETAG_JSON_GET}}"}],"url":"{{SUPABASE_URL}}/functions/v1/json-get","body":{"mode":"raw","raw":"{\n  \"project_id\": \"{{PROJECT}}\",\n  \"path\": \"examples/af.json\"\n}"}},
+      "event":[{"listen":"test","script":{"type":"text/javascript","exec":[
+        "const has = (pm.environment.get('ETAG_JSON_GET')||'').length>0;",
+        "pm.test('304 or skip', function(){ if (has) pm.expect(pm.response.code).to.eql(304); else pm.expect([200,304]).to.include(pm.response.code); });"
+      ]}}]
+    },
+    {"name":"json-list (HEAD)","request":{"method":"HEAD","header":[{"key":"Authorization","value":"Bearer {{KEY}}"}],"url":"{{SUPABASE_URL}}/functions/v1/json-list?project_id={{PROJECT}}&prefix=docs/cogo-agent/examples/simple-screen/&limit=5&offset=0"},
+      "event":[{"listen":"test","script":{"type":"text/javascript","exec":[
+        "const et = pm.response.headers.get('ETag') || pm.response.headers.get('Etag') || pm.response.headers.get('etag');",
+        "pm.environment.set('ETAG_JSON_LIST', et || '');",
+        "pm.test('HEAD ok/skip', function(){ pm.expect([200,405]).to.include(pm.response.code); });"
+      ]}}]
+    },
+    {"name":"json-list (POST If-None-Match 304)","request":{"method":"POST","header":[{"key":"Authorization","value":"Bearer {{KEY}}"},{"key":"Content-Type","value":"application/json"},{"key":"If-None-Match","value":"{{ETAG_JSON_LIST}}"}],"url":"{{SUPABASE_URL}}/functions/v1/json-list","body":{"mode":"raw","raw":"{\n  \"project_id\": \"{{PROJECT}}\",\n  \"prefix\": \"docs/cogo-agent/examples/simple-screen/\",\n  \"limit\": 5,\n  \"offset\": 0\n}"}},
+      "event":[{"listen":"test","script":{"type":"text/javascript","exec":[
+        "const has = (pm.environment.get('ETAG_JSON_LIST')||'').length>0;",
+        "pm.test('304 or skip', function(){ if (has) pm.expect(pm.response.code).to.eql(304); else pm.expect([200,304]).to.include(pm.response.code); });"
+      ]}}]
+    },
+    {"name":"artifacts-list (HEAD)","request":{"method":"HEAD","header":[{"key":"Authorization","value":"Bearer {{KEY}}"}],"url":"{{SUPABASE_URL}}/functions/v1/artifacts-list?project_id={{PROJECT}}&prefix=docs/cogo-agent/examples/simple-screen/"},
+      "event":[{"listen":"test","script":{"type":"text/javascript","exec":[
+        "const et = pm.response.headers.get('ETag') || pm.response.headers.get('Etag') || pm.response.headers.get('etag');",
+        "pm.environment.set('ETAG_ARTIFACTS_LIST', et || '');",
+        "pm.test('HEAD ok/skip', function(){ pm.expect([200,405]).to.include(pm.response.code); });"
+      ]}}]
+    },
+    {"name":"artifacts-list (POST If-None-Match 304)","request":{"method":"POST","header":[{"key":"Authorization","value":"Bearer {{KEY}}"},{"key":"Content-Type","value":"application/json"},{"key":"If-None-Match","value":"{{ETAG_ARTIFACTS_LIST}}"}],"url":"{{SUPABASE_URL}}/functions/v1/artifacts-list","body":{"mode":"raw","raw":"{\n  \"project_id\": \"{{PROJECT}}\",\n  \"prefix\": \"docs/cogo-agent/examples/simple-screen/\",\n  \"limit\": 2,\n  \"offset\": 0\n}"}},
+      "event":[{"listen":"test","script":{"type":"text/javascript","exec":[
+        "const has = (pm.environment.get('ETAG_ARTIFACTS_LIST')||'').length>0;",
+        "pm.test('304 or skip', function(){ if (has) pm.expect(pm.response.code).to.eql(304); else pm.expect([200,304]).to.include(pm.response.code); });"
+      ]}}]
+    },
+    {"name":"trace-status (HEAD)","request":{"method":"HEAD","header":[{"key":"Authorization","value":"Bearer {{KEY}}"}],"url":"{{SUPABASE_URL}}/functions/v1/trace-status?trace_id={{TRACE_ID}}"},
+      "event":[{"listen":"test","script":{"type":"text/javascript","exec":[
+        "const et = pm.response.headers.get('ETag') || pm.response.headers.get('Etag') || pm.response.headers.get('etag');",
+        "pm.environment.set('ETAG_TRACE_STATUS', et || '');",
+        "pm.test('HEAD ok/skip', function(){ pm.expect([200,405,400]).to.include(pm.response.code); });"
+      ]}}]
+    },
+    {"name":"trace-status (GET If-None-Match 304)","request":{"method":"GET","header":[{"key":"Authorization","value":"Bearer {{KEY}}"},{"key":"If-None-Match","value":"{{ETAG_TRACE_STATUS}}"}],"url":"{{SUPABASE_URL}}/functions/v1/trace-status?trace_id={{TRACE_ID}}"},
+      "event":[{"listen":"test","script":{"type":"text/javascript","exec":[
+        "const has = (pm.environment.get('ETAG_TRACE_STATUS')||'').length>0;",
+        "pm.test('304 or skip', function(){ if (has) pm.expect(pm.response.code).to.eql(304); else pm.expect([200,304,400]).to.include(pm.response.code); });"
+      ]}}]
+    }
+  ]
+}
+
+

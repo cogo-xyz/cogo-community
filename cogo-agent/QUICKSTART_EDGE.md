@@ -3,6 +3,12 @@
 ### 1) Prerequisites
 - Supabase project: note `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`.
 - macOS zsh: install `jq`, `curl`.
+ - Supabase CLI: recommended v2.x (latest). Verify:
+```bash
+supabase --version
+# Upgrade on macOS (brew)
+brew update && brew upgrade supabase/tap/supabase
+```
 
 ### 2) Environment
 ```bash
